@@ -1,5 +1,5 @@
 #labels Featured
-=What is SolrMeter?=
+=What is SolrMeter? =
 SolrMeter allows simple and fast configuration to run stress tests to Solr implementations. 
 It measures time of  queries, updates, commits and optimizes and show them on simple charts.
 
