@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.linebee</groupId>
 	<artifactId>solrmeter</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SolrMeter</name>
 	<licenses>
@@ -12,9 +12,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://code.google.com/p/solrmeter/source/browse/tags/solrmeter-0.1.0</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/tags/solrmeter-0.1.0</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/tags/solrmeter-0.1.0</connection>
+		<url>http://code.google.com/p/solrmeter/source/browse/</url>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/</connection>
 	</scm>
 	<mailingLists />
 	<url>http://www.linebee.com</url>
