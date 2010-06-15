@@ -1,0 +1,15 @@
+#labels Featured
+=What is SolrMeter?=
+SolrMeter allows simple and fast configuration to run stress tests to Solr implementations. 
+It measures time of  queries, updates, commits and optimizes and show them on simple charts.
+
+Actual version of SolrMeter (0.1.0) allows you to:
+  * Execute Queries to a solr server.
+  * Execute Update/Inserts to a solr server (not necessary the same as queries).
+  * Obtain queries and documents to update from a text file.
+  * Execute optimize (to se solr server configured to update/insert documents)
+  * Add filter queries to the query
+  * Use facets (randomly obtained from a text file with file names)
+  * Select facet method.
+  * Many charts and statistics (see screenshots)
+  * Import/Export test configuration.
