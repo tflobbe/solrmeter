@@ -1,0 +1,15 @@
+#How to compile/run the software
+=Run the latest version=
+The following steps should be followed to get !SolrMeter up and running.
+  # Download latest version.
+  # run it from the command line with "java -jar solrmeter-{version}-jar-with-dependencies.jar"
+  # create files with information of [queries], [fields], [updates] and [filterqueries filter queries]
+  # specify the URL of Solr for updates and queries.
+  # run the executors with the "Run" button.
+
+=Compile from trunk=
+The following steps should be followed to compile and package !SolrMeter
+  # Download trunk from http://solrmeter.googlecode.com/svn/trunk/
+  # Run command "mvn assembly:assembly"
+  # The generated jar file is under "target" directory.
+  # run it like [Run_the_latest_version Run the lastest version].
