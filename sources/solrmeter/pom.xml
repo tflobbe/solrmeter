@@ -13,7 +13,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://solrmeter.googlecode.com/svn/trunk/</url>
+		<url>http://code.google.com/p/solrmeter/source/browse/</url>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/</connection>
 	</scm>
 	<mailingLists></mailingLists>
 	<url>http://www.linebee.com</url>
