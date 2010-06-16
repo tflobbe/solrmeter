@@ -18,7 +18,7 @@ http://solrmeter.googlecode.com/svn/wiki/Screenshots/error-log-and-stacktrace.PN
 http://solrmeter.googlecode.com/svn/wiki/Screenshots/timeline-chart.PNG
 
 =Query Statistics=
-"http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics.PNG
+http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics.PNG
 
 =Query Statistics2=
-"http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics2.PNG
+http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics2.PNG
