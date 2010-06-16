@@ -1,0 +1,12 @@
+workflowType:CCC
+workflowType:CUV
+workflowType:STG
+metaEstado:1
+metaEstado:0
+metaEstado:4
+estado:solucionado
+estado:Postulante ingresado
+estado:Rechazado por Servicios
+
+
+
