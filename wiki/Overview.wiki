@@ -3,7 +3,8 @@ This is a Screenshot overview of !SolrMeter.
 
 While you run the test, watch the updated data on the charts, like the Pie chart:
 
-<img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/pie-chart1.PNG" height="250" width="300"/>
+<a id="http://solrmeter.googlecode.com/svn/wiki/Screenshots/pie-chart1.PNG">
+<img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/pie-chart1.PNG" height="250" width="300"/></a>
 <img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/pie-chart2.PNG" height="250" width="300"/>
 
 You can also watch the Query time histogram, that shows the distribution of obtained query times:
