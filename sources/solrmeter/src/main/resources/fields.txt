@@ -1,4 +1,6 @@
-fieldName1
-fieldName2
-fieldName3
-andSoOn
+weight
+price
+popularity
+inStock
+content_type
+manu_exact
