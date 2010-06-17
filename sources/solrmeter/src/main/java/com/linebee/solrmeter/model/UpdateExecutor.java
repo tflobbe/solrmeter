@@ -33,7 +33,7 @@ import com.linebee.solrmeter.model.task.UpdateThread;
 
 /**
  * Creates and manages update execution Threads.
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class UpdateExecutor extends AbstractExecutor {

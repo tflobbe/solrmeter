@@ -28,7 +28,7 @@ import com.linebee.solrmeter.model.exception.QueryException;
 /**
  * Executes a Query Operation
  * 
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class QueryThread extends AbstractOperationThread {

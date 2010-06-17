@@ -25,7 +25,7 @@ import com.linebee.solrmeter.model.exception.UpdateException;
 
 /**
  * Generate simple statistics for executed commits.
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class CommitHistoryStatistic implements UpdateStatistic {

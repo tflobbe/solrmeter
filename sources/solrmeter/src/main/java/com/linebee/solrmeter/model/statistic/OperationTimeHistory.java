@@ -35,7 +35,7 @@ import com.linebee.solrmeter.model.exception.UpdateException;
  * 
  * Statistic to keep time of all operations executed. It hast a milisecond precision.
  * 
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class OperationTimeHistory implements QueryStatistic, UpdateStatistic,

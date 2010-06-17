@@ -26,7 +26,7 @@ import com.linebee.solrmeter.model.exception.QueryException;
 /**
  * 
  * Statistic to divide QTimes in time intervals.
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class TimeRangeStatistic implements QueryStatistic {

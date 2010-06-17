@@ -33,7 +33,7 @@ import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 /**
  * 
  * TODO add validators
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class PropertyPanel extends JPanel implements FocusListener {

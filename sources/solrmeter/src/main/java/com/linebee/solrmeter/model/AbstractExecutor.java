@@ -25,7 +25,7 @@ import com.linebee.solrmeter.model.task.AbstractOperationThread;
 
 /**
  * Base class for operation executors that run multiple threads
- * @author Tomás
+ * @author tflobbe
  *
  */
 public abstract class AbstractExecutor {
