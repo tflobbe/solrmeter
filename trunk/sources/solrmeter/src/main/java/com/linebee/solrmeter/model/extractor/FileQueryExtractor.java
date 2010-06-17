@@ -23,7 +23,7 @@ import com.linebee.solrmeter.model.SolrMeterConfiguration;
 
 /**
  * A QueryExtractor that extract the possible queries from a text file
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class FileQueryExtractor implements QueryExtractor {

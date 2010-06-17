@@ -16,7 +16,7 @@
 package com.linebee.solrmeter.model.statistic;
 /**
  * The results an Optimize operation can have
- * @author Tomás
+ * @author tflobbe
  *
  */
 public enum OptimizationResult {

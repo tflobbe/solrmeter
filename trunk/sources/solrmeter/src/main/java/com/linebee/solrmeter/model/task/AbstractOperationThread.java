@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
  * is not precise, it is at least queryInterval (parameter passed to the constructor)
  * and at most queryInterval + operation time. This is becouse the instant where the
  * operation is executed is randomly chosen inside the N seconds interval.
- * @author Tomás
+ * @author tflobbe
  *
  */
 public abstract class AbstractOperationThread extends Thread {

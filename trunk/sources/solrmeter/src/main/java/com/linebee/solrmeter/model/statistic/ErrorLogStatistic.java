@@ -34,7 +34,7 @@ import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.solrmeter.model.exception.UpdateException;
 /**
  * Keeps statistics of the last ocurred errors and their timestamps
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class ErrorLogStatistic implements QueryStatistic, UpdateStatistic,

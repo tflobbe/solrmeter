@@ -21,7 +21,7 @@ import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
  * 
  * This OperationTimeHistory is just like original one but it always want to use
  * the same map key. The porpose of this class is to test the "addTime" method
- * @author Tomás
+ * @author tflobbe
  *
  */
 public class OperationTimeHistorySpy extends OperationTimeHistory {
