@@ -81,40 +81,4 @@ public class HistogramChartPanel extends StatisticPanel {
 		return dataset;
 	}
 
-
-//	@Override
-//	public void refresh() {
-//		System.out.println("refreshing histogram");
-//		JFreeChart chart = ChartFactory.createHistogram("Histogram", "Time", "Nº of Queries", this.createDataset(), PlotOrientation.VERTICAL, false, false, false);
-//		BufferedImage image = chart.createBufferedImage(500, 300);
-//		imageLabel.setIcon(new ImageIcon(image));
-//	}
-//
-//	private IntervalXYDataset createDataset() {
-//		HistogramDataset dataset = new HistogramDataset();
-//		dataset.setType(HistogramType.RELATIVE_FREQUENCY);
-//		Map<Integer, Integer> histogramData = histogram.getCurrentHisogram();
-//		if(histogramData.isEmpty()) {
-//			return dataset;
-//		}
-//		List<Double> values = new ArrayList<Double>();
-//		for(Integer integer:histogramData.keySet()) {
-//			for(int i = 0; i < histogramData.get(integer); i++) {
-//				values.add(new Double(integer));
-//			}
-//		}
-//		dataset.addSeries("uno", getDoubleArray(values) , 30);
-//		return dataset;
-//	}
-//
-//	private double[] getDoubleArray(List<Double> values) {
-//		double[] array = new double[values.size()];
-//		int index = 0;
-//		for(Double value:values) {
-//			array[index] = value;
-//			index++;
-//		}
-//		return array;
-//	}
-
 }
