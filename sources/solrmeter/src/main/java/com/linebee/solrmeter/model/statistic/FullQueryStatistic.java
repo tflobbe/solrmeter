@@ -35,7 +35,7 @@ import com.linebee.solrmeter.model.exception.QueryException;
 public class FullQueryStatistic implements QueryStatistic {
 	
 	/**
-	 * Stores the execution time as key, and the sumation of queries times on the same instant.
+	 * Stores the execution time as key, and the sumation of strings times on the same instant.
 	 */
 	private SortedMap<Long, Integer> queryTimeByDate;
 	

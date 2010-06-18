@@ -42,7 +42,7 @@ public class QueryThread extends AbstractOperationThread {
 	private QueryExecutor executor;
 	
 	/**
-	 * If set, queries are executed adding random felds as facet.
+	 * If set, strings are executed adding random felds as facet.
 	 */
 	private boolean useFacets = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFacets", "true"));
 	

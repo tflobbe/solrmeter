@@ -33,7 +33,7 @@ public abstract class AbstractExecutor {
 	protected Logger logger = Logger.getLogger(this.getClass());
 	
 	/**
-	 * List of threads executing queries
+	 * List of threads executing strings
 	 */
 	protected List<AbstractOperationThread> threads;
 	
@@ -78,7 +78,7 @@ public abstract class AbstractExecutor {
 	}
 	
 	/**
-	 * Increments in one the number of queries per minute
+	 * Increments in one the number of strings per minute
 	 */
 	public void incrementConcurrentOperations() {
 		AbstractOperationThread newThread = this.createThread(); 
@@ -96,7 +96,7 @@ public abstract class AbstractExecutor {
 
 	/**
 	 * Decrements in one (and stops the removed one) the number of
-	 * queries per minute
+	 * strings per minute
 	 */
 	public void decrementConcurrentQueries() {
 		AbstractOperationThread removedThread = threads.remove(threads.size() - 1);

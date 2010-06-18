@@ -19,7 +19,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import com.linebee.solrmeter.extractor.FileInputDocumentExtractorTestCase;
-import com.linebee.solrmeter.extractor.FileQueryExtractorTestCase;
+import com.linebee.solrmeter.extractor.FileStringExtractorTestCase;
 import com.linebee.solrmeter.statistic.ErrorLogStatisticTestCase;
 import com.linebee.solrmeter.statistic.FullQueryStatisticTestCase;
 import com.linebee.solrmeter.statistic.HistogramQueryStatisticTestCase;
@@ -42,7 +42,7 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(AbstractOperationThreadTestCase.class);
 		suite.addTestSuite(UpdateThreadTestCase.class);
 		suite.addTestSuite(QueryTimeHistoryTestCase.class);
-		suite.addTestSuite(FileQueryExtractorTestCase.class);
+		suite.addTestSuite(FileStringExtractorTestCase.class);
 		suite.addTestSuite(ErrorLogStatisticTestCase.class);
 		suite.addTestSuite(OperationTimeHistoryTestCase.class);
 		suite.addTestSuite(SimpleQueryStatisticTestCase.class);

@@ -18,20 +18,20 @@ package com.linebee.solrmeter.extractor;
 import java.util.List;
 
 import com.linebee.solrmeter.model.FileUtils;
-import com.linebee.solrmeter.model.extractor.FileQueryExtractor;
+import com.linebee.solrmeter.model.extractor.FileStringExtractor;
 
-public class FileQueryExtractorSpy extends FileQueryExtractor {
+public class FileStringExtractorSpy extends FileStringExtractor {
 
-	public FileQueryExtractorSpy(String string) {
+	public FileStringExtractorSpy(String string) {
 		super(string);
 	}
 
-	public List<String> getParsedQueries() {
-		return this.queries;
+	public List<String> getParsedStrings() {
+		return this.strings;
 	}
 	
 	@Override
-	protected void loadQueries(String filePath) {
-		queries = FileUtils.loadStringsFromFile(filePath);
+	protected void loadStrings(String filePath) {
+		strings = FileUtils.loadStringsFromFile(filePath);
 	}
 }

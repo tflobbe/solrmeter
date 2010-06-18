@@ -26,7 +26,7 @@ public class SimpleQueryStatistic implements QueryStatistic {
 	private Logger logger = Logger.getLogger(this.getClass());
 	
 	/**
-	 * The sum of QTime of all executed queries
+	 * The sum of QTime of all executed strings
 	 */
 	private long totalQTime;
 	
@@ -36,13 +36,13 @@ public class SimpleQueryStatistic implements QueryStatistic {
 	private long totalQueries;
 	
 	/**
-	 * The sum of client time of all executed queries. Client time is the time measured from
+	 * The sum of client time of all executed strings. Client time is the time measured from
 	 * this appication (and not Solr QTime).
 	 */
 	private long totalClientTime;
 	
 	/**
-	 * The number of errors ocurred on queries.
+	 * The number of errors ocurred on strings.
 	 */
 	private int totalErrors;
 

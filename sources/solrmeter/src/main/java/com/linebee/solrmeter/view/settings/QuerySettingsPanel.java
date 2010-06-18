@@ -43,6 +43,7 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(new PropertyPanel(I18n.get("settings.query.solrUrl"), "solr.searchUrl", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.useFacets"), "solr.query.useFacets", editable, this));
+		this.add(new PropertyPanel(I18n.get("settings.query.fieldsFile"), "solr.documentFieldsFile", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.useFilterQueries"), "solr.query.useFilterQueries", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.facetMethod"), "solr.query.facetMethod", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.filterQueryFile"), "solr.query.filterQueriesFile", editable, this));
