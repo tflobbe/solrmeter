@@ -35,17 +35,13 @@ public class SolrServerRegistry {
 				//TODO parametrize
 				logger.info("Connecting to Solr: " + url);
 				server = new CommonsHttpSolrServer(url);
-				server.setSoTimeout(60000); // socket read timeout
-				server.setConnectionTimeout(60000);
-				server.setDefaultMaxConnectionsPerHost(100000);
-				server.setMaxTotalConnections(1000000);
-				server.setFollowRedirects(false); // defaults to false
-				// allowCompression defaults to false.
-				// Server side must support gzip or deflate for this to have any
-				// effect.
-				server.setAllowCompression(true);
-				server.setMaxRetries(1); // defaults to 0. > 1 not recommended.
-				logger.info("Connected OK");
+				server.setSoTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.soTimeout", "60000"))); // socket read timeout
+				server.setConnectionTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.connectionTimeout", "60000")));
+				server.setDefaultMaxConnectionsPerHost(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.defaultMaxConnectionsPerHost", "100000")));
+				server.setMaxTotalConnections(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxTotalConnections", "1000000")));
+				server.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
+				server.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
+				server.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
