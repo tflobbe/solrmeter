@@ -13,3 +13,5 @@ Actual version of !SolrMeter (0.1.0) allows you to:
   * Select facet method.
   * Many charts and statistics (see screenshots)
   * Import/Export test configuration.
+
+See [Overview] for more details and some screenshots.
