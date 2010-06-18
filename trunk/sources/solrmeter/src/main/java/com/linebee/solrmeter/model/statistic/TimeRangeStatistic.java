@@ -62,7 +62,7 @@ public class TimeRangeStatistic implements QueryStatistic {
 	
 	/**
 	 * 
-	 * @return Returns all the configured timeRanges and the percentage of queries on 
+	 * @return Returns all the configured timeRanges and the percentage of strings on 
 	 * each one of them.
 	 */
 	public Map<TimeRange, Integer> getActualPercentage() {

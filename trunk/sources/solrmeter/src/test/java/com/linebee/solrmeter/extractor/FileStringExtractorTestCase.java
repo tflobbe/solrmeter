@@ -21,18 +21,18 @@ import java.util.List;
 
 import com.linebee.solrmeter.BaseTestCase;
 
-public class FileQueryExtractorTestCase extends BaseTestCase {
+public class FileStringExtractorTestCase extends BaseTestCase {
 	
 	private File queriesFile;
 	
 	@Override
 	protected void setUp() throws Exception {
-		queriesFile = new File(FileQueryExtractorTestCase.class.getClassLoader().getResource("./com/linebee/solrmeter/queriesTest.txt").getFile());
+		queriesFile = new File(FileStringExtractorTestCase.class.getClassLoader().getResource("./com/linebee/solrmeter/queriesTest.txt").getFile());
 	}
 
 	public void testExtraxt() {
-		FileQueryExtractorSpy extractor = new FileQueryExtractorSpy(queriesFile.getPath());
-		List<String> strings = extractor.getParsedQueries();
+		FileStringExtractorSpy extractor = new FileStringExtractorSpy(queriesFile.getPath());
+		List<String> strings = extractor.getParsedStrings();
 		assertTrue(strings.contains(""));
 		assertTrue(strings.contains("some"));
 		assertTrue(strings.contains("query"));
@@ -50,9 +50,9 @@ public class FileQueryExtractorTestCase extends BaseTestCase {
 		possibleQueries.add("query");
 		possibleQueries.add("some query");
 		possibleQueries.add("field:value");
-		FileQueryExtractorSpy extractor = new FileQueryExtractorSpy(queriesFile.getPath());
+		FileStringExtractorSpy extractor = new FileStringExtractorSpy(queriesFile.getPath());
 		for(int i = 0; i < 100; i++) {
-			assertTrue(possibleQueries.contains(extractor.getRandomQuery()));
+			assertTrue(possibleQueries.contains(extractor.getRandomString()));
 		}
 	}
 }

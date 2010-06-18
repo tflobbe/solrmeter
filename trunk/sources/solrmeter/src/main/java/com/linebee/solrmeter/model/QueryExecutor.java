@@ -24,6 +24,7 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.solrmeter.model.extractor.FileFieldExtractor;
 import com.linebee.solrmeter.model.extractor.FileQueryExtractor;
 import com.linebee.solrmeter.model.task.AbstractOperationThread;
 import com.linebee.solrmeter.model.task.QueryThread;
@@ -36,12 +37,7 @@ import com.linebee.solrmeter.model.task.QueryThread;
 public class QueryExecutor extends AbstractExecutor {
 	
 	/**
-	 * List of existing Fields. These fields are used to add fecets to queries.
-	 */
-	private List<String> fields;
-	
-	/**
-	 * Solr Server for queries
+	 * Solr Server for strings
 	 */
 	private CommonsHttpSolrServer server;
 	
@@ -66,6 +62,11 @@ public class QueryExecutor extends AbstractExecutor {
 	private QueryExtractor filterQueryExtractor;
 	
 	/**
+	 * The facet fields extractor
+	 */
+	private FieldExtractor facetFieldExtractor;
+	
+	/**
 	 * Extra parameters specified to the query
 	 */
 	private Map<String, String> extraParameters;
@@ -84,8 +85,8 @@ public class QueryExecutor extends AbstractExecutor {
 		queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
 		queryExtractor = new FileQueryExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_FILE_PATH));
 		filterQueryExtractor = new FileQueryExtractor(SolrMeterConfiguration.getProperty("solr.query.filterQueriesFile"));
+		facetFieldExtractor = new FileFieldExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.FIELDS_FILE_PATH));
 		loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
-		loadFields();
 		prepareStatistics();
 		super.prepare();
 	}
@@ -118,14 +119,7 @@ public class QueryExecutor extends AbstractExecutor {
 	}
 
 	/**
-	 * Loads all fields from the fields file and add every one to the "fields" list.
-	 */
-	private void loadFields() {
-		fields = loadStringsFromFile(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.FIELDS_FILE_PATH));
-	}
-
-	/**
-	 * Logs queries time and all statistics information.
+	 * Logs strings time and all statistics information.
 	 */
 	protected void stopStatistics() {
 		for(QueryStatistic statistic:statistics) {
@@ -183,7 +177,7 @@ public class QueryExecutor extends AbstractExecutor {
 	 * @return returns a random Field of the existing ones.
 	 */
 	public String getRandomField() {
-		return (String) this.getNextRandomObject(fields);
+		return facetFieldExtractor.getRandomFacetField();
 	}
 	
 	/**

@@ -16,7 +16,7 @@
 package com.linebee.solrmeter.model;
 
 /**
- * Manages the queries to be executed to Solr.
+ * Manages the strings to be executed to Solr.
  * @author Tomas
  *
  */

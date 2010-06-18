@@ -15,23 +15,18 @@
  */
 package com.linebee.solrmeter.model.extractor;
 
-import java.util.List;
-
-import com.linebee.solrmeter.model.FileUtils;
 import com.linebee.solrmeter.model.QueryExtractor;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 
 /**
- * A QueryExtractor that extract the possible queries from a text file
+ * A QueryExtractor that extract the possible strings from a text file
  * @author tflobbe
  *
  */
 public class FileQueryExtractor implements QueryExtractor {
 	
-	/**
-	 * List of available Queries. The Queries are extracted from the queries file.
-	 */
-	protected List<String> queries;
+	private FileStringExtractor stringExtractor;
+	
 	
 	public FileQueryExtractor() {
 		this(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_FILE_PATH));
@@ -39,19 +34,13 @@ public class FileQueryExtractor implements QueryExtractor {
 	
 	public FileQueryExtractor(String filePath) {
 		super();
-		loadQueries(filePath);
+		stringExtractor = new FileStringExtractor(filePath);
 	}
-	
-	/**
-	 * Load all queries from the queries file.
-	 */
-	protected void loadQueries(String filePath) {
-		queries = FileUtils.loadStringsFromFile(filePath);
-	}
+
 
 	@Override
 	public String getRandomQuery() {
-		return (String)FileUtils.getNextRandomObject(queries);
+		return stringExtractor.getRandomString();
 	}
 	
 }
