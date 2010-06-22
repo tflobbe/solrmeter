@@ -1,6 +1,7 @@
 #labels Version-0.1.0
 =Queries File Configuration=
 A simple text file, each line should be the extact text you want to put on the "q" parameter.
+This file is used by the FileQueryExtractor class.
 
 Example:
 {{{
