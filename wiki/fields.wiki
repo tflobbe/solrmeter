@@ -1,0 +1,13 @@
+#labels Version-0.1.0
+= Fields File Configuration =
+A simple text file, each line should be the a declared field of the schema. This fields are going to be used for faceting. (Only fields that you want to be used for faceting should be added to this file).
+
+This file is going to be used by the [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/extractor/FileFieldExtractor.java FileQueryExtractor] class
+
+Example:
+
+{{{
+content
+category
+fileExtension
+}}}
