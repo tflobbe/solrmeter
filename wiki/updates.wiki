@@ -2,7 +2,7 @@
 = Updates / Adds file configuration =
 A simple text file, each line representing a document that is going to be added to solr. The format is:
 {{{fieldName:fieldValue;}}}
-All required fields must be
+All required fields must be on the file.
 == Example: ==
 {{{
 id:1;name:dog;category:animal
