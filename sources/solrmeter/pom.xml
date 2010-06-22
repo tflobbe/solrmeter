@@ -16,13 +16,32 @@
 		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/</developerConnection>
 		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/</connection>
 	</scm>
-	<mailingLists />
-	<url>http://www.linebee.com</url>
-
+	<mailingLists>
+		<mailingList>
+			<name>Google Group</name>
+			<archive>http://groups.google.com.ar/group/solrmeter/topics</archive>
+			<post>solrmeter@googlegroups.com</post>
+			<subscribe>http://groups.google.com/group/solrmeter/subscribe</subscribe>
+			<unsubscribe>http://groups.google.com/group/solrmeter/subscribe</unsubscribe>
+		</mailingList>
+	</mailingLists>
+	<issueManagement>
+		<system>Google Issues</system>
+		<url>http://code.google.com/p/solrmeter/issues/list</url>
+	</issueManagement>
+	<organization>
+		<name>Linebee LLC</name>
+		<url>www.linebee.com</url>
+	</organization>
+	
+	<url>http://groups.google.com.ar/group/solrmeter</url>
+	
 	<developers>
 		<developer>
 			<name>Tomás Fernández Löbbe</name>
 			<email>tflobbe@gmail.com</email>
+			<id>tflobbe</id>
+			<timezone>GMT+3</timezone>
 		</developer>
 	</developers>
 
