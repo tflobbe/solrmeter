@@ -1,0 +1,14 @@
+#labels Version-0.1.0
+=Filter Queries File Configuration=
+A simple text file, each line should be the extact text you want to put on the "fq" parameter. This file is used by the [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/extractor/FileQueryExtractor.java FileQueryExtractor] class.
+You can put multiple filter queries on the same line if you want them all to be used as one (on the same query).
+You can also use blank lines if you want the query to execute some queries with no filter queries.
+
+== Example == 
+{{{
+category:animal
+
+category:vegetable
+categoty:vegetable price:[0 TO 10] 
+categoty:vegetable price:[10 TO *] 
+}}}
