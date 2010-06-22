@@ -24,3 +24,5 @@ See also the times queries, updates, commits and optimize take during the test. 
 You can also see last executed queries of the test, the time they took, how many results they brougth or if it result in an error. Also Statistics like median, mode, variance, last minute average, last ten minutes average and some more:
 
 <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics.PNG" height="250" width="300"/></a> <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics2"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics2.PNG" height="250" width="300"/></a>
+
+See the [Usage] page for details on how to download/use/contribute SolrMeter.
