@@ -10,7 +10,7 @@ pig
 red
 dog category:animal
 "solr roks"
-category:(animal OR vegetal)
+category:(animal OR vegetable)
 }}}
 
 Before creating this file you have to think on the search handler you are going to use.
