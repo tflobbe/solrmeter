@@ -1,6 +1,6 @@
 this
 are
-the queryes
+the queries
 that
 are going to be
 added
