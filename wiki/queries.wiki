@@ -3,7 +3,7 @@
 A simple text file, each line should be the extact text you want to put on the "q" parameter.
 This file is used by the [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/extractor/FileQueryExtractor.java FileQueryExtractor] class.
 
-Example:
+== Example:==
 {{{
 car
 pig
