@@ -4,7 +4,7 @@ A simple text file, each line should be the a declared field of the schema. This
 
 This file is going to be used by the [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/extractor/FileFieldExtractor.java FileQueryExtractor] class
 
-Example:
+== Example:==
 
 {{{
 content
