@@ -12,3 +12,5 @@ category:vegetable
 categoty:vegetable price:[0 TO 10] 
 categoty:vegetable price:[10 TO *] 
 }}}
+
+Also, you can check de [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/example/filterQueries.txt example file] from the sorce code, this example works just fine with the [http://lucene.apache.org/solr/tutorial.html solr example].
