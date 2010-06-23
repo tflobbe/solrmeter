@@ -11,3 +11,5 @@ content
 category
 fileExtension
 }}}
+
+Also, you can check de [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/example/fields.txt example file] from the sorce code, this example works just fine with the [http://lucene.apache.org/solr/tutorial.html solr example].
