@@ -19,7 +19,7 @@
 	<mailingLists>
 		<mailingList>
 			<name>Google Group</name>
-			<archive>http://groups.google.com.ar/group/solrmeter/topics</archive>
+			<archive>http://groups.google.com/group/solrmeter/topics</archive>
 			<post>solrmeter@googlegroups.com</post>
 			<subscribe>http://groups.google.com/group/solrmeter/subscribe</subscribe>
 			<unsubscribe>http://groups.google.com/group/solrmeter/subscribe</unsubscribe>
@@ -34,7 +34,7 @@
 		<url>www.linebee.com</url>
 	</organization>
 	
-	<url>http://groups.google.com.ar/group/solrmeter</url>
+	<url>http://groups.google.com/group/solrmeter</url>
 	
 	<developers>
 		<developer>
