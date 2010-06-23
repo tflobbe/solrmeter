@@ -1,0 +1,5 @@
+documentId:1;entryId:11\;2;type:ABC\\;active:F\\\\;value:2:5;date:Mon Mar 06 00:00:00 ART 2006
+documentId:11;entryId:21;type:ABC;active:F;value:1;date:Tue Mar 07 00:00:00 ART 2006
+documentId:21;entryId:31;type:ABC;active:F;value:4;date:Mon Mar 13 00:00:00 ART 2006
+documentId:31;entryId:41;type:ABC;active:F;value:1;date:Mon Mar 13 00:00:00 ART 2006
+documentId:43;entryId:53;type:ABC;active:F;value:2;date:Fri Mar 31 00:00:00 ART 2006

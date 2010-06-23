@@ -1,0 +1,6 @@
+fieldName1:query
+fieldName1:(some other query)
+fieldName2:"phrase query"
+
+
+(Blank lines will produce some queries with no filter queries)
