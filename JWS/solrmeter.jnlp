@@ -16,7 +16,7 @@
   </information>
   <security>
       <!-- all-permissions/-->
-	  <j2ee-application-client-permissions/>
+	  <!-- j2ee-application-client-permissions/-->
   </security>
   <resources>
     <j2se version="1.4.2+" java-vm-args="-esa -Xnoclassgc"/>
