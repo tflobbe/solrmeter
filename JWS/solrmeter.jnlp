@@ -15,7 +15,7 @@
     </shortcut-->
   </information>
   <security>
-      <!-- all-permissions/-->
+      <all-permissions/>
 	  <!-- j2ee-application-client-permissions/-->
   </security>
   <resources>
