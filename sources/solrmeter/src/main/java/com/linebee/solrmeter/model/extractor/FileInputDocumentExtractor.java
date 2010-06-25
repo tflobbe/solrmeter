@@ -15,7 +15,6 @@
  */
 package com.linebee.solrmeter.model.extractor;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,17 +41,17 @@ public class FileInputDocumentExtractor implements InputDocumentExtractor {
 	 */
 	protected List<SolrInputDocument> documents;
 	
-	public FileInputDocumentExtractor(File inputFile) {
+	public FileInputDocumentExtractor(String inputFilePath) {
 		super();
 		documents = new LinkedList<SolrInputDocument>();
-		loadDocuments(inputFile);
+		loadDocuments(inputFilePath);
 	}
 	
 	/**
 	 * Loads all documents from text file
 	 */
-	protected void loadDocuments(File inputFile) {
-		List<String> documentStrings = FileUtils.loadStringsFromFile(inputFile.getPath());
+	protected void loadDocuments(String inputFilePath) {
+		List<String> documentStrings = FileUtils.loadStringsFromFile(inputFilePath);
 		documents = this.createDocumentList(documentStrings);
 	}
 	

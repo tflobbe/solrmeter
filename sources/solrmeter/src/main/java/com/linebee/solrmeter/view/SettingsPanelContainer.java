@@ -21,6 +21,7 @@ import java.awt.GridBagLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.log4j.Logger;
+
 import com.linebee.solrmeter.controller.SettingsController;
+import com.linebee.solrmeter.model.FileUtils;
 import com.linebee.solrmeter.view.settings.QuerySettingsPanel;
 import com.linebee.solrmeter.view.settings.UpdateSettingsPanel;
 
@@ -88,7 +92,13 @@ public class SettingsPanelContainer extends JPanel {
 			constraints.gridy = row;
 			constraints.weighty = 0.0;
 			JLabel messageLabel = new JLabel("<html><p>" + I18n.get("settings.noEditableMessage") + "</p></html>");
-			messageLabel.setIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("./images/warning.png")));
+//			messageLabel.setIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("./images/warning.png")));
+			try {
+				messageLabel.setIcon(new ImageIcon(FileUtils.findFileAsResource("./images/warning.png")));
+			} catch (FileNotFoundException e) {
+				Logger.getLogger(SettingsPanelContainer.class).error("Image not found", e);
+				//no image added, but stil working.
+			}
 			this.add(messageLabel, constraints);
 			row++;
 		}
