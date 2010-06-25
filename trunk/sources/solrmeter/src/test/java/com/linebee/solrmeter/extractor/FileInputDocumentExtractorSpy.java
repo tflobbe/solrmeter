@@ -15,7 +15,6 @@
  */
 package com.linebee.solrmeter.extractor;
 
-import java.io.File;
 import java.util.List;
 
 import org.apache.solr.common.SolrInputDocument;
@@ -24,8 +23,8 @@ import com.linebee.solrmeter.model.extractor.FileInputDocumentExtractor;
 
 public class FileInputDocumentExtractorSpy extends FileInputDocumentExtractor {
 
-	public FileInputDocumentExtractorSpy(File inputFile) {
-		super(inputFile);
+	public FileInputDocumentExtractorSpy(String inputFilePath) {
+		super(inputFilePath);
 	}
 
 	public List<SolrInputDocument> getParsedDocuments() {

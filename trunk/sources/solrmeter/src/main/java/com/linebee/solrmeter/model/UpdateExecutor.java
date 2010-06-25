@@ -15,7 +15,6 @@
  */
 package com.linebee.solrmeter.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,8 +30,8 @@ import com.linebee.solrmeter.model.exception.UpdateException;
 import com.linebee.solrmeter.model.extractor.FileInputDocumentExtractor;
 import com.linebee.solrmeter.model.task.UpdateThread;
 
-/**
- * Creates and manages update execution Threads.
+/** 
+ * manages update execution Threads.
  * @author tflobbe
  *
  */
@@ -71,8 +70,7 @@ public class UpdateExecutor extends AbstractExecutor {
 		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
-		File inputFile = new File(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_FILE_PATH));
-		documentExtractor = new FileInputDocumentExtractor(inputFile);
+		documentExtractor = new FileInputDocumentExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_FILE_PATH));
 		if(!autocommit) {
 			this.prepareCommiter();
 		}

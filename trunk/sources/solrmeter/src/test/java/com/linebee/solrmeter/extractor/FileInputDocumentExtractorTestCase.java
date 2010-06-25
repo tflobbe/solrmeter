@@ -15,7 +15,6 @@
  */
 package com.linebee.solrmeter.extractor;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +27,7 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 
 	public void testSingleDoc() {
 		
-		File inputFile = new File(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase1.txt").getPath());
-		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(inputFile);
+		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase1.txt").getPath());
 		assertEquals(1, extractor.getParsedDocuments().size());
 		for(int i = 0; i < 10; i++) {
 			SolrInputDocument document = extractor.getRandomDocument();
@@ -42,8 +40,7 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 	
 	public void testManyDocs() {
 		
-		File inputFile = new File(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase2.txt").getPath());
-		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(inputFile);
+		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase2.txt").getPath());
 		assertEquals(21, extractor.getParsedDocuments().size());
 		Set<Integer> set = new HashSet<Integer>();
 		for(int i = 0; i < 100; i++) {
@@ -59,8 +56,7 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 	}
 	
 	public void testLoadDocuments() {
-		File inputFile = new File(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase3.txt").getPath());
-		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(inputFile);
+		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase3.txt").getPath());
 		List<SolrInputDocument> documents = executor.getParsedDocuments();
 		assertEquals(5, documents.size());
 		SolrInputDocument document = documents.get(0);
@@ -73,8 +69,7 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 	}
 	
 	public void testScapedChars() {
-		File inputFile = new File(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase4.txt").getPath());
-		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(inputFile);
+		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase4.txt").getPath());
 		List<SolrInputDocument> documents = executor.getParsedDocuments();
 		assertEquals(5, documents.size());
 		SolrInputDocument document = documents.get(0);

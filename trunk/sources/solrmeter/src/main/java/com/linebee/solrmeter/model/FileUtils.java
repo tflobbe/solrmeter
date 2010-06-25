@@ -22,10 +22,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import com.linebee.solrmeter.SolrMeterMain;
 /**
  * 
  * Utility methods related with Files
@@ -45,8 +49,8 @@ public class FileUtils {
 		InputStream stream;
 		List<String> list = new LinkedList<String>();
 		try {
-//			stream = FileUtils.class.getResourceAsStream(filePath);
-			stream = new FileInputStream(new File(filePath));
+			stream = findFileAsStream(filePath);
+//			stream = new FileInputStream(new File(filePath));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			String nextLine = reader.readLine();
 			while(nextLine != null) {
@@ -79,5 +83,69 @@ public class FileUtils {
 	public static Object getNextRandomObject(List<?> list) {
 		int index = (int) (Math.random() * list.size());
 		return list.get(index);
+	}
+	
+	public static InputStream findFileAsStream(String filePath) throws FileNotFoundException {
+		logger.debug("looking for file " + filePath);
+		File file = new File(filePath);
+		if(file != null && file.exists()) {
+			try {
+				logger.debug(filePath + " was found as a file");
+				return new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(filePath);
+		if(stream != null) {
+			logger.debug(filePath + " was found with the system classloader");
+			return stream;
+		}
+		stream = FileUtils.class.getClassLoader().getResourceAsStream(filePath);
+		if(stream != null) {
+			logger.debug(filePath + " was found with the actual class classloader");
+			return stream;
+		}
+		stream = SolrMeterMain.class.getClassLoader().getResourceAsStream(filePath);
+		if(stream != null) {
+			logger.debug(filePath + " was found with the main class classloader");
+			return stream;
+		}
+		if (filePath.startsWith("./")) {
+			return findFileAsStream(filePath.substring(2));
+		}
+		throw new FileNotFoundException("File could not be found on standard locations " + filePath);
+	}
+	
+	public static URL findFileAsResource(String filePath) throws FileNotFoundException {
+		logger.debug("looking for file " + filePath);
+		File file = new File(filePath);
+		if(file != null && file.exists()) {
+			try {
+				logger.debug(filePath + " was found as a file");
+				return file.toURI().toURL();
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		URL url = ClassLoader.getSystemClassLoader().getResource(filePath);
+		if(url != null) {
+			logger.debug(filePath + " was found with the system classloader");
+			return url;
+		}
+		url = FileUtils.class.getClassLoader().getResource(filePath);
+		if(url != null) {
+			logger.debug(filePath + " was found with the actual class classloader");
+			return url;
+		}
+		url = SolrMeterMain.class.getClassLoader().getResource(filePath);
+		if(url != null) {
+			logger.debug(filePath + " was found with the main class classloader");
+			return url;
+		}
+		if (filePath.startsWith("./")) {
+			return findFileAsResource(filePath.substring(2));
+		}
+		throw new FileNotFoundException("File could not be found on standard locations " + filePath);
 	}
 }

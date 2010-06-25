@@ -17,6 +17,7 @@ package com.linebee.solrmeter.model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,14 +98,23 @@ public class SolrMeterConfiguration {
 	}
 	
 	public static void loadDefatultConfiguration() {
-		InputStream inStream = ClassLoader.getSystemClassLoader().getResourceAsStream(
+		LoggerFactory.getLogger("boot").info("Loading Default configuration");
+		InputStream inStream = SolrMeterConfiguration.class.getClassLoader().getResourceAsStream(
 				FILE_CONFIG_NAME);
-		
+		try {
+			if(inStream == null) {
+				LoggerFactory.getLogger("boot").info("Configuration File " + FILE_CONFIG_NAME + " not found");
+				throw new FileNotFoundException("Configuration File " + FILE_CONFIG_NAME + " not found");
+			}
+			LoggerFactory.getLogger("boot").info("Srteam availability: " + inStream.available());
+		} catch (IOException e1) {
+			throw new RuntimeException(e1);
+		}
 		try {
 			prop.clear();
 			prop.load(inStream);
 		} catch (IOException e) {
-			logger.error("Error", e);
+			LoggerFactory.getLogger("boot").error("Error", e);
 		}
 	}
 	
