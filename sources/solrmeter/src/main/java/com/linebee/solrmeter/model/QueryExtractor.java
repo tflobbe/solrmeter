@@ -17,7 +17,7 @@ package com.linebee.solrmeter.model;
 
 /**
  * Manages the strings to be executed to Solr.
- * @author Tomas
+ * @author tflobbe
  *
  */
 public interface QueryExtractor {

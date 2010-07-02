@@ -26,7 +26,7 @@ import com.linebee.solrmeter.model.exception.UpdateException;
 
 /**
  * 
- * @author Tomas Fernandez Lobbe
+ * @author tflobbe
  *
  */
 public class UpdateExecutorTestCase extends BaseTestCase {

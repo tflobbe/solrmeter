@@ -33,7 +33,7 @@ import com.linebee.solrmeter.SolrMeterMain;
 /**
  * 
  * Utility methods related with Files
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class FileUtils {

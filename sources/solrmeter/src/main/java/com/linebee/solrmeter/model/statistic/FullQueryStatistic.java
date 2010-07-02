@@ -29,7 +29,7 @@ import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.exception.QueryException;
 /**
  * 
- * @author Tomas Fernandez Lobbe
+ * @author tflobbe
  *
  */
 public class FullQueryStatistic implements QueryStatistic {

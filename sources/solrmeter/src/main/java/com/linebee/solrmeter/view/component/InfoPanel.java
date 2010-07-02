@@ -23,7 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 /**
  * JPanel that shows a label and a value.
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class InfoPanel extends JPanel {
