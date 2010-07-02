@@ -29,7 +29,7 @@ import com.linebee.solrmeter.model.InputDocumentExtractor;
  * if a ";" character is part of some value (and it is not a field separator) it must be scaped with a "\" character.
  * All "\" on a value must be scaped as "\\"
  * @see com.linebee.solrmeter.extractor.FileInputDocumentExtractorTestCase.testScapedChars()
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class FileInputDocumentExtractor implements InputDocumentExtractor {

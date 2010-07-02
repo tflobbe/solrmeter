@@ -16,7 +16,7 @@
 package com.linebee.solrmeter.model.exception;
 /**
  * 
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class CommitException extends OperationException {

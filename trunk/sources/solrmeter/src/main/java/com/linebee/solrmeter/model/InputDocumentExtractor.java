@@ -19,7 +19,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 /**
  * Manages the documents to be added/updated to Solr.
- * @author Tomas
+ * @author tflobbe
  *
  */
 public interface InputDocumentExtractor {

@@ -39,7 +39,7 @@ import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
 
 /**
  * Main Queries Panel
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class QueryConsolePanel extends RoundedBorderJPanel {

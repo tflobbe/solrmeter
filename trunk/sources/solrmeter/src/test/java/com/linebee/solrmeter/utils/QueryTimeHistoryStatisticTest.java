@@ -25,7 +25,7 @@ import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
  * Class to test QueryTimeHistoryStatistic. It simply override the method
  * "getNewDate" so it doesn't create a new Date, it uses the previously setted
  * date.
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class QueryTimeHistoryStatisticTest extends QueryTimeHistoryStatistic {

@@ -25,7 +25,7 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import com.linebee.solrmeter.model.exception.OptimizeException;
 /**
  * Executes an optimize 
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class OptimizeExecutor {

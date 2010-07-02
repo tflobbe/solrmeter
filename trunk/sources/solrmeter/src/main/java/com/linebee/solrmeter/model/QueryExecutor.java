@@ -31,7 +31,7 @@ import com.linebee.solrmeter.model.task.QueryThread;
 
 /**
  * Creates and manages query execution Threads.
- * @author Tomas
+ * @author tflobbe
  *
  */
 public class QueryExecutor extends AbstractExecutor {
