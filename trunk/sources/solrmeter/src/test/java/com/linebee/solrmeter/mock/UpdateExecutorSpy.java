@@ -26,7 +26,7 @@ public class UpdateExecutorSpy extends UpdateExecutor {
 	private SolrServerMock serverMock;
 	
 	public UpdateExecutorSpy() {
-		super();
+		super(null);
 		try {
 			serverMock = new SolrServerMock();
 		} catch (MalformedURLException e) {

@@ -21,18 +21,26 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.QueryExecutor;
-import com.linebee.solrmeter.view.Model;
-import com.linebee.solrmeter.view.QueryConsolePanel;
+import com.linebee.solrmeter.view.ConsolePanel;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class QueryExecutorController {
 	
-	private QueryConsolePanel panel;
+	private ConsolePanel panel;
+	
+	private QueryExecutor executor;
 	
 	private Timer timer = null;
 
-	public QueryExecutorController(QueryConsolePanel panel) {
-		this.panel = panel;
+	@Inject
+	public QueryExecutorController(@Named("queryConsolePanel") ConsolePanel queryConsolePanel,
+			QueryExecutor executor) {
+		this.panel = queryConsolePanel;
+		this.executor = executor;
 	}
 
 	public void onStart() {
@@ -79,7 +87,7 @@ public class QueryExecutorController {
 	}
 	
 	private QueryExecutor getExecutor() {
-		return Model.getInstance().getCurrentQueryExecutor();
+		return executor;
 	}
 
 }

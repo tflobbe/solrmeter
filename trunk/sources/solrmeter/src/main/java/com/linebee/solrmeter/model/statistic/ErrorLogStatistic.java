@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.OptimizeStatistic;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
@@ -32,11 +33,13 @@ import com.linebee.solrmeter.model.exception.OperationException;
 import com.linebee.solrmeter.model.exception.OptimizeException;
 import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.solrmeter.model.exception.UpdateException;
+import com.linebee.stressTestScope.StressTestScope;
 /**
  * Keeps statistics of the last ocurred errors and their timestamps
  * @author tflobbe
  *
  */
+@StressTestScope
 public class ErrorLogStatistic implements QueryStatistic, UpdateStatistic,
 		OptimizeStatistic {
 	
@@ -50,6 +53,7 @@ public class ErrorLogStatistic implements QueryStatistic, UpdateStatistic,
 	
 	private LinkedList<OptimizeException> optimizeExceptions;
 	
+	@Inject
 	public ErrorLogStatistic() {
 		queryExceptions = new LinkedList<QueryException>();
 		updateExceptions = new LinkedList<UpdateException>();

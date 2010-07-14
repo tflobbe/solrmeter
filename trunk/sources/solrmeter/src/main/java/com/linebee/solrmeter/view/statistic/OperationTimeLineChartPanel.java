@@ -37,10 +37,13 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class OperationTimeLineChartPanel extends StatisticPanel implements ActionListener {
 
 	private static final long serialVersionUID = 3661614439597184136L;
@@ -54,6 +57,7 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 	private JCheckBox checkBoxShowAdd;
 	private JCheckBox checkBoxShowCommit;
 	
+	@Inject
 	public OperationTimeLineChartPanel(OperationTimeHistory statistic) {
 		super();
 		this.statistic = statistic;
@@ -99,7 +103,7 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 	}
 
 	@Override
-	public synchronized void refresh() {
+	public synchronized void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing Time Line");
 		JFreeChart chart = ChartFactory.createXYLineChart(I18n.get("statistic.operationTimeLineChartPanel.timeLine"), 
 				I18n.get("statistic.operationTimeLineChartPanel.executionInstance"), 
@@ -139,7 +143,7 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				refresh();
+				refreshView();
 			}
 		};
 		thread.start();

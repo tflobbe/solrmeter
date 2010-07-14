@@ -27,11 +27,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class QueryTimeHistoryStatistic implements QueryStatistic {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
@@ -47,8 +49,10 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 	 */
 	private long precision = 10;
 	
+	@Inject
 	public QueryTimeHistoryStatistic() {
 		super();
+		prepare();
 	}
 	
 	public QueryTimeHistoryStatistic(String filePath) {

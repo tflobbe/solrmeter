@@ -24,13 +24,16 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.OptimizeExecutorController;
 import com.linebee.solrmeter.model.OptimizeExecutor;
 import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-public class OptimizeConsolePanel extends RoundedBorderJPanel {
+@StressTestScope
+public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refreshable {
 	
 	private static final long serialVersionUID = -1971290718269938970L;
 	private static final int paddingSize = 1;
@@ -57,11 +60,15 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel {
 	
 	private JButton optimizeButton;
 	
-	public OptimizeConsolePanel() {
+	@Inject
+	public OptimizeConsolePanel(OptimizeExecutorController controller,
+			OptimizeExecutor executor,
+			SimpleOptimizeStatistic optimizeStatistic) {
 		super(I18n.get("optimizeConsolePanel.title"));
-		executor = Model.getInstance().getCurrentOptimizeExecutor();
-		optimizeStatistic = (SimpleOptimizeStatistic) Model.getInstance().getOptimizeStatistic("optimizeStatistic");
-		controller = new OptimizeExecutorController(this, executor);
+		this.executor = executor;
+		this.optimizeStatistic = optimizeStatistic;
+//		optimizeStatistic = (SimpleOptimizeStatistic) Model.getInstance().getOptimizeStatistic("optimizeStatistic");
+		this.controller = controller;
 		this.initGUI();
 	}
 

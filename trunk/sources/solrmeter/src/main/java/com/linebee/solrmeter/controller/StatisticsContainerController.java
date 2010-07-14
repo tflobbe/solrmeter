@@ -19,23 +19,27 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.linebee.solrmeter.view.StatisticsContainer;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.linebee.solrmeter.view.Refreshable;
 
-
+@Singleton
 public class StatisticsContainerController {
 
-	private StatisticsContainer container;
+	private Refreshable container;
 	
 	private Timer timer = null;
 	
-	public StatisticsContainerController(StatisticsContainer view) {
+	@Inject
+	public StatisticsContainerController(@Named("statisticsContainer") Refreshable view) {
 		this.container = view;
 		timer = new Timer();
 		TimerTask task = new TimerTask() {
 
 			@Override
 			public void run() {
-				container.refresh();
+				container.refreshView();
 			}
 			
 		};
@@ -46,7 +50,7 @@ public class StatisticsContainerController {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				container.refresh();
+				container.refreshView();
 			}
 		};
 		thread.start();

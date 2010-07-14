@@ -22,19 +22,22 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.linebee.solrmeter.controller.StatisticsContainerController;
 
-
-public class StatisticsContainer extends JTabbedPane implements ChangeListener {
+@Singleton
+public class StatisticsContainer extends JTabbedPane implements ChangeListener, Refreshable {
 	
 	private static final long serialVersionUID = -1238490278156682110L;
 	private Map<String, StatisticPanel> statistics;
 	private StatisticsContainerController controller;
 	
-	public StatisticsContainer() {
+	@Inject
+	public StatisticsContainer(StatisticsContainerController controller) {
 		super();
 		statistics = new HashMap<String, StatisticPanel>();
-		controller = new StatisticsContainerController(this);
+		this.controller = controller;
 		this.addChangeListener(this);
 	}
 	
@@ -43,16 +46,22 @@ public class StatisticsContainer extends JTabbedPane implements ChangeListener {
 		this.addTab(panel.getStatisticName(), panel);
 	}
 	
-	public synchronized void refresh() {
+	public synchronized void refreshView() {
 		StatisticPanel selectedPanel =(StatisticPanel)this.getSelectedComponent();
 		if(selectedPanel != null) {
-			selectedPanel.refresh();
+			selectedPanel.refreshView();
 		}
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		controller.onTabChanged();
+	}
+	
+	public void clearStatistics() {
+		statistics.clear();
+		this.removeAll();
+		this.revalidate();
 	}
 
 }

@@ -19,15 +19,18 @@ import java.util.Date;
 
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.UpdateStatistic;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * Generate simple statistics for executed commits.
  * @author tflobbe
  *
  */
+@StressTestScope
 public class CommitHistoryStatistic implements UpdateStatistic {
 	
 	private Date lastCommitDate;
@@ -39,6 +42,12 @@ public class CommitHistoryStatistic implements UpdateStatistic {
 	private int commitErrorCount;
 	
 	private int updateErrorCount;
+	
+	@Inject
+	public CommitHistoryStatistic() {
+		super();
+		this.prepare();
+	}
 
 	@Override
 	public void onAddedDocument(UpdateResponse response) {

@@ -92,7 +92,6 @@ public class SettingsPanelContainer extends JPanel {
 			constraints.gridy = row;
 			constraints.weighty = 0.0;
 			JLabel messageLabel = new JLabel("<html><p>" + I18n.get("settings.noEditableMessage") + "</p></html>");
-//			messageLabel.setIcon(new ImageIcon(ClassLoader.getSystemClassLoader().getResource("./images/warning.png")));
 			try {
 				messageLabel.setIcon(new ImageIcon(FileUtils.findFileAsResource("./images/warning.png")));
 			} catch (FileNotFoundException e) {

@@ -20,8 +20,10 @@ import java.util.Map;
 
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * 
@@ -29,11 +31,17 @@ import com.linebee.solrmeter.model.exception.QueryException;
  * @author tflobbe
  *
  */
+@StressTestScope
 public class TimeRangeStatistic implements QueryStatistic {
 	
 	private Map<TimeRange, Integer> counter;
 	
 	private int totalQueries;
+	
+	@Inject
+	public TimeRangeStatistic() {
+		this.prepare();
+	}
 
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {

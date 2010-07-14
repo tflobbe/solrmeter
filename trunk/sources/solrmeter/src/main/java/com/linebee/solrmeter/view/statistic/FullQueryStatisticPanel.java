@@ -35,13 +35,16 @@ import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.FullQueryStatistic;
 import com.linebee.solrmeter.model.statistic.QueryLogStatistic;
 import com.linebee.solrmeter.model.statistic.QueryLogStatistic.QueryLogValue;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.solrmeter.view.component.InfoPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class FullQueryStatisticPanel extends StatisticPanel {
 	
 	private static final long serialVersionUID = 7432143826253437314L;
@@ -64,6 +67,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 //	private JButton clearButton;
 	private JToggleButton scrollLockButton;
 	
+	@Inject
 	public FullQueryStatisticPanel(FullQueryStatistic statictic, QueryLogStatistic queryLogStatictic) {
 		super();
 		this.fullQueryStatictic = statictic;
@@ -152,7 +156,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	}
 
 	@Override
-	public void refresh() {
+	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing Full Query Statistics");
 		medianInfoPanel.setValue(getString(fullQueryStatictic.getMedian()));
 		modeInfoPanel.setValue(fullQueryStatictic.getMode().toString());

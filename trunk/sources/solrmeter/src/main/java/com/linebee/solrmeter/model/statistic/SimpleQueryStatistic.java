@@ -20,7 +20,9 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class SimpleQueryStatistic implements QueryStatistic {
 	
 	private Logger logger = Logger.getLogger(this.getClass());
@@ -45,7 +47,7 @@ public class SimpleQueryStatistic implements QueryStatistic {
 	 * The number of errors ocurred on strings.
 	 */
 	private int totalErrors;
-
+	
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {
 		long qTime = response.getQTime();

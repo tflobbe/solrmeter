@@ -17,7 +17,7 @@ package com.linebee.solrmeter.view;
 
 import javax.swing.JPanel;
 
-public abstract class StatisticPanel extends JPanel {
+public abstract class StatisticPanel extends JPanel implements Refreshable {
 	
 	private static final long serialVersionUID = 390299207939738920L;
 	
@@ -27,5 +27,5 @@ public abstract class StatisticPanel extends JPanel {
 
 	public abstract String getStatisticName();
 	
-	public abstract void refresh();
+	public abstract void refreshView();
 }

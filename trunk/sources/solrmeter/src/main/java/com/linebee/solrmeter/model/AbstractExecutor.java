@@ -110,6 +110,9 @@ public abstract class AbstractExecutor {
 	 * Starts the executor. All Threads are started.
 	 */
 	public void start() {
+		if(running == true) {
+			return;
+		}
 		running = true;
 		for(Thread thread:threads) {
 			thread.start();
@@ -120,6 +123,9 @@ public abstract class AbstractExecutor {
 	 * Stops the executor. All threads are stopped. Statistics are printed.
 	 */
 	public void stop() {
+		if(running == false) {
+			return;
+		}
 		running = false;
 		for(AbstractOperationThread thread:threads) {
 			thread.destroy();

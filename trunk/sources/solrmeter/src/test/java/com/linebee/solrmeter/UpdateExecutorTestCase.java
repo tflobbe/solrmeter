@@ -196,6 +196,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		
 		
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "2147483600");
+		updateExecutor = new UpdateExecutorSpy();
 		updateExecutor.prepare();
 		
 		while (updateExecutor.getNumberOfDocumentsBeforeCommit() < Integer.MAX_VALUE) {

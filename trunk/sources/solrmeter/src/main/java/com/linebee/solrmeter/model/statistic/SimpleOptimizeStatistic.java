@@ -18,9 +18,18 @@ package com.linebee.solrmeter.model.statistic;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.OptimizeStatistic;
 import com.linebee.solrmeter.model.exception.OptimizeException;
+import com.linebee.stressTestScope.StressTestScope;
 
+/**
+ * This implementation of OptimizeStatistic is the main one. The data maintained
+ * by this is the one shown on the OptimizeConsolePanel.
+ * @author tflobbe
+ *
+ */
+@StressTestScope
 public class SimpleOptimizeStatistic implements OptimizeStatistic {
 	
 	private List<String> optimizeErrors;
@@ -32,6 +41,12 @@ public class SimpleOptimizeStatistic implements OptimizeStatistic {
 	private long totalOptimizationTime;
 	
 	private OptimizationResult lastOptimizationResult;
+	
+	@Inject
+	public SimpleOptimizeStatistic() {
+		super();
+		prepare();
+	}
 	
 	@Override
 	public void onOptimizeError(OptimizeException exception) {

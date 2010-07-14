@@ -21,17 +21,21 @@ import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.SolrMeterMenuController;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class SolrMeterMenuBar extends MenuBar {
 	
 	private static final long serialVersionUID = 1L;
 	private SolrMeterMenuController controller;
 
-	public SolrMeterMenuBar() {
+	@Inject
+	public SolrMeterMenuBar(SolrMeterMenuController controller) {
 		super();
 		this.initGUI();
-		controller = new SolrMeterMenuController();
+		this.controller = controller;
 	}
 
 	private void initGUI() {

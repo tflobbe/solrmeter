@@ -15,16 +15,21 @@
  */
 package com.linebee.solrmeter.controller;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.exception.OperationException;
 import com.linebee.solrmeter.view.JDialogStackTrace;
-import com.linebee.solrmeter.view.statistic.ErrorLogPanel;
+import com.linebee.solrmeter.view.Refreshable;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class ErrorLogController {
 	
-	private ErrorLogPanel view;
+	private Refreshable view;
 
-	public ErrorLogController(ErrorLogPanel errorLogPanel) {
+	@Inject
+	public ErrorLogController(@Named("errorLogPanel")Refreshable errorLogPanel) {
 		view = errorLogPanel;
 	}
 
@@ -37,7 +42,7 @@ public class ErrorLogController {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				view.refresh();
+				view.refreshView();
 			}
 		};
 		thread.start();

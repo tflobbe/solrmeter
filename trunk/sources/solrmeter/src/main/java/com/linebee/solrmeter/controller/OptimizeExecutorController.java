@@ -17,17 +17,23 @@ package com.linebee.solrmeter.controller;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.OptimizeExecutor;
-import com.linebee.solrmeter.view.OptimizeConsolePanel;
+import com.linebee.solrmeter.view.Refreshable;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class OptimizeExecutorController {
 	
 	private OptimizeExecutor executor;
 	
-	private OptimizeConsolePanel panel;
+	private Refreshable panel;
 	
+	@Inject
 	public OptimizeExecutorController(
-			OptimizeConsolePanel optimizeConsolePanel, OptimizeExecutor executor) {
+			@Named("optimizeConsolePanel")Refreshable optimizeConsolePanel, 
+			OptimizeExecutor executor) {
 		this.executor = executor;
 		this.panel = optimizeConsolePanel;
 	}

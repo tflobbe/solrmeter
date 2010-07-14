@@ -32,17 +32,20 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.QueryExecutorController;
 import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * Main Queries Panel
  * @author tflobbe
  *
  */
-public class QueryConsolePanel extends RoundedBorderJPanel {
+@StressTestScope
+public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePanel {
 
 	private static final long serialVersionUID = 1376883703280500293L;
 	private static final double MAX_CONCURRENT_QUERIES = 999999999;
@@ -66,10 +69,12 @@ public class QueryConsolePanel extends RoundedBorderJPanel {
 	
 	private JButton stopButton;
 	
-	public QueryConsolePanel(SimpleQueryStatistic simpleQueryStatistic) {
+	@Inject
+	public QueryConsolePanel(QueryExecutorController controller, 
+			SimpleQueryStatistic simpleQueryStatistic) {
 		super(I18n.get("queryConsolePanel.title"));
 		this.simpleQueryStatistic = simpleQueryStatistic;
-		controller = new QueryExecutorController(this);
+		this.controller = controller;
 		this.initGUI();
 	}
 
@@ -162,5 +167,12 @@ public class QueryConsolePanel extends RoundedBorderJPanel {
 		startButton.setEnabled(true);
 		
 	}
+
+	@Inject
+	public void setController(QueryExecutorController controller) {
+		this.controller = controller;
+	}
+	
+	
 
 }

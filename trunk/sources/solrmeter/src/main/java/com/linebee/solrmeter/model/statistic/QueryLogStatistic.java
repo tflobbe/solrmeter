@@ -22,15 +22,25 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.util.NamedList;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class QueryLogStatistic implements QueryStatistic {
 	
 	private static int maxStored;
 	
 	private LinkedList<QueryLogValue> queries;
+	
+	@Inject
+	public QueryLogStatistic() {
+		super();
+		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.queryLogStatistic.maxStored", "400"));
+		queries = new LinkedList<QueryLogValue>();
+	}
 
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {
@@ -47,8 +57,8 @@ public class QueryLogStatistic implements QueryStatistic {
 
 	@Override
 	public void prepare() {
-		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.queryLogStatistic.maxStored", "400"));
-		queries = new LinkedList<QueryLogValue>();
+//		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.queryLogStatistic.maxStored", "400"));
+//		queries = new LinkedList<QueryLogValue>();
 
 	}
 	

@@ -21,19 +21,23 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.UpdateExecutor;
-import com.linebee.solrmeter.view.UpdateConsolePanel;
+import com.linebee.solrmeter.view.ConsolePanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class UpdateExecutorController {
 
-	private UpdateConsolePanel panel;
+	private ConsolePanel panel;
 	
 	private UpdateExecutor executor;
 	
 	private Timer timer = null;
 
-	public UpdateExecutorController(UpdateConsolePanel panel, UpdateExecutor executor) {
+	@Inject
+	public UpdateExecutorController(@Named("updateConsolePanel")ConsolePanel panel, UpdateExecutor executor) {
 		this.panel = panel;
 		this.executor = executor; 
 	}
