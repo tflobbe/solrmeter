@@ -31,11 +31,13 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.HistogramQueryStatistic;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class HistogramChartPanel extends StatisticPanel {
 
 	private static final long serialVersionUID = 2779231592485893152L;
@@ -44,6 +46,7 @@ public class HistogramChartPanel extends StatisticPanel {
 	
 	private JLabel imageLabel;
 	
+	@Inject
 	public HistogramChartPanel(HistogramQueryStatistic histogram) {
 		super();
 		this.histogram = histogram;
@@ -57,7 +60,7 @@ public class HistogramChartPanel extends StatisticPanel {
 	}
 	
 	@Override
-	public void refresh() {
+	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing histogram");
 		JFreeChart chart = ChartFactory.createBarChart(I18n.get("statistic.histogramChartPanel.histogram"), 
 				I18n.get("statistic.histogramChartPanel.time"), 

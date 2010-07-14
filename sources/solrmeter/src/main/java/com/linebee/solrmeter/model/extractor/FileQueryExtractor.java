@@ -16,21 +16,17 @@
 package com.linebee.solrmeter.model.extractor;
 
 import com.linebee.solrmeter.model.QueryExtractor;
-import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * A QueryExtractor that extract the possible strings from a text file
  * @author tflobbe
  *
  */
+@StressTestScope
 public class FileQueryExtractor implements QueryExtractor {
 	
 	private FileStringExtractor stringExtractor;
-	
-	
-	public FileQueryExtractor() {
-		this(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_FILE_PATH));
-	}
 	
 	public FileQueryExtractor(String filePath) {
 		super();

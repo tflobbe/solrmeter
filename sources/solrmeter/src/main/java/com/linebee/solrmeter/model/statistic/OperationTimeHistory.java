@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.OptimizeStatistic;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.UpdateStatistic;
@@ -30,6 +31,7 @@ import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.OptimizeException;
 import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.solrmeter.model.exception.UpdateException;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * 
@@ -38,6 +40,7 @@ import com.linebee.solrmeter.model.exception.UpdateException;
  * @author tflobbe
  *
  */
+@StressTestScope
 public class OperationTimeHistory implements QueryStatistic, UpdateStatistic,
 		OptimizeStatistic {
 	
@@ -61,6 +64,7 @@ public class OperationTimeHistory implements QueryStatistic, UpdateStatistic,
 	
 	private long initTime;
 	
+	@Inject
 	public OperationTimeHistory() {
 		queriesTime = new TreeMap<Long, Long>();
 		updatesTime = new TreeMap<Long, Long>();

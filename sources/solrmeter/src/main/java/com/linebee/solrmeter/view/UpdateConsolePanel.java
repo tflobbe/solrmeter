@@ -29,15 +29,17 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.UpdateExecutorController;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.statistic.CommitHistoryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
 import com.linebee.solrmeter.view.component.SpinnerPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-
-public class UpdateConsolePanel extends RoundedBorderJPanel {
+@StressTestScope
+public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePanel {
 	
 	private static final int MAX_CONCURRENT_UPDATES = Integer.MAX_VALUE;
 	private static final int TIME_SPINNER_STEP = 500;
@@ -63,11 +65,14 @@ public class UpdateConsolePanel extends RoundedBorderJPanel {
 	
 	private UpdateExecutorController controller;
 	
-	public UpdateConsolePanel() {
+	@Inject
+	public UpdateConsolePanel(UpdateExecutor updateExecutor, 
+			UpdateExecutorController controller,
+			CommitHistoryStatistic commitHistoryStatistic) {
 		super(I18n.get("updateConsolePanel.title"));
-		updateExecutor = Model.getInstance().getCurrentUpdateExecutor();
-		commitHistoryStatistic = (CommitHistoryStatistic) Model.getInstance().getUpdateStatistic("commitHistoryStatistic");
-		controller = new UpdateExecutorController(this, updateExecutor);
+		this.updateExecutor = updateExecutor;
+		this.controller = controller;
+		this.commitHistoryStatistic = commitHistoryStatistic;
 		this.initGUI();
 		stopped();
 	}

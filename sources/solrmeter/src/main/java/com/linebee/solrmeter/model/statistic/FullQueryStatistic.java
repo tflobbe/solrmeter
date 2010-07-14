@@ -25,13 +25,16 @@ import java.util.TreeMap;
 
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 /**
  * 
  * @author tflobbe
  *
  */
+@StressTestScope
 public class FullQueryStatistic implements QueryStatistic {
 	
 	/**
@@ -49,6 +52,11 @@ public class FullQueryStatistic implements QueryStatistic {
 	private Date lastErrorDate;
 	
 	private int totalQTime;
+	
+	@Inject
+	public FullQueryStatistic() {
+		prepare();
+	}
 	
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {

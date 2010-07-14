@@ -27,11 +27,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class HistogramQueryStatistic implements QueryStatistic {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
@@ -42,8 +44,10 @@ public class HistogramQueryStatistic implements QueryStatistic {
 	
 	private long histogramInterval = 100L;
 	
+	@Inject
 	public HistogramQueryStatistic() {
 		super();
+		histogram = new HashMap<Long, Integer>();
 	}
 	
 	public HistogramQueryStatistic(String filePath) {
@@ -72,7 +76,6 @@ public class HistogramQueryStatistic implements QueryStatistic {
 
 	@Override
 	public void prepare() {
-		histogram = new HashMap<Long, Integer>();
 
 	}
 	

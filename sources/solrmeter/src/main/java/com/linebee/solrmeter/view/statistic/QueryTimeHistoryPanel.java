@@ -31,11 +31,13 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class QueryTimeHistoryPanel extends StatisticPanel {
 	
 	private static final long serialVersionUID = 2781214713297030466L;
@@ -44,6 +46,7 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 	
 	private JLabel imageLabel;
 	
+	@Inject
 	public QueryTimeHistoryPanel(QueryTimeHistoryStatistic queryTimeStatistic) {
 		super();
 		this.queryTimeStatistic = queryTimeStatistic;
@@ -57,7 +60,7 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 	}
 
 	@Override
-	public void refresh() {
+	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing query Time History");
 		JFreeChart chart = ChartFactory.createBarChart(I18n.get("statistic.queryTimeHistoryPanel.queryHistory"), 
 				I18n.get("statistic.queryTimeHistoryPanel.time"), 

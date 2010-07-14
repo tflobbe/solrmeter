@@ -25,18 +25,22 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
-import com.linebee.solrmeter.model.extractor.FileInputDocumentExtractor;
 import com.linebee.solrmeter.model.task.UpdateThread;
+import com.linebee.stressTestScope.StressTestScope;
 
 /** 
  * manages update execution Threads.
  * @author tflobbe
  *
  */
+@StressTestScope
 public class UpdateExecutor extends AbstractExecutor {
 	
+	//TODO DI
 	private CommonsHttpSolrServer server;
 	
 	private Integer numberOfDocumentsBeforeCommit;
@@ -53,6 +57,20 @@ public class UpdateExecutor extends AbstractExecutor {
 	
 	private InputDocumentExtractor documentExtractor;
 	
+	@Inject
+	public UpdateExecutor(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
+		super();
+		this.documentExtractor = documentExtractor;
+		statistics = new LinkedList<UpdateStatistic>();
+		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE)).intValue();
+		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
+		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
+		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
+		if(!autocommit) {
+			this.prepareCommiter();
+		}
+	}
+
 	public UpdateExecutor() {
 		super();
 		statistics = new LinkedList<UpdateStatistic>();
@@ -66,14 +84,6 @@ public class UpdateExecutor extends AbstractExecutor {
 	}
 	
 	public void prepare() {
-		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE)).intValue();
-		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
-		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
-		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
-		documentExtractor = new FileInputDocumentExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_FILE_PATH));
-		if(!autocommit) {
-			this.prepareCommiter();
-		}
 		prepareStatistics();
 		super.prepare();
 	}
@@ -99,6 +109,9 @@ public class UpdateExecutor extends AbstractExecutor {
 	}
 
 	public void start() {
+		if(this.isRunning()) {
+			return;
+		}
 		super.start();
 		if(!isAutocommit()) {
 			commiterThread.start();
@@ -107,6 +120,9 @@ public class UpdateExecutor extends AbstractExecutor {
 	}
 	
 	public void stop() {
+		if(!this.isRunning()) {
+			return;
+		}
 		if(!isAutocommit()) {
 			commiterThread.destroy();
 		}

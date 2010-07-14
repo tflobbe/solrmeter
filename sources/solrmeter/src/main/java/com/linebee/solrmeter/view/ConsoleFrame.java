@@ -18,6 +18,7 @@ package com.linebee.solrmeter.view;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.MenuBar;
 import java.awt.event.WindowAdapter;
@@ -28,22 +29,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.linebee.solrmeter.model.statistic.ErrorLogStatistic;
-import com.linebee.solrmeter.model.statistic.FullQueryStatistic;
-import com.linebee.solrmeter.model.statistic.HistogramQueryStatistic;
-import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
-import com.linebee.solrmeter.model.statistic.QueryLogStatistic;
-import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
-import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
-import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
-import com.linebee.solrmeter.view.statistic.ErrorLogPanel;
-import com.linebee.solrmeter.view.statistic.FullQueryStatisticPanel;
-import com.linebee.solrmeter.view.statistic.HistogramChartPanel;
-import com.linebee.solrmeter.view.statistic.OperationTimeLineChartPanel;
-import com.linebee.solrmeter.view.statistic.PieChartPanel;
-import com.linebee.solrmeter.view.statistic.QueryTimeHistoryPanel;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
-
+@Singleton
 public class ConsoleFrame extends JFrame {
 	
 	private static final long serialVersionUID = 976934495299084244L;
@@ -52,9 +41,16 @@ public class ConsoleFrame extends JFrame {
 	private OptimizeConsolePanel optimizePanel;
 	private StatisticsContainer statisticsContainer;
 	
-	public ConsoleFrame() {
+	
+	@Inject
+	public ConsoleFrame(QueryConsolePanel queryPanel,
+			UpdateConsolePanel updatePanel, OptimizeConsolePanel optimizePanel,
+			StatisticsContainer statisticsContainer) throws HeadlessException {
 		super();
-		this.initMenu();
+		this.queryPanel = queryPanel;
+		this.updatePanel = updatePanel;
+		this.optimizePanel = optimizePanel;
+		this.statisticsContainer = statisticsContainer;
 		this.initGUI();
 		this.addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent evt) {
@@ -63,7 +59,7 @@ public class ConsoleFrame extends JFrame {
 	    });
 		SwingUtils.centerWindow(this);
 	}
-	
+
 	private void exitApplication() {
 		System.exit(0);
 	}
@@ -83,45 +79,54 @@ public class ConsoleFrame extends JFrame {
 		
 	}
 
-	private void initMenu() {
-		MenuBar menuBar = new SolrMeterMenuBar();
-		this.setMenuBar(menuBar);
-		
-	}
-
 	private OptimizeConsolePanel getOptimizePanel() {
-		optimizePanel = new OptimizeConsolePanel();
 		return optimizePanel;
 	}
 
 	private UpdateConsolePanel getUpdatePanel() {
-		updatePanel = new UpdateConsolePanel();
 		return updatePanel;
 	}
 
 	private void addStatisticsPanel() {
-		statisticsContainer = new StatisticsContainer();
-		statisticsContainer.addStatistic(new PieChartPanel((TimeRangeStatistic) Model.getInstance().getQueryStatistic("timeRangeStatistic")));
-		statisticsContainer.addStatistic(new HistogramChartPanel((HistogramQueryStatistic) Model.getInstance().getQueryStatistic("histogram")));
-		statisticsContainer.addStatistic(new QueryTimeHistoryPanel((QueryTimeHistoryStatistic) Model.getInstance().getQueryStatistic("queryTimeHistory")));
-		statisticsContainer.addStatistic(new ErrorLogPanel((ErrorLogStatistic) Model.getInstance().getQueryStatistic("errorLogStatistic")));
-		statisticsContainer.addStatistic(new OperationTimeLineChartPanel((OperationTimeHistory) Model.getInstance().getQueryStatistic("operationTimeHistory")));
-		statisticsContainer.addStatistic(new FullQueryStatisticPanel((FullQueryStatistic) Model.getInstance().getQueryStatistic("fullQueryStatistic"), 
-				(QueryLogStatistic) Model.getInstance().getQueryStatistic("queryLogStatistic")));
-		
 		this.getContentPane().add(statisticsContainer);
 	}
 
 	private QueryConsolePanel getQueryPanel() {
-		queryPanel = new QueryConsolePanel((SimpleQueryStatistic) Model.getInstance().getQueryStatistic("simpleQueryStatistic"));
 		return queryPanel;
 	}
 
 	public void onConfigurationChanged() {
+		statisticsContainer.clearStatistics();
 		this.getContentPane().removeAll();
 		this.initGUI();
 		this.getContentPane().repaint();
 		((JComponent)this.getContentPane()).revalidate();
+	}
+	
+	@Inject
+	@Override
+	public void setMenuBar(MenuBar mb) {
+		super.setMenuBar(mb);
+	}
+
+	public StatisticsContainer getStatisticsContainer() {
+		return statisticsContainer;
+	}
+
+	public void setStatisticsContainer(StatisticsContainer statisticsContainer) {
+		this.statisticsContainer = statisticsContainer;
+	}
+
+	public void setQueryPanel(QueryConsolePanel queryPanel) {
+		this.queryPanel = queryPanel;
+	}
+
+	public void setUpdatePanel(UpdateConsolePanel updatePanel) {
+		this.updatePanel = updatePanel;
+	}
+
+	public void setOptimizePanel(OptimizeConsolePanel optimizePanel) {
+		this.optimizePanel = optimizePanel;
 	}
 
 }

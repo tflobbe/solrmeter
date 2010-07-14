@@ -18,6 +18,8 @@ package com.linebee.solrmeter.model.extractor;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.linebee.solrmeter.model.FileUtils;
 
 /**
@@ -35,7 +37,12 @@ public class FileStringExtractor {
 	
 	public FileStringExtractor(String filePath) {
 		super();
-		loadStrings(filePath);
+		if(filePath == null) {
+			Logger.getLogger(this.getClass()).info("No path specified for FileStringExtractor. No Strings added");
+			strings = new LinkedList<String>();
+		} else {
+			loadStrings(filePath);
+		}
 	}
 	
 	/**

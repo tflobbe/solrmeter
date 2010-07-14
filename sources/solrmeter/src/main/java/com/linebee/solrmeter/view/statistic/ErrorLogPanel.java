@@ -34,13 +34,16 @@ import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.ErrorLogController;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.OperationException;
 import com.linebee.solrmeter.model.statistic.ErrorLogStatistic;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
+@StressTestScope
 public class ErrorLogPanel extends StatisticPanel implements ActionListener, MouseListener {
 	
 	private static final long serialVersionUID = 6190280732555917695L;
@@ -61,10 +64,11 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 	
 	private ErrorLogController controller;
 
-	public ErrorLogPanel(ErrorLogStatistic statistic) {
+	@Inject
+	public ErrorLogPanel(ErrorLogStatistic statistic, ErrorLogController controller) {
 		super();
 		this.statistic = statistic;
-		this.controller = new ErrorLogController(this);
+		this.controller = controller;
 		initGUI();
 	}
 
@@ -120,7 +124,7 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 	}
 
 	@Override
-	public synchronized void refresh() {
+	public synchronized void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing Error Log");
 		((OperationExceptionTableModel)logTable.getModel()).refreshData(getErrorsToShow());
 	}

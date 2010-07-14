@@ -18,7 +18,7 @@ package com.linebee.solrmeter.mock;
 import com.linebee.solrmeter.model.QueryExecutor;
 
 public class QueryExecutorSpy extends QueryExecutor {
-
+	
 	@Override
 	public void loadExtraParameters(String property) {
 		super.loadExtraParameters(property);

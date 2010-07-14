@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.linebee</groupId>
 	<artifactId>solrmeter</artifactId>
@@ -33,15 +34,15 @@
 		<name>Linebee LLC</name>
 		<url>www.linebee.com</url>
 	</organization>
-	
+
 	<url>http://groups.google.com/group/solrmeter</url>
-	
+
 	<developers>
 		<developer>
 			<name>Tomás Fernández Löbbe</name>
 			<email>tflobbe@gmail.com</email>
 			<id>tflobbe</id>
-			<timezone>GMT+3</timezone>
+			<timezone>GMT-3</timezone>
 		</developer>
 	</developers>
 
@@ -95,13 +96,25 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-					
+
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>2.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.linebee</groupId>
+			<artifactId>stressTestScope</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

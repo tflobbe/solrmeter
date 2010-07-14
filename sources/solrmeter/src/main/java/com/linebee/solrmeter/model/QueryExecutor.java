@@ -23,21 +23,24 @@ import java.util.Map;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.exception.QueryException;
-import com.linebee.solrmeter.model.extractor.FileFieldExtractor;
-import com.linebee.solrmeter.model.extractor.FileQueryExtractor;
 import com.linebee.solrmeter.model.task.AbstractOperationThread;
 import com.linebee.solrmeter.model.task.QueryThread;
+import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * Creates and manages query execution Threads.
  * @author tflobbe
  *
  */
+@StressTestScope
 public class QueryExecutor extends AbstractExecutor {
 	
 	/**
 	 * Solr Server for strings
+	 * TODO implement provider
 	 */
 	private CommonsHttpSolrServer server;
 	
@@ -71,6 +74,22 @@ public class QueryExecutor extends AbstractExecutor {
 	 */
 	private Map<String, String> extraParameters;
 	
+	@Inject
+	public QueryExecutor(
+			@Named("queryExtractor") QueryExtractor queryExtractor,
+			@Named("filterQueryExtractor") QueryExtractor filterQueryExtractor,
+			FieldExtractor facetFieldExtractor) {
+		super();
+		statistics = new LinkedList<QueryStatistic>();
+		this.queryExtractor = queryExtractor;
+		this.filterQueryExtractor = filterQueryExtractor;
+		this.facetFieldExtractor = facetFieldExtractor;
+		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
+		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
+		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
+		prepare();
+	}
+
 	public QueryExecutor() {
 		super();
 		statistics = new LinkedList<QueryStatistic>();
@@ -81,12 +100,6 @@ public class QueryExecutor extends AbstractExecutor {
 	 * Prepares the executor to run.
 	 */
 	public void prepare() {
-		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
-		queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
-		queryExtractor = new FileQueryExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_FILE_PATH));
-		filterQueryExtractor = new FileQueryExtractor(SolrMeterConfiguration.getProperty("solr.query.filterQueriesFile"));
-		facetFieldExtractor = new FileFieldExtractor(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.FIELDS_FILE_PATH));
-		loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 		prepareStatistics();
 		super.prepare();
 	}

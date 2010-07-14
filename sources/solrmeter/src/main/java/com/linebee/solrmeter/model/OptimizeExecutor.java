@@ -23,11 +23,13 @@ import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
 import com.linebee.solrmeter.model.exception.OptimizeException;
+import com.linebee.stressTestScope.StressTestScope;
 /**
  * Executes an optimize 
  * @author tflobbe
  *
  */
+@StressTestScope
 public class OptimizeExecutor {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
@@ -50,6 +52,7 @@ public class OptimizeExecutor {
 	public OptimizeExecutor() {
 		super();
 		optimizeObservers = new LinkedList<OptimizeStatistic>();
+		prepare();
 	}
 	/**
 	 * Prepares the Excecutor to run an optimize

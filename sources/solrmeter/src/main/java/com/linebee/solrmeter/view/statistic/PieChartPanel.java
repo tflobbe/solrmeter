@@ -26,12 +26,14 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
+import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.TimeRange;
 import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
+import com.linebee.stressTestScope.StressTestScope;
 
-
+@StressTestScope
 public class PieChartPanel extends StatisticPanel {
 
 	private static final long serialVersionUID = -3022639027937641338L;
@@ -40,6 +42,7 @@ public class PieChartPanel extends StatisticPanel {
 	
 	private TimeRangeStatistic timeRangeStatistic;
 
+	@Inject
 	public PieChartPanel(TimeRangeStatistic timeRangeStatistic) {
 		super();
 		imageLabel = new JLabel();
@@ -53,7 +56,7 @@ public class PieChartPanel extends StatisticPanel {
 	}
 
 	@Override
-	public void refresh() {
+	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("Refreshing pie chart");
 		DefaultPieDataset pieDataset = this.generatePieDataset();
 		JFreeChart chart = ChartFactory.createPieChart(
