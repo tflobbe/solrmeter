@@ -249,9 +249,6 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		@Override
 		public void onFinishedTest() {}
 
-		@Override
-		public void prepare() {}
-
 		public int getAddedDocs() {
 			return addedDocs;
 		}

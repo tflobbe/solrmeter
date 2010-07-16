@@ -114,11 +114,7 @@ public class OperationTimeHistory implements QueryStatistic, UpdateStatistic,
 
 	@Override
 	public void onQueryError(QueryException exception) {}
-
-	@Override
-	public void prepare() {
-	}
-
+	
 	@Override
 	public void onAddError(UpdateException exception) {}
 

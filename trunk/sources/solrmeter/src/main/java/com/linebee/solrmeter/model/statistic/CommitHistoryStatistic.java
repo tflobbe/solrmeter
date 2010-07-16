@@ -46,7 +46,9 @@ public class CommitHistoryStatistic implements UpdateStatistic {
 	@Inject
 	public CommitHistoryStatistic() {
 		super();
-		this.prepare();
+		totalAddedDocuments = 0;
+		lastCommitDate = null;
+		totalCommits = 0;
 	}
 
 	@Override
@@ -62,13 +64,6 @@ public class CommitHistoryStatistic implements UpdateStatistic {
 
 	@Override
 	public void onFinishedTest() {
-	}
-
-	@Override
-	public void prepare() {
-		totalAddedDocuments = 0;
-		lastCommitDate = null;
-		totalCommits = 0;
 	}
 
 	public Date getLastCommitDate() {

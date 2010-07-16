@@ -23,7 +23,6 @@ public class OperationTimeHistoryTestCase extends BaseTestCase {
 
 	public void testAdd() throws InterruptedException {
 		OperationTimeHistory statistic = new OperationTimeHistory();
-		statistic.prepare();
 		assertTrue(statistic.getCommitTime().isEmpty());
 		assertTrue(statistic.getUpdatesTime().isEmpty());
 		assertTrue(statistic.getOptimizeTime().isEmpty());
@@ -38,7 +37,6 @@ public class OperationTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testAddSameKey() throws InterruptedException {
 		OperationTimeHistory statistic = new OperationTimeHistorySpy();
-		statistic.prepare();
 		assertTrue(statistic.getCommitTime().isEmpty());
 		assertTrue(statistic.getUpdatesTime().isEmpty());
 		assertTrue(statistic.getOptimizeTime().isEmpty());

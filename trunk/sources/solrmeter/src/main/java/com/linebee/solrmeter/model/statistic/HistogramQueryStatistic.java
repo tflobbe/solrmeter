@@ -73,11 +73,6 @@ public class HistogramQueryStatistic implements QueryStatistic {
 	public void onFinishedTest() {
 		printHistogram();
 	}
-
-	@Override
-	public void prepare() {
-
-	}
 	
 	public Map<Integer, Integer> getCurrentHisogram() {
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();

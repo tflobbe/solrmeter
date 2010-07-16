@@ -30,7 +30,6 @@ public class HistogramQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testOneQuery() {
 		HistogramQueryStatistic statistic = new HistogramQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(10), 0);
 		statistic.onFinishedTest();
 		try {
@@ -45,7 +44,6 @@ public class HistogramQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testManyQueries() {
 		HistogramQueryStatistic statistic = new HistogramQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(99), 0);
 		statistic.onExecutedQuery(this.createQueryResponse(99), 0);
 		statistic.onExecutedQuery(this.createQueryResponse(101), 0);
@@ -81,14 +79,12 @@ public class HistogramQueryStatisticTestCase extends BaseTestCase {
 			file.delete();
 		}
 		HistogramQueryStatistic statistic = new HistogramQueryStatistic("histogramEmpty.csv");
-		statistic.prepare();
 		statistic.onFinishedTest();
 		assertFalse(file.exists());
 	}
 	
 	public void testGetCurrentHistogram() {
 		HistogramQueryStatistic statistic = new HistogramQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(99), 0);
 		statistic.onExecutedQuery(this.createQueryResponse(99), 0);
 		statistic.onExecutedQuery(this.createQueryResponse(101), 0);

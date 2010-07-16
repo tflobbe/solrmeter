@@ -87,21 +87,13 @@ public class QueryExecutor extends AbstractExecutor {
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
-		prepare();
+		super.prepare();
 	}
 
 	public QueryExecutor() {
 		super();
 		statistics = new LinkedList<QueryStatistic>();
 //		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
-	}
-	
-	/**
-	 * Prepares the executor to run.
-	 */
-	public void prepare() {
-		prepareStatistics();
-		super.prepare();
 	}
 	
 	protected void loadExtraParameters(String property) {
@@ -121,14 +113,6 @@ public class QueryExecutor extends AbstractExecutor {
 	@Override
 	protected AbstractOperationThread createThread() {
 		return new QueryThread(this, 60);
-	}
-	/**
-	 * Prepares al observer statistics
-	 */
-	private void prepareStatistics() {
-		for(QueryStatistic statistic:statistics) {
-			statistic.prepare();
-		}
 	}
 
 	/**

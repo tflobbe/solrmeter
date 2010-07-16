@@ -40,7 +40,12 @@ public class TimeRangeStatistic implements QueryStatistic {
 	
 	@Inject
 	public TimeRangeStatistic() {
-		this.prepare();
+		counter = new HashMap<TimeRange, Integer>();
+		//TODO parameterize
+		counter.put(new TimeRange(0, 500), 0);
+		counter.put(new TimeRange(501, 1000), 0);
+		counter.put(new TimeRange(1001, 2000), 0);
+		counter.put(new TimeRange(2001), 0);
 	}
 
 	@Override
@@ -58,16 +63,6 @@ public class TimeRangeStatistic implements QueryStatistic {
 		//does nothing
 	}
 
-	@Override
-	public void prepare() {
-		counter = new HashMap<TimeRange, Integer>();
-		//TODO parameterize
-		counter.put(new TimeRange(0, 500), 0);
-		counter.put(new TimeRange(501, 1000), 0);
-		counter.put(new TimeRange(1001, 2000), 0);
-		counter.put(new TimeRange(2001), 0);
-	}
-	
 	/**
 	 * 
 	 * @return Returns all the configured timeRanges and the percentage of strings on 

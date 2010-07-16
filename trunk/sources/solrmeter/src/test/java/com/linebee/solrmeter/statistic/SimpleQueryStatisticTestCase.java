@@ -23,7 +23,6 @@ public class SimpleQueryStatisticTestCase extends BaseTestCase {
 
 	public void testExecutedQueries() {
 		SimpleQueryStatistic statistic = new SimpleQueryStatistic();
-		statistic.prepare();
 		assertEquals(0, statistic.getTotalClientTime());
 		assertEquals(0, statistic.getTotalQTime());
 		assertEquals(0, statistic.getTotalErrors());

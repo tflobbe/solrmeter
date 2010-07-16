@@ -33,7 +33,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testOneQuery() {
 		QueryTimeHistoryStatisticTest statistic = new QueryTimeHistoryStatisticTest();
-		statistic.prepare();
 		Date date = new Date();
 		statistic.setDateEvent(date);
 		statistic.onExecutedQuery(this.createQueryResponse(10), 0);
@@ -50,7 +49,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testManyQueriesEqualTimes() {
 		QueryTimeHistoryStatisticTest statistic = new QueryTimeHistoryStatisticTest();
-		statistic.prepare();
 		Date date = new Date();
 		statistic.setDateEvent(date);
 		statistic.onExecutedQuery(this.createQueryResponse(100), 0);
@@ -79,7 +77,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testManyQueriesDiferentTimes() {
 		QueryTimeHistoryStatisticTest statistic = new QueryTimeHistoryStatisticTest();
-		statistic.prepare();
 		Date date = new Date();
 		statistic.setDateEvent(date);
 		statistic.onExecutedQuery(this.createQueryResponse(100), 0);
@@ -103,7 +100,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testManyQueriesDiferentDates() {
 		QueryTimeHistoryStatisticTest statistic = new QueryTimeHistoryStatisticTest();
-		statistic.prepare();
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MILLISECOND, 0);
 		calendar.set(Calendar.SECOND, 0);
@@ -153,7 +149,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 	
 	public void testManyQueriesDiferentDates2() {
 		QueryTimeHistoryStatisticTest statistic = new QueryTimeHistoryStatisticTest();
-		statistic.prepare();
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MILLISECOND, 0);
 		calendar.set(Calendar.SECOND, 0);
@@ -213,7 +208,6 @@ public class QueryTimeHistoryTestCase extends BaseTestCase {
 			file.delete();
 		}
 		QueryTimeHistoryStatistic statistic = new QueryTimeHistoryStatistic("queryTimeEmpty.csv");
-		statistic.prepare();
 		statistic.onFinishedTest();
 		assertFalse(file.exists());
 	}

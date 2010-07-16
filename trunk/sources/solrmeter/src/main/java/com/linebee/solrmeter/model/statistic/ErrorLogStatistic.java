@@ -59,12 +59,6 @@ public class ErrorLogStatistic implements QueryStatistic, UpdateStatistic,
 		updateExceptions = new LinkedList<UpdateException>();
 		commitExceptions = new LinkedList<CommitException>();
 		optimizeExceptions = new LinkedList<OptimizeException>();
-		
-	}
-	
-
-	@Override
-	public void prepare() {
 		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.errorLogStatistic.maxStored", "400"));
 	}
 

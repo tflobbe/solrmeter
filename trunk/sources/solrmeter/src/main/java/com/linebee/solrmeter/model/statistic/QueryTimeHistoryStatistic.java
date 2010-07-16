@@ -52,10 +52,12 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 	@Inject
 	public QueryTimeHistoryStatistic() {
 		super();
-		prepare();
+		timePerInterval = new HashMap<Long, Integer>();
+		queriesPerInterval = new HashMap<Long, Integer>();
 	}
 	
 	public QueryTimeHistoryStatistic(String filePath) {
+		this();
 		this.queryTimeFilePath = filePath;
 	}
 
@@ -82,12 +84,6 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 		printQueriesTime();
 	}
 
-	@Override
-	public void prepare() {
-		timePerInterval = new HashMap<Long, Integer>();
-		queriesPerInterval = new HashMap<Long, Integer>();
-	}
-	
 	public Map<Integer, Integer> getCurrentHistory() {
 		Map<Integer, Integer> history = new HashMap<Integer, Integer>();
 		if(timePerInterval.isEmpty()) {

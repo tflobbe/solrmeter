@@ -55,7 +55,10 @@ public class FullQueryStatistic implements QueryStatistic {
 	
 	@Inject
 	public FullQueryStatistic() {
-		prepare();
+		lastErrorDate = null;
+		queryTimeByDate = new TreeMap<Long, Integer>();
+		sortedQueryTimes = new LinkedList<Integer>();
+		totalQTime = 0;
 	}
 	
 	@Override
@@ -80,14 +83,6 @@ public class FullQueryStatistic implements QueryStatistic {
 	@Override
 	public void onQueryError(QueryException exception) {
 		lastErrorDate = exception.getDate();
-	}
-
-	@Override
-	public void prepare() {
-		lastErrorDate = null;
-		queryTimeByDate = new TreeMap<Long, Integer>();
-		sortedQueryTimes = new LinkedList<Integer>();
-		totalQTime = 0;
 	}
 	
 	public Double getMedian() {

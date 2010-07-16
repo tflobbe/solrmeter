@@ -26,7 +26,6 @@ public class QueryLogStatisticTestCase extends BaseTestCase {
 
 	public void simpleTest() {
 		QueryLogStatistic statistic = new QueryLogStatistic();
-		statistic.prepare();
 		assertEquals(0, statistic.getLastQueries().size());
 		statistic.onExecutedQuery(createQueryResponse(10), 0);
 		assertEquals(1, statistic.getLastQueries().size());
@@ -46,7 +45,6 @@ public class QueryLogStatisticTestCase extends BaseTestCase {
 	public void testManyQueries() {
 		SolrMeterConfiguration.setProperty("solr.queryLogStatistic.maxStored", "100");
 		QueryLogStatistic statistic = new QueryLogStatistic();
-		statistic.prepare();
 		for(int i = 1; i <= 100; i++) {
 			statistic.onExecutedQuery(createQueryResponse(i), 0);
 			assertEquals(i, statistic.getLastQueries().size());

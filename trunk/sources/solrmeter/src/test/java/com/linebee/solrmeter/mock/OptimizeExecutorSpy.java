@@ -27,12 +27,6 @@ public class OptimizeExecutorSpy extends OptimizeExecutor {
 
 	public OptimizeExecutorSpy() throws MalformedURLException {
 		optimizeObservers = new LinkedList<OptimizeStatistic>();
-		this.server = new SolrServerMock();
-	}
-	
-	@Override
-	public void prepare() {
-		super.prepare();
 		try {
 			this.server = new SolrServerMock();
 		} catch (MalformedURLException e) {

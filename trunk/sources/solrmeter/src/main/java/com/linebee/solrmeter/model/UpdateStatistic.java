@@ -22,8 +22,6 @@ import com.linebee.solrmeter.model.exception.UpdateException;
 
 public interface UpdateStatistic {
 
-	void prepare();
-
 	void onAddedDocument(UpdateResponse response);
 
 	void onCommit(UpdateResponse response);

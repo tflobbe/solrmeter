@@ -39,7 +39,6 @@ public class TimeRangeStatisticTestCase extends BaseTestCase {
 
 	public void test() {
 		TimeRangeStatistic statistic = new TimeRangeStatistic();
-		statistic.prepare();
 		assertTrue(statistic.getActualPercentage().isEmpty());
 		statistic.onExecutedQuery(createQueryResponse(0), 0);
 		this.assertAll(statistic, 100, 0, 0, 0);

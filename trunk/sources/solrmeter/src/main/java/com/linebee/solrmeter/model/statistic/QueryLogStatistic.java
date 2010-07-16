@@ -54,13 +54,6 @@ public class QueryLogStatistic implements QueryStatistic {
 	public void onQueryError(QueryException exception) {
 		addToList(new QueryLogValue(exception));
 	}
-
-	@Override
-	public void prepare() {
-//		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.queryLogStatistic.maxStored", "400"));
-//		queries = new LinkedList<QueryLogValue>();
-
-	}
 	
 	private void addToList(QueryLogValue objectToAdd) {
 		queries.addFirst(objectToAdd);

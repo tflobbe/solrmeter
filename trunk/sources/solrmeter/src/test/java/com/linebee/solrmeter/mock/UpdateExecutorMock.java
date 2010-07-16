@@ -43,10 +43,6 @@ public class UpdateExecutorMock extends UpdateExecutor {
 	public SolrInputDocument getNextDocument() {
 		return new SolrInputDocument();
 	}
-	
-	public void prepare() {
-		
-	}
 
 	@Override
 	public void notifyAddedDocument(UpdateResponse response) {

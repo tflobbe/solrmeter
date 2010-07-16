@@ -52,18 +52,9 @@ public class OptimizeExecutor {
 	public OptimizeExecutor() {
 		super();
 		optimizeObservers = new LinkedList<OptimizeStatistic>();
-		prepare();
-	}
-	/**
-	 * Prepares the Excecutor to run an optimize
-	 */
-	public void prepare() {
 		server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
-		for(OptimizeStatistic observer:optimizeObservers) {
-			observer.prepare();
-		}
 	}
-
+	
 	/**
 	 * Asynchonize index optimization
 	 */

@@ -25,6 +25,4 @@ public interface OptimizeStatistic {
 
 	void onOptimizeStared(long initTime);
 
-	void prepare();
-
 }
