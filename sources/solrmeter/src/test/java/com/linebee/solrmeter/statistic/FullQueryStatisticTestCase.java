@@ -28,7 +28,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 
 	public void testLastErrorDate() throws InterruptedException {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		QueryException exception = new QueryException();
 		statistic.onQueryError(exception);
 		Thread.sleep(200);
@@ -37,7 +36,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testEmptyStatistic() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		assertEquals(0.0, statistic.getMedian());
 		assertEquals(0.0, statistic.getVariance());
 		assertEquals(new Integer(-1), statistic.getMode());
@@ -48,7 +46,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	 */
 	public void testMedian1() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(2),1);
 		statistic.onExecutedQuery(this.createQueryResponse(3),1);
@@ -60,7 +57,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	 */
 	public void testMedian2() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(3),1);
 		statistic.onExecutedQuery(this.createQueryResponse(2),1);
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
@@ -69,7 +65,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMedian3() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(10),1);
 		statistic.onExecutedQuery(this.createQueryResponse(20),1);
 		statistic.onExecutedQuery(this.createQueryResponse(60),1);
@@ -78,7 +73,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMedian4() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(10),1);
 		statistic.onExecutedQuery(this.createQueryResponse(20),1);
 		assertEquals(15.0, statistic.getMedian());
@@ -86,7 +80,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMedian5() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(2),1);
 		statistic.onExecutedQuery(this.createQueryResponse(3),1);
@@ -100,7 +93,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMedian6() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
@@ -124,7 +116,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private void medianWith(int cantItems) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int i = 0; i < cantItems; i++) {
 			statistic.onExecutedQuery(this.createQueryResponse((int)(Math.random() * 500)),1);
 		}
@@ -139,7 +130,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMode1() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(1),1);
 		statistic.onExecutedQuery(this.createQueryResponse(2),1);
@@ -158,7 +148,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testMode2() {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		statistic.onExecutedQuery(this.createQueryResponse(4),1);
 		statistic.onExecutedQuery(this.createQueryResponse(4),1);
 		statistic.onExecutedQuery(this.createQueryResponse(3),1);
@@ -189,7 +178,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private void doTestMode(int[] nums, int mode) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int num:nums) {
 			statistic.onExecutedQuery(this.createQueryResponse(num),1);
 		}
@@ -198,7 +186,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private void modeWith(int cantItems) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int i = 0; i < cantItems; i++) {
 			statistic.onExecutedQuery(this.createQueryResponse((int)(Math.random() * 500)),1);
 		}
@@ -228,7 +215,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private Double getVariance(int[] nums) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int num:nums) {
 			statistic.onExecutedQuery(this.createQueryResponse(num),1);
 		}
@@ -237,7 +223,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private void varianceWith(int cantItems) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int i = 0; i < cantItems; i++) {
 			statistic.onExecutedQuery(this.createQueryResponse((int)(Math.random() * 500)),1);
 		}
@@ -260,7 +245,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private Double getStandardDeviation(int[] nums) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int num:nums) {
 			statistic.onExecutedQuery(this.createQueryResponse(num),1);
 		}
@@ -276,7 +260,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	private Integer getTotalAverage(int[] nums) {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		for(int num:nums) {
 			statistic.onExecutedQuery(this.createQueryResponse(num),1);
 		}
@@ -285,7 +268,6 @@ public class FullQueryStatisticTestCase extends BaseTestCase {
 	
 	public void testAverageSince() throws InterruptedException {
 		FullQueryStatistic statistic = new FullQueryStatistic();
-		statistic.prepare();
 		Date initDate = new Date();
 		statistic.onExecutedQuery(this.createQueryResponse(100), 1);
 		Thread.sleep(200);

@@ -66,9 +66,7 @@ public class UpdateExecutor extends AbstractExecutor {
 		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
-		if(!autocommit) {
-			this.prepareCommiter();
-		}
+		super.prepare();
 	}
 
 	public UpdateExecutor() {
@@ -83,11 +81,6 @@ public class UpdateExecutor extends AbstractExecutor {
 		return server;
 	}
 	
-	public void prepare() {
-		prepareStatistics();
-		super.prepare();
-	}
-	
 	protected UpdateThread createThread() {
 		return new UpdateThread(this, 60);
 	}
@@ -99,21 +92,13 @@ public class UpdateExecutor extends AbstractExecutor {
 		commiterThread = new CommiterThread();
 	}
 
-	/**
-	 * Prepares al observer statistics
-	 */
-	private void prepareStatistics() {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.prepare();
-		}
-	}
-
 	public void start() {
 		if(this.isRunning()) {
 			return;
 		}
 		super.start();
 		if(!isAutocommit()) {
+			prepareCommiter();
 			commiterThread.start();
 		}
 		logger.info("Update Executor started");

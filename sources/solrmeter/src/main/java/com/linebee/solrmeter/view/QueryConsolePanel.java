@@ -34,6 +34,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.QueryExecutorController;
+import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
@@ -54,6 +55,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	private SimpleQueryStatistic simpleQueryStatistic;
 	
 	private QueryExecutorController controller;
+	private QueryExecutor queryExecutor;
 	
 	private InfoPanel totalQueries;
 	private InfoPanel totalQueryTime;
@@ -71,10 +73,12 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	
 	@Inject
 	public QueryConsolePanel(QueryExecutorController controller, 
-			SimpleQueryStatistic simpleQueryStatistic) {
+			SimpleQueryStatistic simpleQueryStatistic,
+			QueryExecutor queryExecutor) {
 		super(I18n.get("queryConsolePanel.title"));
 		this.simpleQueryStatistic = simpleQueryStatistic;
 		this.controller = controller;
+		this.queryExecutor = queryExecutor;
 		this.initGUI();
 	}
 
@@ -140,12 +144,12 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		panel.add(new JLabel(I18n.get("queryConsolePanel.queriesPerMinute")));
 		panel.add(Box.createHorizontalGlue());
 		panel.add(concurrentQueries);
-		concurrentQueries.setValue(new Double(Model.getInstance().getCurrentQueryExecutor().getQueriesPerMinute()));
+		concurrentQueries.setValue(new Double(queryExecutor.getQueriesPerMinute()));
 		return panel;
 	}
 
 	public void refreshView() {
-		concurrentQueries.setValue(new Double(Model.getInstance().getCurrentQueryExecutor().getQueriesPerMinute()));
+		concurrentQueries.setValue(new Double(queryExecutor.getQueriesPerMinute()));
 		totalQueries.setValue(String.valueOf(simpleQueryStatistic.getTotalQueries()));
 		totalQueryTime.setValue(String.valueOf(simpleQueryStatistic.getTotalQTime()));
 		totalClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime()));

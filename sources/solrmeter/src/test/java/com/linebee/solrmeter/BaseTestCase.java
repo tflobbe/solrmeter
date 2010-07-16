@@ -28,9 +28,16 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.NamedList;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.linebee.stressTestScope.StressTestRegistry;
+import com.linebee.stressTestScope.StressTestScopeModule;
+
 public abstract class BaseTestCase extends TestCase {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
+	
+	protected Injector injector;
 	
 	public BaseTestCase() {
 		Properties props = new Properties();
@@ -41,8 +48,17 @@ public abstract class BaseTestCase extends TestCase {
 		}
 		PropertyConfigurator.configure(props);
 		logger = Logger.getLogger(this.getClass());
+		injector = createInjector();
 	}
-
+	
+	private static Injector createInjector() {
+		Injector injector = Guice.createInjector(
+				new StatisticsModule(), 
+				new ModelTestModule(),
+				new StressTestScopeModule());
+		StressTestRegistry.start();
+		return injector;
+	}
 	
 	protected void fail(Exception e) {
 		logger.error(e);

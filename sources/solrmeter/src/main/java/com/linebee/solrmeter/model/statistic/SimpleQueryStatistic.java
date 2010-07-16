@@ -67,13 +67,6 @@ public class SimpleQueryStatistic implements QueryStatistic {
 		}
 	}
 
-	@Override
-	public void prepare() {
-		
-
-	}
-	
-
 	public long getTotalQTime() {
 		return totalQTime;
 	}

@@ -21,8 +21,6 @@ import com.linebee.solrmeter.model.exception.QueryException;
 
 public interface QueryStatistic {
 
-	void prepare();
-
 	void onExecutedQuery(QueryResponse response, long clientTime);
 
 	void onFinishedTest();

@@ -29,7 +29,6 @@ public class ErrorLogStatisticTestCase extends BaseTestCase {
 	
 	public void testErrorCount() {
 		ErrorLogStatistic statistic = new ErrorLogStatistic();
-		statistic.prepare();
 		assertEquals(0, statistic.getLastErrors(true, true, true, true).size());
 		statistic.onAddError(new UpdateException());
 		assertEquals(1, statistic.getLastErrors(true, true, true, true).size());
@@ -65,7 +64,6 @@ public class ErrorLogStatisticTestCase extends BaseTestCase {
 	
 	public void testMaxSoredErrors() {
 		ErrorLogStatistic statistic = new ErrorLogStatistic();
-		statistic.prepare();
 		for(int i = 0; i < 400; i++) {//using max number of stored strings = 400
 			statistic.onAddError(new UpdateException());
 		}
@@ -86,7 +84,6 @@ public class ErrorLogStatisticTestCase extends BaseTestCase {
 	
 	public void testSort() throws InterruptedException {
 		ErrorLogStatistic statistic = new ErrorLogStatistic();
-		statistic.prepare();
 		for(int i = 0; i < 10; i++) {//using max number of stored strings = 400
 			statistic.onAddError(new UpdateException(String.valueOf(i)));
 			statistic.onQueryError(new QueryException(String.valueOf(i)));

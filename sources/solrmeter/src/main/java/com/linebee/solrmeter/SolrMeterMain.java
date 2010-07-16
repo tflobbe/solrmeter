@@ -41,7 +41,6 @@ import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
 import com.linebee.solrmeter.view.ConsoleFrame;
 import com.linebee.solrmeter.view.I18n;
-import com.linebee.solrmeter.view.Model;
 import com.linebee.solrmeter.view.OptimizeConsolePanel;
 import com.linebee.solrmeter.view.QueryConsolePanel;
 import com.linebee.solrmeter.view.StatisticPanel;
@@ -67,8 +66,8 @@ public class SolrMeterMain {
 
 	public static void main(String[] args) throws Exception {
 		Injector injector = createInjector();
+		StressTestRegistry.start();
 		loadLookAndFeel();
-		initModel(injector);
 		initView(injector);
 		addStatistics(injector);
 	}
@@ -79,7 +78,6 @@ public class SolrMeterMain {
 				createModule("guice.modelModule"),
 				createModule("guice.standalonePresentationModule"),
 				new StressTestScopeModule());
-		StressTestRegistry.start();
 		return injector;
 	}
 
@@ -107,7 +105,6 @@ public class SolrMeterMain {
 		StressTestRegistry.restart();
 		Injector injector = createInjector();
 		I18n.onConfigurationChange();
-		initModel(injector);
 		mainFrame.setQueryPanel(injector.getInstance(QueryConsolePanel.class));
 		mainFrame.setUpdatePanel(injector.getInstance(UpdateConsolePanel.class));
 		mainFrame.setOptimizePanel(injector.getInstance(OptimizeConsolePanel.class));
@@ -130,43 +127,31 @@ public class SolrMeterMain {
 		}
 	}
 
-	private static void initModel(Injector injector) {
-		initQueryModel(injector);
-		initUpdateModel(injector);
-		initOptimizeModel(injector);
-	}
-
 	private static void addOperationHistoryStatistic(Injector injector) {
 		OperationTimeHistory statistic = injector.getInstance(OperationTimeHistory.class);
-		statistic.prepare();
-		Model.getInstance().getCurrentQueryExecutor().addStatistic(statistic);
-		Model.getInstance().getCurrentUpdateExecutor().addStatistic(statistic);
-		Model.getInstance().getCurrentOptimizeExecutor().addStatistic(statistic);
+		getCurrentQueryExecutor(injector).addStatistic(statistic);
+		getCurrentUpdateExecutor(injector).addStatistic(statistic);
+		getCurrentOptimizeExecutor(injector).addStatistic(statistic);
 		
 	}
 
 	private static void addErrorLogStatistic(Injector injector) {
 		ErrorLogStatistic statistic =  injector.getInstance(ErrorLogStatistic.class);
-		statistic.prepare();
-		Model.getInstance().getCurrentQueryExecutor().addStatistic(statistic);
-		Model.getInstance().getCurrentUpdateExecutor().addStatistic(statistic);
-		Model.getInstance().getCurrentOptimizeExecutor().addStatistic(statistic);
+		getCurrentQueryExecutor(injector).addStatistic(statistic);
+		getCurrentUpdateExecutor(injector).addStatistic(statistic);
+		getCurrentOptimizeExecutor(injector).addStatistic(statistic);
 	}
-
-	private static void initOptimizeModel(Injector injector) {
-		OptimizeExecutor executor = injector.getInstance(OptimizeExecutor.class);
-		Model.getInstance().setOptimizeExecutor(executor);
+	
+	private static QueryExecutor getCurrentQueryExecutor(Injector injector) {
+		return injector.getInstance(QueryExecutor.class);
 	}
-
-	private static void initUpdateModel(Injector injector) {
-		UpdateExecutor executor = injector.getInstance(UpdateExecutor.class);
-		Model.getInstance().setUpdateExecutor(executor);
-		
+	
+	private static UpdateExecutor getCurrentUpdateExecutor(Injector injector) {
+		return injector.getInstance(UpdateExecutor.class);
 	}
-
-	private static void initQueryModel(Injector injector) {
-		QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
-		Model.getInstance().setQueryExecutor(queryExecutor);
+	
+	private static OptimizeExecutor getCurrentOptimizeExecutor(Injector injector) {
+		return injector.getInstance(OptimizeExecutor.class);
 	}
 	
 	/*

@@ -45,7 +45,8 @@ public class SimpleOptimizeStatistic implements OptimizeStatistic {
 	@Inject
 	public SimpleOptimizeStatistic() {
 		super();
-		prepare();
+		optimizeErrors = new LinkedList<String>();
+		optimizationCount = 0;
 	}
 	
 	@Override
@@ -66,12 +67,6 @@ public class SimpleOptimizeStatistic implements OptimizeStatistic {
 	@Override
 	public void onOptimizeStared(long initTime) {
 
-	}
-
-	@Override
-	public void prepare() {
-		optimizeErrors = new LinkedList<String>();
-		optimizationCount = 0;
 	}
 
 	public int getOptimizeErrorCount() {

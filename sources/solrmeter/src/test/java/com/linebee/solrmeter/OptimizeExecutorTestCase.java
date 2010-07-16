@@ -26,7 +26,6 @@ public class OptimizeExecutorTestCase extends BaseTestCase {
 
 	public void test() throws MalformedURLException, InterruptedException {
 		OptimizeExecutorSpy executor = new OptimizeExecutorSpy();
-		executor.prepare();
 		assertEquals(0, ((SolrServerMock)executor.getServer()).getNumberOfOptimize());
 		executor.execute();
 		Thread.sleep(100);
@@ -37,7 +36,6 @@ public class OptimizeExecutorTestCase extends BaseTestCase {
 		OptimizeExecutorSpy executor = new OptimizeExecutorSpy();
 		SimpleOptimizeStatistic statistic = new SimpleOptimizeStatistic();
 		executor.addStatistic(statistic);
-		executor.prepare();
 		executor.execute();
 		Thread.sleep(100);
 		assertEquals(1, statistic.getOptimizationCount());
