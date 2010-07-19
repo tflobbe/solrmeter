@@ -25,15 +25,15 @@ import com.google.inject.name.Names;
 public class StressTestScopeModule extends AbstractModule {
 
 	 public void configure() {
-		 StressTestScopeImpl batchScope = new StressTestScopeImpl();
+		 StressTestScopeImpl stressTestScope = new StressTestScopeImpl();
 
 		    // tell Guice about the scope
-		    bindScope(StressTestScope.class, batchScope);
+		    bindScope(StressTestScope.class, stressTestScope);
 
 		    // make our scope instance injectable
 		    bind(StressTestScopeImpl.class)
 		        .annotatedWith(Names.named("StressTestScope"))
-		        .toInstance(batchScope);
+		        .toInstance(stressTestScope);
 		  }
 
 }
