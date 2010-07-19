@@ -23,22 +23,19 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
+import com.linebee.solrmeter.controller.StatisticDescriptor;
+import com.linebee.solrmeter.controller.StatisticType;
+import com.linebee.solrmeter.controller.StatisticsRepository;
 import com.linebee.solrmeter.model.OptimizeExecutor;
+import com.linebee.solrmeter.model.OptimizeStatistic;
 import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.UpdateExecutor;
-import com.linebee.solrmeter.model.statistic.CommitHistoryStatistic;
-import com.linebee.solrmeter.model.statistic.ErrorLogStatistic;
-import com.linebee.solrmeter.model.statistic.FullQueryStatistic;
-import com.linebee.solrmeter.model.statistic.HistogramQueryStatistic;
-import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
-import com.linebee.solrmeter.model.statistic.QueryLogStatistic;
-import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
-import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
-import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
-import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
+import com.linebee.solrmeter.model.UpdateStatistic;
 import com.linebee.solrmeter.view.ConsoleFrame;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.OptimizeConsolePanel;
@@ -46,12 +43,6 @@ import com.linebee.solrmeter.view.QueryConsolePanel;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.solrmeter.view.StatisticsContainer;
 import com.linebee.solrmeter.view.UpdateConsolePanel;
-import com.linebee.solrmeter.view.statistic.ErrorLogPanel;
-import com.linebee.solrmeter.view.statistic.FullQueryStatisticPanel;
-import com.linebee.solrmeter.view.statistic.HistogramChartPanel;
-import com.linebee.solrmeter.view.statistic.OperationTimeLineChartPanel;
-import com.linebee.solrmeter.view.statistic.PieChartPanel;
-import com.linebee.solrmeter.view.statistic.QueryTimeHistoryPanel;
 import com.linebee.stressTestScope.StressTestRegistry;
 import com.linebee.stressTestScope.StressTestScopeModule;
 
@@ -63,9 +54,11 @@ import com.linebee.stressTestScope.StressTestScopeModule;
 public class SolrMeterMain {
 	
 	public static ConsoleFrame mainFrame;
+	
+	private static Injector injector;
 
 	public static void main(String[] args) throws Exception {
-		Injector injector = createInjector();
+		injector = createInjector();
 		StressTestRegistry.start();
 		loadLookAndFeel();
 		initView(injector);
@@ -103,7 +96,6 @@ public class SolrMeterMain {
 
 	public static void restartApplication() {
 		StressTestRegistry.restart();
-		Injector injector = createInjector();
 		I18n.onConfigurationChange();
 		mainFrame.setQueryPanel(injector.getInstance(QueryConsolePanel.class));
 		mainFrame.setUpdatePanel(injector.getInstance(UpdateConsolePanel.class));
@@ -126,74 +118,53 @@ public class SolrMeterMain {
 			Logger.getLogger(SolrMeterMain.class).error("Error loading look and feel. Will Continue with default.", e);
 		}
 	}
-
-	private static void addOperationHistoryStatistic(Injector injector) {
-		OperationTimeHistory statistic = injector.getInstance(OperationTimeHistory.class);
-		getCurrentQueryExecutor(injector).addStatistic(statistic);
-		getCurrentUpdateExecutor(injector).addStatistic(statistic);
-		getCurrentOptimizeExecutor(injector).addStatistic(statistic);
-		
-	}
-
-	private static void addErrorLogStatistic(Injector injector) {
-		ErrorLogStatistic statistic =  injector.getInstance(ErrorLogStatistic.class);
-		getCurrentQueryExecutor(injector).addStatistic(statistic);
-		getCurrentUpdateExecutor(injector).addStatistic(statistic);
-		getCurrentOptimizeExecutor(injector).addStatistic(statistic);
-	}
 	
-	private static QueryExecutor getCurrentQueryExecutor(Injector injector) {
-		return injector.getInstance(QueryExecutor.class);
-	}
-	
-	private static UpdateExecutor getCurrentUpdateExecutor(Injector injector) {
-		return injector.getInstance(UpdateExecutor.class);
-	}
-	
-	private static OptimizeExecutor getCurrentOptimizeExecutor(Injector injector) {
-		return injector.getInstance(OptimizeExecutor.class);
-	}
-	
-	/*
-	 * TODO refactor this on issue issue #21
-	 */
 	private static void addStatistics(Injector injector) {
 		QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
-		addStatistic(queryExecutor, injector, HistogramQueryStatistic.class);
-		addStatistic(queryExecutor, injector, QueryTimeHistoryStatistic.class);
-		addStatistic(queryExecutor, injector, TimeRangeStatistic.class);
-		addStatistic(queryExecutor, injector, SimpleQueryStatistic.class);
-		addStatistic(queryExecutor, injector, FullQueryStatistic.class);
-		addStatistic(queryExecutor, injector, QueryLogStatistic.class);
-		
 		UpdateExecutor updateExecutor = injector.getInstance(UpdateExecutor.class);
-		updateExecutor.addStatistic(injector.getInstance(CommitHistoryStatistic.class));
-		
 		OptimizeExecutor optimizeExecutor = injector.getInstance(OptimizeExecutor.class);
-		optimizeExecutor.addStatistic(injector.getInstance(SimpleOptimizeStatistic.class));
+		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
+		for(StatisticDescriptor stat:repository.getActiveStatistics()) {
+			Logger.getLogger("boot").info("Adding Statistic " + stat.getName());
+			if(stat.isHasView()) {
+				addStatictic(mainFrame.getStatisticsContainer(), injector, stat.getViewName());
+			}
+			if(stat.getTypes().contains(StatisticType.QUERY)) {
+				addStatistic(queryExecutor, injector, stat.getModelName());
+			}
+			if(stat.getTypes().contains(StatisticType.UPDATE)) {
+				addStatistic(updateExecutor, injector, stat.getModelName());
+			}
+			if(stat.getTypes().contains(StatisticType.OPTIMIZE)) {
+				addStatistic(optimizeExecutor, injector, stat.getModelName());
+			}
+		}
 		
-		addErrorLogStatistic(injector);
-		addOperationHistoryStatistic(injector);
-		
-		addStatictic(mainFrame.getStatisticsContainer(), injector, PieChartPanel.class);
-		addStatictic(mainFrame.getStatisticsContainer(), injector, HistogramChartPanel.class);
-		addStatictic(mainFrame.getStatisticsContainer(), injector, QueryTimeHistoryPanel.class);
-		addStatictic(mainFrame.getStatisticsContainer(), injector, ErrorLogPanel.class);
-		addStatictic(mainFrame.getStatisticsContainer(), injector, OperationTimeLineChartPanel.class);
-		addStatictic(mainFrame.getStatisticsContainer(), injector, FullQueryStatisticPanel.class);
-		
-		
+	}
+	
+	private static void addStatistic(OptimizeExecutor optimizeExecutor,
+			Injector injector, String modelName) {
+		Key<OptimizeStatistic> injectorKey = Key.get(OptimizeStatistic.class, Names.named(modelName));
+		optimizeExecutor.addStatistic(injector.getInstance(injectorKey));
+	}
+
+	private static void addStatistic(UpdateExecutor updateExecutor,
+			Injector injector, String modelName) {
+		Key<UpdateStatistic> injectorKey = Key.get(UpdateStatistic.class, Names.named(modelName));
+		updateExecutor.addStatistic(injector.getInstance(injectorKey));
 	}
 
 	private static void addStatictic(StatisticsContainer statisticsContainer,
-			Injector injector, Class<? extends StatisticPanel> clazz) {
-		statisticsContainer.addStatistic(injector.getInstance(clazz));
+			Injector injector, String viewName) {
+		Key<StatisticPanel> injectorKey = Key.get(StatisticPanel.class, Names.named(viewName));
+		statisticsContainer.addStatistic(injector.getInstance(injectorKey));
 		
 	}
 	
 	private static void addStatistic(QueryExecutor queryExecutor, Injector injector,
-			Class<? extends QueryStatistic> modelKey) {
-		queryExecutor.addStatistic(injector.getInstance(modelKey));
+			String modelName) {
+		Key<QueryStatistic> injectorKey = Key.get(QueryStatistic.class, Names.named(modelName));
+		queryExecutor.addStatistic(injector.getInstance(injectorKey));
 	}
 	
 	

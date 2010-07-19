@@ -30,6 +30,7 @@ import org.apache.solr.common.util.NamedList;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.util.Modules;
 import com.linebee.stressTestScope.StressTestRegistry;
 import com.linebee.stressTestScope.StressTestScopeModule;
 
@@ -53,8 +54,8 @@ public abstract class BaseTestCase extends TestCase {
 	
 	private static Injector createInjector() {
 		Injector injector = Guice.createInjector(
-				new StatisticsModule(), 
-				new ModelTestModule(),
+				Modules.override(new StatisticsModule()).with(new ModelTestModule()), 
+				new ModelModule(),
 				new StressTestScopeModule());
 		StressTestRegistry.start();
 		return injector;

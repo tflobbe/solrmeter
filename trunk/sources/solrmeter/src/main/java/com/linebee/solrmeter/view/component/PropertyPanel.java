@@ -72,7 +72,7 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		this.initGUI(text);
 	}
 
-	private void initGUI(String text) {
+	protected void initGUI(String text) {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.add(Box.createRigidArea(new Dimension(paddingLeft, paddingLeft)));

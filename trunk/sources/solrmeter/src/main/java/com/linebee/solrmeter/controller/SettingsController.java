@@ -18,10 +18,12 @@ package com.linebee.solrmeter.controller;
 import java.awt.Window;
 import java.util.Properties;
 
+import com.google.inject.Singleton;
 import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.SettingsPanelContainer;
 
+@Singleton
 public class SettingsController {
 	
 	private Properties changedProps;
