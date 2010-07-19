@@ -51,6 +51,8 @@ public class ConsoleFrame extends JFrame {
 		this.updatePanel = updatePanel;
 		this.optimizePanel = optimizePanel;
 		this.statisticsContainer = statisticsContainer;
+//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setSize(new Dimension(800, 700));
 		this.initGUI();
 		this.addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent evt) {
@@ -65,8 +67,6 @@ public class ConsoleFrame extends JFrame {
 	}
 
 	private void initGUI() {
-//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setSize(new Dimension(800, 700));
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		JPanel auxiliarPanel = new JPanel();
 		auxiliarPanel.setLayout(new GridBagLayout());
