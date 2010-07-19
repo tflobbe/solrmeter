@@ -50,16 +50,20 @@ public class SolrMeterMenuController {
 	
 	private OptimizeExecutor optimizeExecutor;
 	
+	private StatisticsRepository repository;
+	
 	@Inject
 	public SolrMeterMenuController(
 			QueryExecutor queryExecutor, 
 			UpdateExecutor updateExecutor,
-			OptimizeExecutor optimizeExecutor) {
+			OptimizeExecutor optimizeExecutor, 
+			StatisticsRepository repository) {
 		super();
 		mainFrame = SolrMeterMain.mainFrame;
 		this.queryExecutor = queryExecutor;
 		this.updateExecutor = updateExecutor;
 		this.optimizeExecutor = optimizeExecutor;
+		this.repository = repository;
 	}
 
 
@@ -151,7 +155,7 @@ public class SolrMeterMenuController {
 
 	public void onSettingsMenu() {
 		JDialog dialog = new JDialog(mainFrame, I18n.get("menu.edit.settings"), ModalityType.APPLICATION_MODAL);
-		dialog.setContentPane(new SettingsPanelContainer(dialog, this.isSettingsEditable()));
+		dialog.setContentPane(new SettingsPanelContainer(dialog, this.isSettingsEditable(), repository));
 		dialog.setSize(new Dimension(400, 400));
 		SwingUtils.centerWindow(dialog);
 		dialog.setVisible(true);

@@ -18,6 +18,7 @@ package com.linebee.solrmeter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.linebee.solrmeter.controller.StatisticsRepositoryTestCase;
 import com.linebee.solrmeter.extractor.FileInputDocumentExtractorTestCase;
 import com.linebee.solrmeter.extractor.FileStringExtractorTestCase;
 import com.linebee.solrmeter.statistic.ErrorLogStatisticTestCase;
@@ -53,6 +54,7 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(FileInputDocumentExtractorTestCase.class);
 		suite.addTestSuite(QueryExecutorTestCase.class);
 		suite.addTestSuite(FullQueryStatisticTestCase.class);
+		suite.addTestSuite(StatisticsRepositoryTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

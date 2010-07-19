@@ -15,13 +15,13 @@
  */
 package com.linebee.solrmeter.controller;
 
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.Refreshable;
 
 @Singleton
@@ -43,7 +43,8 @@ public class StatisticsContainerController {
 			}
 			
 		};
-		timer.schedule(task, new Date(), 2000);
+		timer.schedule(task, Long.valueOf(SolrMeterConfiguration.getProperty("statistic.refreshTime")), 
+				Long.valueOf(SolrMeterConfiguration.getProperty("statistic.refreshTime")));
 	}
 	
 	public void onTabChanged() {

@@ -37,8 +37,10 @@ import javax.swing.JTabbedPane;
 import org.apache.log4j.Logger;
 
 import com.linebee.solrmeter.controller.SettingsController;
+import com.linebee.solrmeter.controller.StatisticsRepository;
 import com.linebee.solrmeter.model.FileUtils;
 import com.linebee.solrmeter.view.settings.QuerySettingsPanel;
+import com.linebee.solrmeter.view.settings.StatisticsSettingsPanel;
 import com.linebee.solrmeter.view.settings.UpdateSettingsPanel;
 
 public class SettingsPanelContainer extends JPanel {
@@ -61,13 +63,12 @@ public class SettingsPanelContainer extends JPanel {
 	
 	private boolean editable;
 	
-	public SettingsPanelContainer(Window parent) {
-		this(parent, true);
-	}
-	
-	public SettingsPanelContainer(Window parent, boolean editable) {
+	private StatisticsRepository repository;
+
+	public SettingsPanelContainer(Window parent, boolean editable, StatisticsRepository repository) {
 		super();
 		this.editable = editable;
+		this.repository = repository;
 		statistics = new HashMap<String, SettingsPanel>();
 		tabPanel = new JTabbedPane();
 		settingsController = new SettingsController(this, parent);
@@ -79,6 +80,7 @@ public class SettingsPanelContainer extends JPanel {
 		QuerySettingsPanel querySettingsPanel = new QuerySettingsPanel(settingsController, editable);
 		this.addSetting(querySettingsPanel);
 		this.addSetting(new UpdateSettingsPanel(settingsController, editable));
+		this.addSetting(new StatisticsSettingsPanel(settingsController, editable, repository));
 	}
 
 	private void initGUI() {
