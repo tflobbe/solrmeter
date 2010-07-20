@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
@@ -42,8 +41,6 @@ import com.linebee.stressTestScope.StressTestScope;
 @StressTestScope
 public class SolrMeterMenuController {
 	
-	private JFrame mainFrame;
-	
 	private QueryExecutor queryExecutor;
 	
 	private UpdateExecutor updateExecutor;
@@ -59,7 +56,6 @@ public class SolrMeterMenuController {
 			OptimizeExecutor optimizeExecutor, 
 			StatisticsRepository repository) {
 		super();
-		mainFrame = SolrMeterMain.mainFrame;
 		this.queryExecutor = queryExecutor;
 		this.updateExecutor = updateExecutor;
 		this.optimizeExecutor = optimizeExecutor;
@@ -69,7 +65,7 @@ public class SolrMeterMenuController {
 
 
 	public void onExitMenu() {
-		mainFrame.dispose();
+		SolrMeterMain.mainFrame.dispose();
 		System.exit(0);
 	}
 
@@ -77,7 +73,7 @@ public class SolrMeterMenuController {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setFileFilter(this.createConfigurationFileFilter());
-		int returnValue = fileChooser.showOpenDialog(mainFrame);
+		int returnValue = fileChooser.showOpenDialog(SolrMeterMain.mainFrame);
 		if(returnValue == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			if(!selectedFile.exists()) {
@@ -100,11 +96,11 @@ public class SolrMeterMenuController {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.setFileFilter(this.createConfigurationFileFilter());
-			int returnValue = fileChooser.showSaveDialog(mainFrame);
+			int returnValue = fileChooser.showSaveDialog(SolrMeterMain.mainFrame);
 			if(returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = this.addExtension(fileChooser.getSelectedFile());
 				if(selectedFile.exists()) {
-					int optionResultPane = JOptionPane.showConfirmDialog(mainFrame, 
+					int optionResultPane = JOptionPane.showConfirmDialog(SolrMeterMain.mainFrame, 
 								I18n.get("menu.file.export.fileExists.message"), 
 								I18n.get("menu.file.export.fileExists.title"),
 								JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
@@ -154,7 +150,7 @@ public class SolrMeterMenuController {
 	}
 
 	public void onSettingsMenu() {
-		JDialog dialog = new JDialog(mainFrame, I18n.get("menu.edit.settings"), ModalityType.APPLICATION_MODAL);
+		JDialog dialog = new JDialog(SolrMeterMain.mainFrame, I18n.get("menu.edit.settings"), ModalityType.APPLICATION_MODAL);
 		dialog.setContentPane(new SettingsPanelContainer(dialog, this.isSettingsEditable(), repository));
 		dialog.setSize(new Dimension(400, 400));
 		SwingUtils.centerWindow(dialog);
