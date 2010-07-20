@@ -56,13 +56,14 @@ public abstract class BaseTestCase extends TestCase {
 		Injector injector = Guice.createInjector(
 				Modules.override(new StatisticsModule()).with(new ModelTestModule()), 
 				new ModelModule(),
+				new StandalonePresentationModule(),
 				new StressTestScopeModule());
 		StressTestRegistry.start();
 		return injector;
 	}
 	
 	protected void fail(Exception e) {
-		logger.error(e);
+		logger.error(e.getMessage(), e);
 		fail(e.getMessage());
 	}
 	

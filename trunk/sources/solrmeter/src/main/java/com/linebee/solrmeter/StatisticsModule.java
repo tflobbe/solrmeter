@@ -27,6 +27,8 @@ import com.linebee.solrmeter.controller.StatisticDescriptor;
 import com.linebee.solrmeter.controller.StatisticScope;
 import com.linebee.solrmeter.controller.StatisticType;
 import com.linebee.solrmeter.controller.StatisticsRepository;
+import com.linebee.solrmeter.controller.statisticsParser.StatisticsParser;
+import com.linebee.solrmeter.controller.statisticsParser.castor.StatisticsParserCastorImpl;
 import com.linebee.solrmeter.model.OptimizeStatistic;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.UpdateStatistic;
@@ -48,7 +50,7 @@ public class StatisticsModule extends AbstractModule {
 	
 	public StatisticsModule() {
 		super();
-		statisticsRepository = new StatisticsRepository();
+		statisticsRepository = new StatisticsRepository(new StatisticsParserCastorImpl());
 		scopes = new HashMap<StatisticScope, Class<? extends Annotation>>();
 		scopes.put(StatisticScope.PROTOTYPE, null);
 		scopes.put(StatisticScope.SINGLETON, Singleton.class);
@@ -61,6 +63,7 @@ public class StatisticsModule extends AbstractModule {
 		bind(StatisticsRepository.class).toInstance(statisticsRepository);
 		bindStatistics(statisticsRepository);
 		bind(Refreshable.class).annotatedWith(Names.named("errorLogPanel")).to(ErrorLogPanel.class);
+		bind(StatisticsParser.class).to(StatisticsParserCastorImpl.class);
 		
 	}
 

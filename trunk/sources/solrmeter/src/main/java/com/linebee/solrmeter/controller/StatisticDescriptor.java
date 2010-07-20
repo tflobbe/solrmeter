@@ -81,6 +81,7 @@ public class StatisticDescriptor {
 	public StatisticDescriptor() {
 		super();
 		types = new LinkedList<StatisticType>();
+		scope = StatisticScope.STRESS_TEST;
 	}
 	
 	public StatisticDescriptor(String name, String description,

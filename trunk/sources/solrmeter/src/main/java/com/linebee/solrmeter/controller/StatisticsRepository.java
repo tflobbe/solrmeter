@@ -20,25 +20,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.linebee.solrmeter.controller.statisticsParser.ParserException;
+import com.linebee.solrmeter.controller.statisticsParser.StatisticsParser;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
-import com.linebee.solrmeter.model.statistic.CommitHistoryStatistic;
-import com.linebee.solrmeter.model.statistic.ErrorLogStatistic;
-import com.linebee.solrmeter.model.statistic.FullQueryStatistic;
-import com.linebee.solrmeter.model.statistic.HistogramQueryStatistic;
-import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
-import com.linebee.solrmeter.model.statistic.QueryLogStatistic;
-import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
-import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
-import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
-import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
-import com.linebee.solrmeter.view.statistic.ErrorLogPanel;
-import com.linebee.solrmeter.view.statistic.FullQueryStatisticPanel;
-import com.linebee.solrmeter.view.statistic.HistogramChartPanel;
-import com.linebee.solrmeter.view.statistic.OperationTimeLineChartPanel;
-import com.linebee.solrmeter.view.statistic.PieChartPanel;
-import com.linebee.solrmeter.view.statistic.QueryTimeHistoryPanel;
 /**
  * Repository for all the available statistics
  * @author tflobbe
@@ -49,25 +37,37 @@ public class StatisticsRepository {
 	
 	private List<StatisticDescriptor> availableStatistics;
 	
+	private StatisticsParser statisticParser;
+	
 	@Inject
-	public StatisticsRepository() {
+	public StatisticsRepository(StatisticsParser statisticParser) {
 		super();
 		availableStatistics = new LinkedList<StatisticDescriptor>();
-		loadDefaults();
+		this.statisticParser = statisticParser;
+		parseAvailable();
 	}
 
-	protected void loadDefaults() {
-		availableStatistics.add(new StatisticDescriptor("histogram","Histogram of Queries", HistogramQueryStatistic.class, HistogramChartPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("timeRange","Shows Query Times as a pie chart", TimeRangeStatistic.class, PieChartPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("errorLog","Shows the log of all produced errors", ErrorLogStatistic.class, ErrorLogPanel.class,new StatisticType[]{StatisticType.QUERY, StatisticType.UPDATE, StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("queryHistort","Shows a chart with the past query times", QueryTimeHistoryStatistic.class, QueryTimeHistoryPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("operationHistory","Shows the a chart with the executed operations and times", OperationTimeHistory.class, OperationTimeLineChartPanel.class, new StatisticType[]{StatisticType.QUERY, StatisticType.UPDATE, StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("fullQueryStatistic","Shows advanced statistics of queries plus the last executed queries", FullQueryStatistic.class, FullQueryStatisticPanel.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("QueryLogStatistic", QueryLogStatistic.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("CommitHistoryStatistic", CommitHistoryStatistic.class, new StatisticType[]{StatisticType.UPDATE}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("SimpleOptimizeStatistic", SimpleOptimizeStatistic.class, new StatisticType[]{StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
-		availableStatistics.add(new StatisticDescriptor("SimpleQueryStatistic", SimpleQueryStatistic.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+	protected void parseAvailable() {
+		try {
+			List<StatisticDescriptor> descriptors = statisticParser.getStatisticDescriptors(SolrMeterConfiguration.getProperty("statistic.configuration.filePath"));
+			availableStatistics.addAll(descriptors);
+		} catch (ParserException e) {
+			Logger.getLogger(this.getClass()).error("Could not parse statistics file! Non will be available", e);
+		}
 	}
+//
+//	protected void loadDefaults() {
+//		availableStatistics.add(new StatisticDescriptor("histogram","Histogram of Queries", HistogramQueryStatistic.class, HistogramChartPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("timeRange","Shows Query Times as a pie chart", TimeRangeStatistic.class, PieChartPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("errorLog","Shows the log of all produced errors", ErrorLogStatistic.class, ErrorLogPanel.class,new StatisticType[]{StatisticType.QUERY, StatisticType.UPDATE, StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("queryHistort","Shows a chart with the past query times", QueryTimeHistoryStatistic.class, QueryTimeHistoryPanel.class,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("operationHistory","Shows the a chart with the executed operations and times", OperationTimeHistory.class, OperationTimeLineChartPanel.class, new StatisticType[]{StatisticType.QUERY, StatisticType.UPDATE, StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("fullQueryStatistic","Shows advanced statistics of queries plus the last executed queries", FullQueryStatistic.class, FullQueryStatisticPanel.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("QueryLogStatistic", QueryLogStatistic.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("CommitHistoryStatistic", CommitHistoryStatistic.class, new StatisticType[]{StatisticType.UPDATE}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("SimpleOptimizeStatistic", SimpleOptimizeStatistic.class, new StatisticType[]{StatisticType.OPTIMIZE}, StatisticScope.STRESS_TEST));
+//		availableStatistics.add(new StatisticDescriptor("SimpleQueryStatistic", SimpleQueryStatistic.class, new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+//	}
 
 	/**
 	 * Add a statistic description. This statistic will be available
