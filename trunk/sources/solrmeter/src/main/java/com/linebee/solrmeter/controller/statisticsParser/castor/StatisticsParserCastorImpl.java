@@ -15,8 +15,6 @@
  */
 package com.linebee.solrmeter.controller.statisticsParser.castor;
 
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.XMLContext;
+import org.xml.sax.InputSource;
 
 import com.linebee.solrmeter.controller.StatisticDescriptor;
 import com.linebee.solrmeter.controller.StatisticType;
@@ -52,10 +51,10 @@ public class StatisticsParserCastorImpl implements StatisticsParser {
 			mapping.loadMapping(FileUtils.findFileAsResource("StatisticDescriptorMapping.xml"));
 			XMLContext context = new XMLContext();
 			context.addMapping(mapping);
-			Reader reader = new FileReader(FileUtils.findFileAsResource(filePath).getPath());
+			InputSource source = new InputSource(FileUtils.findFileAsStream(filePath));
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setClass(StatisticList.class);
-			StatisticList list = (StatisticList)unmarshaller.unmarshal(reader);
+			StatisticList list = (StatisticList)unmarshaller.unmarshal(source);
 			validate(list.getDescriptors());
 			return list.getDescriptors();
 		} catch (Exception e) {
