@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -52,6 +54,7 @@ public class SolrMeterConfiguration {
 	private static Logger logger = LoggerFactory.getLogger(SolrMeterConfiguration.class);
 	private static String FILE_CONFIG_NAME = "solrmeter.properties";
 	private static Properties prop = new Properties();
+	private static Map<String, String> transientProperties = new HashMap<String, String>();
 
 	static {
 		loadDefatultConfiguration();
@@ -70,6 +73,14 @@ public class SolrMeterConfiguration {
 	
 	public static String setProperty(String propertyName, String value) {
 		return (String) prop.setProperty(propertyName, value);
+	}
+	
+	public static String getTransientProperty(String propertyName) {
+		return transientProperties.get(propertyName);
+	}
+	
+	public static void setTransientProperty(String propertyName, String propertyValue) {
+		transientProperties.put(propertyName, propertyValue);
 	}
 	
 	public static void importConfiguration(File configurationFile) throws IOException {
@@ -106,7 +117,6 @@ public class SolrMeterConfiguration {
 				LoggerFactory.getLogger("boot").info("Configuration File " + FILE_CONFIG_NAME + " not found");
 				throw new FileNotFoundException("Configuration File " + FILE_CONFIG_NAME + " not found");
 			}
-			LoggerFactory.getLogger("boot").info("Srteam availability: " + inStream.available());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

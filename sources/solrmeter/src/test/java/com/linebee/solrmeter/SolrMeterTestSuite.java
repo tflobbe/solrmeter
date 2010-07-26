@@ -57,6 +57,7 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(FullQueryStatisticTestCase.class);
 		suite.addTestSuite(StatisticsRepositoryTestCase.class);
 		suite.addTestSuite(StatisticsParserCastorImplTestCase.class);
+		suite.addTestSuite(ExpectedParameterTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}

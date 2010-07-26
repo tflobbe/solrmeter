@@ -16,6 +16,8 @@
 package com.linebee.solrmeter;
 
 import java.awt.MenuBar;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.UIManager;
 
@@ -58,6 +60,7 @@ public class SolrMeterMain {
 	private static Injector injector;
 
 	public static void main(String[] args) throws Exception {
+		addPlugins(new ExpectedParameter(args, "statisticsLocation", "./plugins").getValue());
 		injector = createInjector();
 		StressTestRegistry.start();
 		loadLookAndFeel();
@@ -65,6 +68,27 @@ public class SolrMeterMain {
 		addStatistics(injector);
 	}
 	
+	private static void addPlugins(String statisticsPath) {
+		try {
+			Logger.getLogger("boot").info("Adding plugins from " + statisticsPath);
+			File pluginsDir = new File(statisticsPath);
+			if(!pluginsDir.exists() || pluginsDir.list().length == 0) {
+				Logger.getLogger("boot").warn("No plugins directory found. No pluggin added");
+				return;
+			}
+			for(String jarName:pluginsDir.list()) {
+				if(jarName.endsWith(".jar")) {
+					Logger.getLogger("boot").info("Adding file " + jarName + " to classpath.");
+					ClassPathHacker.addFile(new File(pluginsDir, jarName));
+				}
+			}
+			SolrMeterConfiguration.setTransientProperty("pluginsStatisticsConfigFile", statisticsPath + "/statistics-config.xml");
+		} catch (IOException e) {
+			Logger.getLogger("boot").error("Error while adding plugins to classpath", e);
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static Injector createInjector() {
 		Injector injector = Guice.createInjector(
 				createModule("guice.statisticsModule"),

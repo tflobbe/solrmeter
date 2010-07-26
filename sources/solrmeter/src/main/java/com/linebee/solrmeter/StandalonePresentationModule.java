@@ -23,7 +23,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.linebee.solrmeter.controller.QueryExecutorController;
 import com.linebee.solrmeter.controller.SolrMeterMenuController;
-import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
 import com.linebee.solrmeter.view.ConsoleFrame;
 import com.linebee.solrmeter.view.ConsolePanel;
 import com.linebee.solrmeter.view.OptimizeConsolePanel;
@@ -54,7 +53,6 @@ public class StandalonePresentationModule extends AbstractModule {
 		bind(Refreshable.class).annotatedWith(Names.named("statisticsContainer")).to(StatisticsContainer.class);
 		bind(Refreshable.class).annotatedWith(Names.named("optimizeConsolePanel")).to(OptimizeConsolePanel.class);
 		bind(SolrMeterMenuController.class);
-		bind(SimpleOptimizeStatistic.class);
 	}
 
 }
