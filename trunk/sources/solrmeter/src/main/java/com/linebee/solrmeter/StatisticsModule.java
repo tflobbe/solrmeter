@@ -78,27 +78,51 @@ public class StatisticsModule extends AbstractModule {
 		if(description.isHasView()) {
 			bindView(description);
 		}
-		ScopedBindingBuilder binderBuilder = null;
+		ScopedBindingBuilder interfaceBinderBuilder = null;
 		if(description.getTypes().contains(StatisticType.QUERY)) {
 			Class<? extends QueryStatistic> statisticModelClass = (Class<? extends QueryStatistic>) description.getModelClass();
-			binderBuilder = bind(QueryStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
+			interfaceBinderBuilder = bind(QueryStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
 		}
 		if(description.getTypes().contains(StatisticType.UPDATE)) {
 			Class<? extends UpdateStatistic> statisticModelClass = (Class<? extends UpdateStatistic>) description.getModelClass();
-			binderBuilder = bind(UpdateStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
+			interfaceBinderBuilder = bind(UpdateStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
 		}
 		if(description.getTypes().contains(StatisticType.OPTIMIZE)) {
 			Class<? extends OptimizeStatistic> statisticModelClass = (Class<? extends OptimizeStatistic>) description.getModelClass();
-			binderBuilder = bind(OptimizeStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
+			interfaceBinderBuilder = bind(OptimizeStatistic.class).annotatedWith(Names.named(description.getModelName())).to(statisticModelClass);
 		}
-		applyScope(description, binderBuilder);
+		applyScope(description, interfaceBinderBuilder);
+		bindModelClass(description);
 	}
 
+
+	/**
+	 * Bind also the concrete model class, this binding is necesary to add the scope also to the concrete class.
+	 * @param description
+	 */
+	private void bindModelClass(StatisticDescriptor description) {
+		Class<?> statisticModelClass = description.getModelClass();
+		ScopedBindingBuilder binderBuilder = bind(statisticModelClass);
+		applyScope(description, binderBuilder);
+		
+	}
+	
+	/**
+	 * Bind also the concrete view class, this binding is necesary to add the scope also to the concrete class.
+	 * @param description
+	 */
+	private void bindViewClass(StatisticDescriptor description) {
+		Class<?> statisticViewClass = description.getViewClass();
+		ScopedBindingBuilder binderBuilder = bind(statisticViewClass);
+		applyScope(description, binderBuilder);
+		
+	}
 
 	private void bindView(StatisticDescriptor description) {
 		Class<? extends StatisticPanel> statisticViewClass = description.getViewClass();
 		ScopedBindingBuilder binderBuilder = bind(StatisticPanel.class).annotatedWith(Names.named(description.getViewName())).to(statisticViewClass);
 		applyScope(description, binderBuilder);
+		bindViewClass(description);
 	}
 	
 	private void applyScope(StatisticDescriptor description,

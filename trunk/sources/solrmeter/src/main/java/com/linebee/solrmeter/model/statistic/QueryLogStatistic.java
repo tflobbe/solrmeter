@@ -27,7 +27,11 @@ import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.stressTestScope.StressTestScope;
-
+/**
+ * 
+ * @author tflobbe
+ *
+ */
 @StressTestScope
 public class QueryLogStatistic implements QueryStatistic {
 	
