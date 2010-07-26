@@ -1,0 +1,24 @@
+
+
+
+
+manu:"Maxtor Corp"
+inStock:true
+inStock:false
+price:[0 TO 400]
+price:[0 TO 100]
+price:[100 TO 200]
+price:[200 TO 300]
+price:[300 TO *]
+manu:Belkin
+cat:electronics
+cat:connector
+weight:[0 TO 10]
+weight:[10 TO *]
+manu:"Apple Computer Inc"
+popularity:10
+popularity:[0 TO 3]
+popularity:[3 TO 6]
+popularity:[6 TO 10]
+features:latency
+features:Widescreen
