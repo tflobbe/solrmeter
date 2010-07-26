@@ -9,7 +9,7 @@ The following steps should be followed to get !SolrMeter up and running.
   # run the executors with the "Run" button.
 
 =Compile from trunk=
-The following steps should be followed to compile and package !SolrMeter
+The following steps should be followed to compile and package !SolrMeter ([http://maven.apache.org/index.html Maven] is required)
   # Download sources from trunk from http://solrmeter.googlecode.com/svn/trunk/sources
   # First and for just one time you will have to install in your local maven repository the component "stressTestScope". This component contains a Custom guice scope that is used by solrmeter.
      # go to /trunk/stressTestScope
