@@ -1,4 +1,4 @@
-=Add your own statistics with SolrMeter=
+=Add your own statistics to SolrMeter=
 Statistics in SolrMeter (from version 0.2.0) are pluggable. This means you can build your own statistic and see it from the SolrMeter UI.
 To build your statistic, follow this steps:
 ==Build the *model class*==
@@ -145,6 +145,6 @@ In both cases this is what the xml attributes and elements mean:
   * *model-class:* The full name of the class representing the model Class. This element is required.
   * *view-class:* The full name of the class representing the view class. This is not required if the attribute “hasView” is set to false.
 
-Run SolrMeter, you should see your statistic right away. 
+Run SolrMeter, you should see your statistic right away. If you don't, check the settings menu, on the "statistics" tab and make sure that yours is selected.
 
 *If you think you have built a statistic that is usefull to de community, please share it. You can send the code to the group or upload the patch to the issues page and we will add it to the trunk.*
