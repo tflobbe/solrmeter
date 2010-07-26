@@ -148,3 +148,5 @@ In both cases this is what the xml attributes and elements mean:
 Run SolrMeter, you should see your statistic right away. If you don't, check the settings menu, on the "statistics" tab and make sure that yours is selected.
 
 *If you think you have built a statistic that is usefull to de community, please share it. You can send the code to the group or upload the patch to the issues page and we will add it to the trunk.*
+
+Download the source code or the compiled statistic of the example from the [downloads] page.
