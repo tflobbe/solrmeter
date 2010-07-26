@@ -1,5 +1,5 @@
+#summary How to compile/run the software
 #labels Featured
-#How to compile/run the software
 =Run the latest version=
 The following steps should be followed to get !SolrMeter up and running.
   # Download latest version.
