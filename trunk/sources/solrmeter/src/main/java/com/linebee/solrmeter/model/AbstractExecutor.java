@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
-import com.linebee.solrmeter.model.task.AbstractOperationThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
 /**
  * Base class for operation executors that run multiple threads
@@ -35,7 +35,7 @@ public abstract class AbstractExecutor {
 	/**
 	 * List of threads executing strings
 	 */
-	protected List<AbstractOperationThread> threads;
+	protected List<RandomOperationExecutorThread> threads;
 	
 	/**
 	 * The number of operations that are executed every one minute.
@@ -70,7 +70,7 @@ public abstract class AbstractExecutor {
 	 * Prepare this executor to run a test
 	 */
 	public void prepare() {
-		threads = new LinkedList<AbstractOperationThread>();
+		threads = new LinkedList<RandomOperationExecutorThread>();
 		running = false;
 		for(int i = 0; i < operationsPerMinute; i++) {
 			threads.add(createThread());
@@ -81,7 +81,7 @@ public abstract class AbstractExecutor {
 	 * Increments in one the number of strings per minute
 	 */
 	public void incrementConcurrentOperations() {
-		AbstractOperationThread newThread = this.createThread(); 
+		RandomOperationExecutorThread newThread = this.createThread(); 
 		threads.add(newThread);
 		if(running) {
 			newThread.start();
@@ -92,14 +92,14 @@ public abstract class AbstractExecutor {
 	
 	protected abstract String getOperationsPerMinuteConfigurationKey();
 
-	protected abstract AbstractOperationThread createThread();
+	protected abstract RandomOperationExecutorThread createThread();
 
 	/**
 	 * Decrements in one (and stops the removed one) the number of
 	 * strings per minute
 	 */
 	public void decrementConcurrentQueries() {
-		AbstractOperationThread removedThread = threads.remove(threads.size() - 1);
+		RandomOperationExecutorThread removedThread = threads.remove(threads.size() - 1);
 		removedThread.destroy();
 		operationsPerMinute--;
 		SolrMeterConfiguration.setProperty(getOperationsPerMinuteConfigurationKey(), String.valueOf(operationsPerMinute));
@@ -127,7 +127,7 @@ public abstract class AbstractExecutor {
 			return;
 		}
 		running = false;
-		for(AbstractOperationThread thread:threads) {
+		for(RandomOperationExecutorThread thread:threads) {
 			thread.destroy();
 		}
 		stopStatistics();

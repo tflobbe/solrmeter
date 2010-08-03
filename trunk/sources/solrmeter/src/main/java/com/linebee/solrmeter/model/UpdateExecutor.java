@@ -29,7 +29,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
-import com.linebee.solrmeter.model.task.UpdateThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
+import com.linebee.solrmeter.model.task.UpdateOperation;
 import com.linebee.stressTestScope.StressTestScope;
 
 /** 
@@ -81,8 +82,8 @@ public class UpdateExecutor extends AbstractExecutor {
 		return server;
 	}
 	
-	protected UpdateThread createThread() {
-		return new UpdateThread(this, 60);
+	protected RandomOperationExecutorThread createThread() {
+		return new RandomOperationExecutorThread(new UpdateOperation(this), 60);
 	}
 
 	private void prepareCommiter() {

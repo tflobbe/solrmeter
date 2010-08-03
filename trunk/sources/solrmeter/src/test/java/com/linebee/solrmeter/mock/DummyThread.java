@@ -15,14 +15,14 @@
  */
 package com.linebee.solrmeter.mock;
 
-import com.linebee.solrmeter.model.task.AbstractOperationThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
-public class DummyThread extends AbstractOperationThread {
+public class DummyThread extends RandomOperationExecutorThread {
 	
 	private MockExecutor executor;
 
 	public DummyThread(MockExecutor executor) {
-		super(0);
+		super(null, 0);
 		this.executor = executor;
 	}
 	

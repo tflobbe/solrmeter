@@ -1,22 +1,8 @@
-/**
- * Copyright Linebee LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.linebee.solrmeter.model.task;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -25,19 +11,13 @@ import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
 
-/**
- * Executes a Query Operation
- * 
- * @author tflobbe
- *
- */
-public class QueryThread extends AbstractOperationThread {
+public class QueryOperation implements Operation {
 	
+	private Logger logger = Logger.getLogger(this.getClass());
+
 	private static Integer facetMinCount = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.minCount", "1"));
 	
 	private static Integer facetLimit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.limit", "8"));
-	
-//	private static Map<String, List<String>> filterQueries = new HashMap<String, List<String>>();
 	
 	private QueryExecutor executor;
 	
@@ -50,12 +30,11 @@ public class QueryThread extends AbstractOperationThread {
 	
 	private boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
 	
-	public QueryThread(QueryExecutor executor, long queryInterval) {
-		super(queryInterval);
+	public QueryOperation(QueryExecutor executor) {
 		this.executor = executor;
 	}
 	
-	protected void executeOperation() {
+	public void execute() {
 		SolrQuery query = new SolrQuery();
 		query.setQuery(executor.getRandomQuery());
 		query.setQueryType(executor.getQueryType());
@@ -121,5 +100,4 @@ public class QueryThread extends AbstractOperationThread {
 	public void setUseFacets(boolean useFacets) {
 		this.useFacets = useFacets;
 	}
-
 }

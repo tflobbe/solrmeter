@@ -15,9 +15,9 @@
  */
 package com.linebee.solrmeter.mock;
 
-import com.linebee.solrmeter.model.task.AbstractOperationThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
-public class DummyAbstractOperationThread extends AbstractOperationThread {
+public class DummyAbstractOperationThread extends RandomOperationExecutorThread {
 
 	private long sleepTime;
 	
@@ -28,7 +28,7 @@ public class DummyAbstractOperationThread extends AbstractOperationThread {
 	private long forcedSleepTime = -1;
 	
 	public DummyAbstractOperationThread(long operationInterval, long sleepTime) {
-		super(operationInterval);
+		super(null, operationInterval);
 		this.sleepTime = sleepTime;
 	}
 

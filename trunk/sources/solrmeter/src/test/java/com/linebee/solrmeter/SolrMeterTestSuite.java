@@ -31,7 +31,7 @@ import com.linebee.solrmeter.statistic.TimeRangeStatisticTestCase;
 import com.linebee.solrmeter.statistic.TimeRangeTestCase;
 import com.linebee.solrmeter.statistic.parser.StatisticsParserCastorImplTestCase;
 import com.linebee.solrmeter.task.AbstractOperationThreadTestCase;
-import com.linebee.solrmeter.task.UpdateThreadTestCase;
+import com.linebee.solrmeter.task.ConstantOperationExecutorThreadTestCase;
 
 public class SolrMeterTestSuite {
 
@@ -42,7 +42,6 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(AbstractExecutorTestCase.class);
 		suite.addTestSuite(HistogramQueryStatisticTestCase.class);
 		suite.addTestSuite(AbstractOperationThreadTestCase.class);
-		suite.addTestSuite(UpdateThreadTestCase.class);
 		suite.addTestSuite(QueryTimeHistoryTestCase.class);
 		suite.addTestSuite(FileStringExtractorTestCase.class);
 		suite.addTestSuite(ErrorLogStatisticTestCase.class);
@@ -58,6 +57,8 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(StatisticsRepositoryTestCase.class);
 		suite.addTestSuite(StatisticsParserCastorImplTestCase.class);
 		suite.addTestSuite(ExpectedParameterTestCase.class);
+		suite.addTestSuite(ConstantOperationExecutorThreadTestCase.class);
+		suite.addTestSuite(QueryExecutorConstantImplTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
