@@ -15,9 +15,9 @@
  */
 package com.linebee.solrmeter.mock;
 
-import com.linebee.solrmeter.model.QueryExecutor;
+import com.linebee.solrmeter.model.executor.QueryExecutorRandomImpl;
 
-public class QueryExecutorSpy extends QueryExecutor {
+public class QueryExecutorSpy extends QueryExecutorRandomImpl {
 	
 	@Override
 	public void loadExtraParameters(String property) {

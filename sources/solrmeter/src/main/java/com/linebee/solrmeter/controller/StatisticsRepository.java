@@ -36,6 +36,8 @@ import com.linebee.solrmeter.model.SolrMeterConfiguration;
 @Singleton
 public class StatisticsRepository {
 	
+	public final static String PLUGIN_STATISTICS_CONF_FILE_PROPERTY = "pluginsStatisticsConfigFile";
+	
 	private List<StatisticDescriptor> availableStatistics;
 	
 	private StatisticsParser statisticParser;
@@ -51,8 +53,8 @@ public class StatisticsRepository {
 	protected void parseAvailable() {
 		try {
 			List<StatisticDescriptor> descriptors = statisticParser.getStatisticDescriptors(SolrMeterConfiguration.getProperty("statistic.configuration.filePath"));
-			if(SolrMeterConfiguration.getTransientProperty("pluginsStatisticsConfigFile") != null && 
-					new File(SolrMeterConfiguration.getTransientProperty("pluginsStatisticsConfigFile")).exists()) {
+			if(SolrMeterConfiguration.getTransientProperty(PLUGIN_STATISTICS_CONF_FILE_PROPERTY) != null && 
+					new File(SolrMeterConfiguration.getTransientProperty(PLUGIN_STATISTICS_CONF_FILE_PROPERTY)).exists()) {
 				descriptors.addAll(statisticParser.getStatisticDescriptors(SolrMeterConfiguration.getTransientProperty("pluginsStatisticsConfigFile")));
 			}
 			availableStatistics.addAll(descriptors);

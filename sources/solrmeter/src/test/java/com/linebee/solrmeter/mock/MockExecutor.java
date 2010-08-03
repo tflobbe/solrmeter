@@ -16,7 +16,7 @@
 package com.linebee.solrmeter.mock;
 
 import com.linebee.solrmeter.model.AbstractExecutor;
-import com.linebee.solrmeter.model.task.AbstractOperationThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
 public class MockExecutor extends AbstractExecutor {
 	
@@ -32,7 +32,7 @@ public class MockExecutor extends AbstractExecutor {
 	}
 
 	@Override
-	protected AbstractOperationThread createThread() {
+	protected RandomOperationExecutorThread createThread() {
 		return new DummyThread(this);
 	}
 

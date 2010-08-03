@@ -18,6 +18,7 @@ package com.linebee.solrmeter.model.task;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+
 /**
  * 
  * An Operation that has to be executed every N seconds. The interval of execution
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author tflobbe
  *
  */
-public abstract class AbstractOperationThread extends Thread {
+public class RandomOperationExecutorThread extends Thread {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 
@@ -35,9 +36,15 @@ public abstract class AbstractOperationThread extends Thread {
 	
 	private long queryInterval;
 	
-	public AbstractOperationThread(long operationInterval) {
+	/**
+	 * Operation to execute
+	 */
+	private Operation operation;
+	
+	public RandomOperationExecutorThread(Operation operation, long operationInterval) {
 		super();
 		this.queryInterval = operationInterval;
+		this.operation = operation;
 	}
 	
 	public void run() {
@@ -69,7 +76,9 @@ public abstract class AbstractOperationThread extends Thread {
 		return (long) (Math.random() * queryInterval * 1000);
 	}
 	
-	protected abstract void executeOperation();
+	protected void executeOperation() {
+		operation.execute();
+	}
 
 	protected boolean isStopping() {
 		return stopping;

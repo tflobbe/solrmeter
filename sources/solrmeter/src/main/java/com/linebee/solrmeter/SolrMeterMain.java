@@ -82,7 +82,7 @@ public class SolrMeterMain {
 					ClassPathHacker.addFile(new File(pluginsDir, jarName));
 				}
 			}
-			SolrMeterConfiguration.setTransientProperty("pluginsStatisticsConfigFile", statisticsPath + "/statistics-config.xml");
+			SolrMeterConfiguration.setTransientProperty(StatisticsRepository.PLUGIN_STATISTICS_CONF_FILE_PROPERTY, statisticsPath + "/statistics-config.xml");
 		} catch (IOException e) {
 			Logger.getLogger("boot").error("Error while adding plugins to classpath", e);
 			throw new RuntimeException(e);
