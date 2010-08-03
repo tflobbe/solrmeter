@@ -1,4 +1,5 @@
 #summary Build your own custom statistics
+#labels Since-0.2.0
 =Add your own statistics to SolrMeter=
 Statistics in SolrMeter (from version 0.2.0) are pluggable. This means you can build your own statistic and see it from the SolrMeter UI.
 To build your statistic, follow this steps:
