@@ -1,3 +1,18 @@
+/**
+ * Copyright Linebee LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.linebee.solrmeter.model.task;
 
 import org.apache.log4j.Logger;
@@ -5,6 +20,17 @@ import org.apache.log4j.Logger;
 import com.linebee.solrmeter.model.exception.OperationException;
 import com.linebee.stressTestScope.StressTestScope;
 
+/**
+ * Worker that executes an operation every N milisecods, represented by the
+ * 'timeToWait' field.
+ * The operation is executed on a different thread, that way the operation time
+ * does not affect the interval of this worker. For example, if the worker has a
+ * timeToWait of 20 seconds and it executes a query that takes 10 seconds, the next
+ * query will be executed 20 seconds after the last one STARTED (10 seconds after it
+ * finished).
+ * @author tflobbe
+ *
+ */
 @StressTestScope
 public class ConstantOperationExecutorThread extends Thread {
 	
@@ -20,10 +46,10 @@ public class ConstantOperationExecutorThread extends Thread {
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		while(running) {
 			try {
-				Thread.sleep(getTimeToWait());
+				this.wait(new Long(getTimeToWait()));
 				if(running) {
 					executeOperation();
 				}
@@ -43,13 +69,24 @@ public class ConstantOperationExecutorThread extends Thread {
 		super.start();
 	}
 	
+	public synchronized void wake() {
+		this.notify();
+	}
+	
 	@Override
 	public void destroy() {
 		this.running = false;
 	}
 	
 	private void executeOperation() throws OperationException {
-		operation.execute();
+		Thread thread = new Thread() {
+			
+			@Override
+			public void run() {
+				operation.execute();
+			}
+		};
+		thread.run();
 	}
 
 	private long getTimeToWait() {

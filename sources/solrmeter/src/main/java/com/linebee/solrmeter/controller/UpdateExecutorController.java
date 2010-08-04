@@ -51,7 +51,6 @@ public class UpdateExecutorController {
 			}
 		};
 		timer.schedule(task, new Date(), 1000);
-		executor.prepare();
 		executor.start();
 		panel.started();
 	}
@@ -73,14 +72,14 @@ public class UpdateExecutorController {
 	private void incrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Incrementing");
 		while(executor.getUpdatesPerMinute() < value) {
-			executor.incrementConcurrentOperations();
+			executor.incrementOperationsPerMinute();
 		}
 	}
 
 	private void decrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Decrementing");
 		while(executor.getUpdatesPerMinute() > value) {
-			executor.decrementConcurrentQueries();
+			executor.decrementOperationsPerMinute();
 		}
 	}
 

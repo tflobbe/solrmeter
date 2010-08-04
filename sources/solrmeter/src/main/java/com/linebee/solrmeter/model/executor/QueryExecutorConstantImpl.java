@@ -1,3 +1,18 @@
+/**
+ * Copyright Linebee LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.linebee.solrmeter.model.executor;
 
 import java.util.HashMap;
@@ -25,6 +40,7 @@ import com.linebee.stressTestScope.StressTestScope;
  * This query executor calculates the interval between queries to achieve
  * the specified number of queries per minute and tries to execute them in
  * constant time.
+ * @see com.linebee.solrmeter.model.task.ConstantOperationExecutorThread
  * @author tflobbe
  *
  */
@@ -107,7 +123,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	}
 
 	@Override
-	public void decrementConcurrentQueries() {
+	public void decrementOperationsPerMinute() {
 		operationsPerMinute--;
 		updateThreadWaitTime();
 	}
@@ -128,21 +144,6 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	}
 
 	@Override
-	public String getRandomField() {
-		return facetFieldExtractor.getRandomFacetField();
-	}
-
-	@Override
-	public String getRandomFilterQuery() {
-		return filterQueryExtractor.getRandomQuery();
-	}
-
-	@Override
-	public String getRandomQuery() {
-		return queryExtractor.getRandomQuery();
-	}
-
-	@Override
 	public synchronized CommonsHttpSolrServer getSolrServer() {
 		if(server == null) {
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
@@ -151,7 +152,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	}
 
 	@Override
-	public void incrementConcurrentOperations() {
+	public void incrementOperationsPerMinute() {
 		operationsPerMinute++;
 		updateThreadWaitTime();
 	}
@@ -175,7 +176,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	@Override
 	public void start() {
 		running = true;
-		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this));
+		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor));
 		this.updateThreadWaitTime();
 		executerThread.start();
 	}

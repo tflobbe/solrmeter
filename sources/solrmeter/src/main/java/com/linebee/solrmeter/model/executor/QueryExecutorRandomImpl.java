@@ -25,7 +25,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.linebee.solrmeter.model.AbstractExecutor;
 import com.linebee.solrmeter.model.FieldExtractor;
 import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.QueryExtractor;
@@ -37,12 +36,14 @@ import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 import com.linebee.stressTestScope.StressTestScope;
 
 /**
- * Creates and manages query execution Threads.
+ * Creates and manages query execution Threads. The queries are executed with 
+ * RandomOperationExectionThread.
+ * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
  * @author tflobbe
  *
  */
 @StressTestScope
-public class QueryExecutorRandomImpl extends AbstractExecutor implements QueryExecutor {
+public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements QueryExecutor {
 	
 	/**
 	 * Solr Server for strings
@@ -113,75 +114,46 @@ public class QueryExecutorRandomImpl extends AbstractExecutor implements QueryEx
 				extraParameters.put(param.substring(0, equalSignIndex).trim(), param.substring(equalSignIndex + 1).trim());
 			}
 		}
-		
 	}
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new QueryOperation(this), 60);
+		return new RandomOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor), 60);
 	}
 
 	/**
 	 * Logs strings time and all statistics information.
 	 */
+	@Override
 	protected void stopStatistics() {
 		for(QueryStatistic statistic:statistics) {
 			statistic.onFinishedTest();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getSolrServer()
-	 */
+	@Override
 	public synchronized CommonsHttpSolrServer getSolrServer() {
 		if(server == null) {
 			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}
 		return server;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getRandomQuery()
-	 */
-	public String getRandomQuery() {
-		return queryExtractor.getRandomQuery();
-	}
 	
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getRandomFilterQuery()
-	 */
-	public String getRandomFilterQuery() {
-		return filterQueryExtractor.getRandomQuery();
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#notifyQueryExecuted(org.apache.solr.client.solrj.response.QueryResponse, long)
-	 */
+	@Override
 	public void notifyQueryExecuted(QueryResponse response, long clientTime) {
 		for(QueryStatistic statistic:statistics) {
 			statistic.onExecutedQuery(response, clientTime);
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#notifyError(com.linebee.solrmeter.model.exception.QueryException)
-	 */
+	
+	@Override
 	public void notifyError(QueryException exception) {
 		for(QueryStatistic statistic:statistics) {
 			statistic.onQueryError(exception);
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getRandomField()
-	 */
-	public String getRandomField() {
-		return facetFieldExtractor.getRandomFacetField();
-	}
 	
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getQueryType()
-	 */
+	@Override
 	public String getQueryType() {
 		return queryType;
 	}
@@ -191,23 +163,17 @@ public class QueryExecutorRandomImpl extends AbstractExecutor implements QueryEx
 		return "solr.load.queriesperminute";
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#addStatistic(com.linebee.solrmeter.model.QueryStatistic)
-	 */
+	@Override
 	public void addStatistic(QueryStatistic statistic) {
 		this.statistics.add(statistic);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getQueriesPerMinute()
-	 */
+	@Override
 	public int getQueriesPerMinute() {
 		return operationsPerMinute;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.linebee.solrmeter.model.QueryExecutor#getExtraParameters()
-	 */
+	@Override
 	public Map<String, String> getExtraParameters() {
 		return extraParameters;
 	}

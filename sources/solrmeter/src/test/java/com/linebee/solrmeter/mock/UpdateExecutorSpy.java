@@ -19,9 +19,9 @@ import java.net.MalformedURLException;
 
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
-import com.linebee.solrmeter.model.UpdateExecutor;
+import com.linebee.solrmeter.model.executor.UpdateExecutorRandomImpl;
 
-public class UpdateExecutorSpy extends UpdateExecutor {
+public class UpdateExecutorSpy extends UpdateExecutorRandomImpl {
 
 	private SolrServerMock serverMock;
 	

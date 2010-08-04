@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.solrmeter.model;
+package com.linebee.solrmeter.model.executor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,14 +21,18 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
+import com.linebee.solrmeter.model.FileUtils;
+import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.model.SolrServerRegistry;
 import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
 /**
- * Base class for operation executors that run multiple threads
+ * Base class for operation executors that run multiple threads.
+ * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
  * @author tflobbe
  *
  */
-public abstract class AbstractExecutor {
+public abstract class AbstractRandomExecutor {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 	
@@ -80,7 +84,7 @@ public abstract class AbstractExecutor {
 	/**
 	 * Increments in one the number of strings per minute
 	 */
-	public void incrementConcurrentOperations() {
+	public void incrementOperationsPerMinute() {
 		RandomOperationExecutorThread newThread = this.createThread(); 
 		threads.add(newThread);
 		if(running) {
@@ -98,7 +102,7 @@ public abstract class AbstractExecutor {
 	 * Decrements in one (and stops the removed one) the number of
 	 * strings per minute
 	 */
-	public void decrementConcurrentQueries() {
+	public void decrementOperationsPerMinute() {
 		RandomOperationExecutorThread removedThread = threads.remove(threads.size() - 1);
 		removedThread.destroy();
 		operationsPerMinute--;

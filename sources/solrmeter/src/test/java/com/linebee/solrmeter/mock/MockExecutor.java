@@ -15,10 +15,10 @@
  */
 package com.linebee.solrmeter.mock;
 
-import com.linebee.solrmeter.model.AbstractExecutor;
+import com.linebee.solrmeter.model.executor.AbstractRandomExecutor;
 import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 
-public class MockExecutor extends AbstractExecutor {
+public class MockExecutor extends AbstractRandomExecutor {
 	
 	private int executedThreads;
 	

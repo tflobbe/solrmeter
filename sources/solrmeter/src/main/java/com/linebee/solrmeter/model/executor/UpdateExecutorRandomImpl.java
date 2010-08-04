@@ -18,7 +18,6 @@ package com.linebee.solrmeter.model.executor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
@@ -26,27 +25,26 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.InputDocumentExtractor;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
-import com.linebee.solrmeter.model.SolrServerRegistry;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.UpdateStatistic;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
 import com.linebee.solrmeter.model.task.CommitOperation;
 import com.linebee.solrmeter.model.task.ConstantOperationExecutorThread;
+import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
 import com.linebee.solrmeter.model.task.UpdateOperation;
 import com.linebee.stressTestScope.StressTestScope;
-/**
- * Executor that executes updates in a constant period of time, determined
- * by the specified number of updates per minute.
- * @see com.linebee.solrmeter.model.task.ConstantOperationExecutorThread
+
+/** 
+ * manages update execution Threads. The updates are executed with 
+ * RandomOperationExectionThread.
+ * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
  * @author tflobbe
  *
  */
 @StressTestScope
-public class UpdateExecutorConstantImpl implements UpdateExecutor {
+public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements UpdateExecutor {
 	
-	private Logger logger = Logger.getLogger(this.getClass());
-
 	//TODO DI
 	private CommonsHttpSolrServer server;
 	
@@ -64,14 +62,8 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	
 	private InputDocumentExtractor documentExtractor;
 	
-	private int operationsPerMinute;
-	
-	private boolean running;
-	
-	private ConstantOperationExecutorThread updateExecutorThread;
-	
 	@Inject
-	public UpdateExecutorConstantImpl(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
+	public UpdateExecutorRandomImpl(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
 		super();
 		this.documentExtractor = documentExtractor;
 		statistics = new LinkedList<UpdateStatistic>();
@@ -79,15 +71,25 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
+		super.prepare();
+	}
+
+	public UpdateExecutorRandomImpl() {
+		super();
+		statistics = new LinkedList<UpdateStatistic>();
 	}
 	
 	public synchronized CommonsHttpSolrServer getSolrServer() {
 		if(server == null) {
-			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
+			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
 		}
 		return server;
 	}
 	
+	protected RandomOperationExecutorThread createThread() {
+		return new RandomOperationExecutorThread(new UpdateOperation(this, documentExtractor), 60);
+	}
+
 	private void prepareCommiter() {
 		if(commiterThread != null) {
 			commiterThread.destroy();
@@ -100,9 +102,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		if(this.isRunning()) {
 			return;
 		}
-		updateExecutorThread = new ConstantOperationExecutorThread(new UpdateOperation(this, documentExtractor));
-		onOperationsPerMinuteChange();
-		updateExecutorThread.start();
+		super.start();
 		if(!isAutocommit()) {
 			prepareCommiter();
 			commiterThread.start();
@@ -117,8 +117,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		if(!isAutocommit()) {
 			commiterThread.destroy();
 		}
-		updateExecutorThread.destroy();
-		stopStatistics();
+		super.stop();
 	}
 
 	protected void stopStatistics() {
@@ -193,9 +192,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		}
 		maxTimeBeforeCommit = value;
 		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", String.valueOf(maxTimeBeforeCommit));
-		if(commiterThread != null) {
-			commiterThread.setTimeToWait(value);
-		}
+		commiterThread.setTimeToWait(value);
 	}
 
 	public Integer getMaxTimeBeforeCommit() {
@@ -209,31 +206,10 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	public Integer getUpdatesPerMinute() {
 		return this.operationsPerMinute;
 	}
-	
-	public boolean isRunning() {
-		return running;
-	}
 
 	@Override
-	public void decrementOperationsPerMinute() {
-		if(operationsPerMinute > 1) {
-			this.operationsPerMinute--;
-			this.onOperationsPerMinuteChange();
-		}
+	protected String getOperationsPerMinuteConfigurationKey() {
+		return "solr.load.updatesperminute";
 	}
 
-	@Override
-	public void incrementOperationsPerMinute() {
-		this.operationsPerMinute++;
-		onOperationsPerMinuteChange();
-	}
-	
-	private void onOperationsPerMinuteChange() {
-		SolrMeterConfiguration.setProperty("solr.load.updatesperminute", String.valueOf(operationsPerMinute));
-		if(this.updateExecutorThread != null) {
-			this.updateExecutorThread.setTimeToWait(60000/operationsPerMinute);
-		}
-	}
-
-	
 }

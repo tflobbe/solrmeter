@@ -1,3 +1,18 @@
+/**
+ * Copyright Linebee LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.linebee.solrmeter.model;
 
 import java.util.Map;
@@ -20,16 +35,6 @@ public interface QueryExecutor {
 	CommonsHttpSolrServer getSolrServer();
 
 	/**
-	 * @return returns a random Query of the existing ones.
-	 */
-	String getRandomQuery();
-
-	/**
-	 * @return returns a random filter Query of the existing ones.
-	 */
-	String getRandomFilterQuery();
-
-	/**
 	 * To be executed when a Query succeeds. 
 	 * @param response
 	 */
@@ -41,12 +46,6 @@ public interface QueryExecutor {
 	 * @param exception
 	 */
 	void notifyError(QueryException exception);
-
-	/**
-	 * 
-	 * @return returns a random Field of the existing ones.
-	 */
-	String getRandomField();
 
 	/**
 	 * @return Query type
@@ -89,12 +88,12 @@ public interface QueryExecutor {
 	/**
 	 * Increments in one the number of strings per minute
 	 */
-	void incrementConcurrentOperations();
+	void incrementOperationsPerMinute();
 
 	/**
 	 * Decrements in one the number of strings per minute
 	 */
-	void decrementConcurrentQueries();
+	void decrementOperationsPerMinute();
 
 	/**
 	 * Determines whether this executor is running.
