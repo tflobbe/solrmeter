@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.linebee.solrmeter.model.FieldExtractor;
 
+
 public class FileFieldExtractor implements FieldExtractor{
 
 	private FileStringExtractor fileExtractor;

@@ -20,10 +20,10 @@ import java.util.LinkedList;
 
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 
-import com.linebee.solrmeter.model.OptimizeExecutor;
 import com.linebee.solrmeter.model.OptimizeStatistic;
+import com.linebee.solrmeter.model.executor.OnDemandOptimizeExecutor;
 
-public class OptimizeExecutorSpy extends OptimizeExecutor {
+public class OptimizeExecutorSpy extends OnDemandOptimizeExecutor {
 
 	public OptimizeExecutorSpy() throws MalformedURLException {
 		optimizeObservers = new LinkedList<OptimizeStatistic>();

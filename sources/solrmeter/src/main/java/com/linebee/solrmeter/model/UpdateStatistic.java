@@ -19,17 +19,38 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
-
+/**
+ * nterface to be implemented by all the update statistics.
+ * @author tflobbe
+ *
+ */
 public interface UpdateStatistic {
 
+	/**
+	 * To be executed when an update is performed
+	 * @param response
+	 */
 	void onAddedDocument(UpdateResponse response);
 
+	/**
+	 * To be executed when a commit is performed
+	 * @param response
+	 */
 	void onCommit(UpdateResponse response);
 
+	/**
+	 * This method will be executed when the test finishes.
+	 */
 	void onFinishedTest();
 
+	/**
+	 * This method will be executed when an error ocurrs on a commit.
+	 */
 	void onCommitError(CommitException exception);
 	
+	/**
+	 * This method will be executed when an error ocurrs on an update.
+	 */	
 	void onAddError(UpdateException exception);
 
 }
