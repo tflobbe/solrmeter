@@ -15,243 +15,131 @@
  */
 package com.linebee.solrmeter.model;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrInputDocument;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
-import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
-import com.linebee.solrmeter.model.task.UpdateOperation;
-import com.linebee.stressTestScope.StressTestScope;
-
-/** 
- * manages update execution Threads.
+/**
+ * Interface that all Update Executors must implement.
  * @author tflobbe
  *
  */
-@StressTestScope
-public class UpdateExecutor extends AbstractExecutor {
-	
-	//TODO DI
-	private CommonsHttpSolrServer server;
-	
-	private Integer numberOfDocumentsBeforeCommit;
-	
-	private Integer maxTimeBeforeCommit;
-	
-	private List<UpdateStatistic> statistics;
-	
-	protected boolean autocommit;
-	
-	private int notCommitedDocuments;
-	
-	private CommiterThread commiterThread;
-	
-	private InputDocumentExtractor documentExtractor;
-	
-	@Inject
-	public UpdateExecutor(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
-		super();
-		this.documentExtractor = documentExtractor;
-		statistics = new LinkedList<UpdateStatistic>();
-		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE)).intValue();
-		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
-		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
-		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
-		super.prepare();
-	}
+public interface UpdateExecutor {
 
-	public UpdateExecutor() {
-		super();
-		statistics = new LinkedList<UpdateStatistic>();
-	}
-	
-	public synchronized CommonsHttpSolrServer getSolrServer() {
-		if(server == null) {
-			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
-		}
-		return server;
-	}
-	
-	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new UpdateOperation(this), 60);
-	}
+	/**
+	 * 
+	 * @return The current Solr Server. If there is no current Solr Server, then the method returns a new one.
+	 */
+	public CommonsHttpSolrServer getSolrServer();
 
-	private void prepareCommiter() {
-		if(commiterThread != null) {
-			commiterThread.destroy();
-		}
-		commiterThread = new CommiterThread();
-	}
+	/**
+	 * Starts this executor
+	 */
+	public void start();
 
-	public void start() {
-		if(this.isRunning()) {
-			return;
-		}
-		super.start();
-		if(!isAutocommit()) {
-			prepareCommiter();
-			commiterThread.start();
-		}
-		logger.info("Update Executor started");
-	}
-	
-	public void stop() {
-		if(!this.isRunning()) {
-			return;
-		}
-		if(!isAutocommit()) {
-			commiterThread.destroy();
-		}
-		super.stop();
-	}
+	/**
+	 * Stops this executor.
+	 */
+	public void stop();
 
-	protected void stopStatistics() {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.onFinishedTest();
-		}
-	}
+	/**
+	 * To be executed when an Update succeeds. 
+	 * @param response
+	 */
+	public void notifyAddedDocument(UpdateResponse response);
 
-	public SolrInputDocument getNextDocument() {
-		return documentExtractor.getRandomDocument();
-	}
+	/**
+	 * To be executed when a Commit succeeds. 
+	 * @param response
+	 */
+	public void notifyCommitSuccessfull(UpdateResponse response);
 
-	public void notifyAddedDocument(UpdateResponse response) {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.onAddedDocument(response);
-		}
-		if(!isAutocommit()) {
-			notCommitedDocuments++;//synchronize this?
-			if(notCommitedDocuments >= numberOfDocumentsBeforeCommit) {
-				logger.debug("Not Commited Docs is " + notCommitedDocuments + ". Waking commiter thread.");
-				commiterThread.wake();
-			}
-		}
-	}
-	
-	public void notifyCommitSuccessfull(UpdateResponse response) {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.onCommit(response);
-		}
-	}
-	
-	public void notifyCommitError(CommitException exception) {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.onCommitError(exception);
-		}
-	}
-	
-	public void notifyUpdateError(UpdateException updateException) {
-		for(UpdateStatistic statistic:statistics) {
-			statistic.onAddError(updateException);
-		}
-	}
-	
-	public void addStatistic(UpdateStatistic statistic) {
-		this.statistics.add(statistic);
-	}
-	
-	public class CommiterThread extends Thread {
-		
-		private boolean stopping = false;
-		
-		@Override
-		public synchronized void run() {
-			while(!stopping) {
-				try {
-					this.wait(new Long(maxTimeBeforeCommit));
-					if(!stopping) {
-						performCommit();
-					}
-				} catch (InterruptedException e) {
-					Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
-					throw new RuntimeException(e);
-				}
-			}
-		}
-		
-		private void performCommit() {
-			Logger.getLogger(this.getClass()).info("commiting");
-			try {
-				UpdateResponse response = getSolrServer().commit();
-				Logger.getLogger(this.getClass()).info("Commit OK");
-				notifyCommitSuccessfull(response);
-			} catch (SolrServerException e) {
-				Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
-				notifyCommitError(new CommitException(e));
-			} catch (IOException e) {
-				Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
-				notifyCommitError(new CommitException(e));
-			}
-			notCommitedDocuments = 0;
-			
-		}
-		
-		public void destroy() {
-			this.stopping = true;
-		}
-		
-		public synchronized void wake() {
-			this.notify();
-		}
-	}
+	/**
+	 * To be executed when an error ocurrs when committing.
+	 * @param exception
+	 */
+	public void notifyCommitError(CommitException exception);
 
-	public int getNotCommitedDocuments() {
-		return notCommitedDocuments;
-	}
-	
-	public void incrementNumberOfDocumentsBeforeCommit() {
-		if(numberOfDocumentsBeforeCommit == Integer.MAX_VALUE) {
-			throw new RuntimeException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
-		}
-		numberOfDocumentsBeforeCommit+= 1;
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-	}
-	
-	public void decrementNumberOfDocumentsBeforeCommit() {
-		if(numberOfDocumentsBeforeCommit <= 1) {
-			throw new RuntimeException("Number of documents before commit can't be 0");
-		}
-		numberOfDocumentsBeforeCommit-= 1;
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-	}
+	/**
+	 * To be executed when an error ocurrs when updating.
+	 * @param updateException
+	 */
+	public void notifyUpdateError(UpdateException updateException);
 
-	public Integer getNumberOfDocumentsBeforeCommit() {
-		return numberOfDocumentsBeforeCommit;
-	}
-	
-	public void setMaxTimeBeforeCommit(Integer value) {
-		if(value <= 0) {
-			throw new RuntimeException("Time before commit can't be 0");
-		}
-		maxTimeBeforeCommit = value;
-		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", String.valueOf(maxTimeBeforeCommit));
-	}
+	/**
+	 * Adds a Statistic Observer to the executor
+	 * @param statistic
+	 */
+	public void addStatistic(UpdateStatistic statistic);
 
-	public Integer getMaxTimeBeforeCommit() {
-		return maxTimeBeforeCommit;
-	}
+	/**
+	 * @return The number of added documents that hasn't been committed by solrmeter.
+	 * (if a commit is performed outside solrmeter, this counter wont notice)
+	 */
+	public int getNotCommitedDocuments();
 
-	public boolean isAutocommit() {
-		return autocommit;
-	}
+	/**
+	 * Increment the number of documents that has to be added before a commit is performed
+	 * by solrmeter. This number is useless when solrmeter doesn't perform commits.
+	 */
+	public void incrementNumberOfDocumentsBeforeCommit();
 
-	public Integer getUpdatesPerMinute() {
-		return this.operationsPerMinute;
-	}
+	/**
+	 * Decrement the number of documents that has to be added before a commit is performed
+	 * by solrmeter. This number is useless when solrmeter doesn't perform commits.
+	 */
+	public void decrementNumberOfDocumentsBeforeCommit();
 
-	@Override
-	protected String getOperationsPerMinuteConfigurationKey() {
-		return "solr.load.updatesperminute";
-	}
+	/**
+	 * 
+	 * @return The number of documents that has to be added before a commit is performed by
+	 * solrmeter.
+	 */
+	public Integer getNumberOfDocumentsBeforeCommit();
+
+	/**
+	 * Sets the time interval between commits executed by solrmeter. This number is useless
+	 * when solrmeter doesn't perform commits.
+	 * @param value
+	 */
+	public void setMaxTimeBeforeCommit(Integer value);
+
+	/**
+	 * 
+	 * @return The time interval between commits executed by solrmeter.
+	 */
+	public Integer getMaxTimeBeforeCommit();
+
+	/**
+	 * If autocommit is set to true, this means that Solr is performing autocommit, and solrmeter
+	 * doesn't have to. WHEN SET TO TRUE, SOLRMETER WONT PERFORM COMMITS.
+	 * @return
+	 */
+	public boolean isAutocommit();
+
+	/**
+	 * 
+	 * @return The number of update operations that has to be executed per minute
+	 */
+	public Integer getUpdatesPerMinute();
+
+	/**
+	 * 
+	 * @return true if the executor is currently running.
+	 * 			false if the executor is not currently running.
+	 */
+	public boolean isRunning();
+
+	/**
+	 * Increment in one the number of updates that has to be executed in a minute.
+	 */
+	public void incrementOperationsPerMinute();
+
+	/**
+	 * Decrement in one the number of updates that has to be executed in a minute.
+	 * It can't be 0 or less.
+	 */
+	public void decrementOperationsPerMinute();
 
 }

@@ -18,13 +18,29 @@ package com.linebee.solrmeter.model;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.linebee.solrmeter.model.exception.QueryException;
-
+/**
+ * Interface to be implemented by all the query statistics.
+ * @author tflobbe
+ *
+ */
 public interface QueryStatistic {
 
+	/**
+	 * To be executed when a query is performed
+	 * @param response solr query response
+	 * @param clientTime the time the query took from the client side (from solrmeter)
+	 */
 	void onExecutedQuery(QueryResponse response, long clientTime);
 
+	/**
+	 * This method will be executed when the test finishes.
+	 */
 	void onFinishedTest();
 
+	/**
+	 * This method will be executed when an error ocurrs on a query.
+	 * @param exception
+	 */
 	void onQueryError(QueryException exception);
 
 }

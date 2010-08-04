@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Holds all the current configuration. The settings page will change the values of this configuration
+ * but the changes won't be persistent unless a exportConfiguration method is invoked.
  * @author tflobbe
  *
  */

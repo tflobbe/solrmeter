@@ -21,7 +21,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-
+/**
+ * This registry holds all the created solr servers. It will be one for each different url 
+ * and it wont change between tests.
+ * @author tflobbe
+ *
+ */
 public class SolrServerRegistry {
 	
 	protected static Logger logger = Logger.getLogger(SolrServerRegistry.class);

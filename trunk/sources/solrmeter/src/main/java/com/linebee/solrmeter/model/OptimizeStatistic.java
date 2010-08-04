@@ -17,12 +17,29 @@ package com.linebee.solrmeter.model;
 
 import com.linebee.solrmeter.model.exception.OptimizeException;
 
+/**
+ * Interface to be implemented by all the optimize statistics.
+ * @author tflobbe
+ *
+ */
 public interface OptimizeStatistic {
 
+	/**
+	 * This method will be executed when an error ocurrs when optimizing.
+	 * @param exception
+	 */
 	void onOptimizeError(OptimizeException exception);
 
+	/**
+	 * This method will be executed when an optimize operation finishes.
+	 * @param delay
+	 */
 	void onOptimizeFinished(long delay);
 
+	/**
+	 * This method will be executed when an optimize operation starts.
+	 * @param initTime
+	 */
 	void onOptimizeStared(long initTime);
 
 }

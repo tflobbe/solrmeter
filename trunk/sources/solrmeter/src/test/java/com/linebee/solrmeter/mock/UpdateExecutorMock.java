@@ -21,10 +21,10 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.linebee.solrmeter.model.UpdateExecutor;
+import com.linebee.solrmeter.model.executor.UpdateExecutorRandomImpl;
 
 
-public class UpdateExecutorMock extends UpdateExecutor {
+public class UpdateExecutorMock extends UpdateExecutorRandomImpl {
 	
 	private SolrServerMock server;
 	

@@ -74,14 +74,14 @@ public class QueryExecutorController {
 	private void incrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Incrementing");
 		while(getExecutor().getQueriesPerMinute() < value) {
-			getExecutor().incrementConcurrentOperations();
+			getExecutor().incrementOperationsPerMinute();
 		}
 	}
 
 	private void decrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Decrementing");
 		while(getExecutor().getQueriesPerMinute() > value) {
-			getExecutor().decrementConcurrentQueries();
+			getExecutor().decrementOperationsPerMinute();
 		}
 		
 	}

@@ -1,3 +1,18 @@
+/**
+ * Copyright Linebee LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.linebee.solrmeter.model.task;
 
 import java.util.Date;
@@ -7,10 +22,17 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.linebee.solrmeter.model.FieldExtractor;
 import com.linebee.solrmeter.model.QueryExecutor;
+import com.linebee.solrmeter.model.QueryExtractor;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
 
+/**
+ * Operation that executes a single query
+ * @author tflobbe
+ *
+ */
 public class QueryOperation implements Operation {
 	
 	private Logger logger = Logger.getLogger(this.getClass());
@@ -30,13 +52,24 @@ public class QueryOperation implements Operation {
 	
 	private boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
 	
-	public QueryOperation(QueryExecutor executor) {
-		this.executor = executor;
-	}
+	private QueryExtractor queryExtractor;
 	
+	private QueryExtractor filterQueryExtractor;
+	
+	private FieldExtractor facetFieldExtractor;
+	
+	public QueryOperation(QueryExecutor executor,
+			QueryExtractor queryExtractor, QueryExtractor filterQueryExtractor, FieldExtractor facetFieldExtractor) {
+		this.executor = executor;
+		this.queryExtractor = queryExtractor;
+		this.filterQueryExtractor = filterQueryExtractor;
+		this.facetFieldExtractor = facetFieldExtractor;
+		
+	}
+
 	public void execute() {
 		SolrQuery query = new SolrQuery();
-		query.setQuery(executor.getRandomQuery());
+		query.setQuery(queryExtractor.getRandomQuery());
 		query.setQueryType(executor.getQueryType());
 		query.setIncludeScore(true);
 		this.addExtraParameters(query);
@@ -72,7 +105,7 @@ public class QueryOperation implements Operation {
 	}
 
 	private void addFilterQueriesParameters(SolrQuery query) {
-		String filterQString = executor.getRandomFilterQuery();
+		String filterQString = filterQueryExtractor.getRandomQuery();
 		if(!"".equals(filterQString.trim())) {
 			query.addFilterQuery(filterQString);
 		}
@@ -84,7 +117,7 @@ public class QueryOperation implements Operation {
 
 	private void addFacetParameters(SolrQuery query) {
 		query.setFacet(true);
-		query.addFacetField(executor.getRandomField());
+		query.addFacetField(facetFieldExtractor.getRandomFacetField());
 		query.setFacetMinCount(facetMinCount);
 		query.setFacetLimit(facetLimit);
 		if(facetMethod != null && !"".equals(facetMethod)) {
