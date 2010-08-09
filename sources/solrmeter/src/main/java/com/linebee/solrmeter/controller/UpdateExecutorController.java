@@ -37,9 +37,9 @@ public class UpdateExecutorController {
 	private Timer timer = null;
 
 	@Inject
-	public UpdateExecutorController(@Named("updateConsolePanel")ConsolePanel panel, UpdateExecutor executor) {
+	public UpdateExecutorController(@Named("updateConsolePanel")ConsolePanel panel, ExecutorFactory factory) {
 		this.panel = panel;
-		this.executor = executor; 
+		this.executor = factory.getCurrentUpdateExecutor(); 
 	}
 
 	public void onStart() {

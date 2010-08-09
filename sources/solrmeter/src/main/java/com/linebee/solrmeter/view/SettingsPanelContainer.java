@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
 import com.linebee.solrmeter.controller.SettingsController;
 import com.linebee.solrmeter.controller.StatisticsRepository;
 import com.linebee.solrmeter.model.FileUtils;
+import com.linebee.solrmeter.view.settings.OptimizeSettingsPanel;
 import com.linebee.solrmeter.view.settings.QuerySettingsPanel;
 import com.linebee.solrmeter.view.settings.StatisticsSettingsPanel;
 import com.linebee.solrmeter.view.settings.UpdateSettingsPanel;
@@ -80,6 +81,7 @@ public class SettingsPanelContainer extends JPanel {
 		QuerySettingsPanel querySettingsPanel = new QuerySettingsPanel(settingsController, editable);
 		this.addSetting(querySettingsPanel);
 		this.addSetting(new UpdateSettingsPanel(settingsController, editable));
+		this.addSetting(new OptimizeSettingsPanel(settingsController, editable));
 		this.addSetting(new StatisticsSettingsPanel(settingsController, editable, repository));
 	}
 

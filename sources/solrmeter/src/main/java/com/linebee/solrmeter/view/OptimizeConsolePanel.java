@@ -25,6 +25,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 import com.google.inject.Inject;
+import com.linebee.solrmeter.controller.ExecutorFactory;
 import com.linebee.solrmeter.controller.OptimizeExecutorController;
 import com.linebee.solrmeter.model.OptimizeExecutor;
 import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
@@ -62,12 +63,11 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 	
 	@Inject
 	public OptimizeConsolePanel(OptimizeExecutorController controller,
-			OptimizeExecutor executor,
+			ExecutorFactory factory,
 			SimpleOptimizeStatistic optimizeStatistic) {
 		super(I18n.get("optimizeConsolePanel.title"));
-		this.executor = executor;
+		this.executor = factory.getCurrentOptimizeExecutor();
 		this.optimizeStatistic = optimizeStatistic;
-//		optimizeStatistic = (SimpleOptimizeStatistic) Model.getInstance().getOptimizeStatistic("optimizeStatistic");
 		this.controller = controller;
 		this.initGUI();
 	}

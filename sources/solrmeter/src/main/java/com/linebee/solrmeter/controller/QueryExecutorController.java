@@ -38,9 +38,9 @@ public class QueryExecutorController {
 
 	@Inject
 	public QueryExecutorController(@Named("queryConsolePanel") ConsolePanel queryConsolePanel,
-			QueryExecutor executor) {
+			ExecutorFactory factory) {
 		this.panel = queryConsolePanel;
-		this.executor = executor;
+		this.executor = factory.getCurrentQueryExecutor();
 	}
 
 	public void onStart() {
