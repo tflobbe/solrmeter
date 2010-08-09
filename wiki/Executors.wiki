@@ -1,0 +1,26 @@
+#summary Available Executors and How to build new ones
+#labels Since-0.2.0
+
+= Executors =
+The resposability of _executors_ is to organize the execution of operations against a Solr server. Operations are _query_, _update_ and _optimize_.
+
+== Built-in executors ==
+Since version 0.2.0, there are two built in executors for queries and two for updates. Only one for optimize.
+
+=== Random Executor ===
+This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/QueryExecutorRandomImpl.java QueryExecutorRandomImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/UpdateExecutorRandomImpl.java UpdateExecutorRandomImpl]). This were the only available executors on version 0.1.x. 
+For random executors, the user specify the number of operations per minute, and that number of operation is going to be executed, but with no order or constant interval. For example, if the number of operations per minute is 3, then 2 operations could be executed in the first 5 seconds of the minute (even in the same instant) and the other one on the second 58 of that same minute. 
+This executor tries to simulate real use where users don't execute queries on an exact interval.
+To select this executor, write "random" the Executor field in the settings panel (for queries or updates)
+
+=== Constant Executor ===
+This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/QueryExecutorConstantImpl.java QueryExecutorConstantImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/UpdateExecutorConstantImpl.java UpdateExecutorConstantImpl]).
+For Constant executors, the user specify the number of operations to be executed in a minute, and an interval between operations is calculated to be equal and to complete the specified number of operation in a minute.
+For example, if the user specify 60 operations per minute, then, one operation is going to be executed every second. If the user specify 30 operations, then one operation every 2 seconds, and so on.
+To select this executor, write "constant" the Executor field in the settings panel (for queries or updates)
+=== On Demand Executor ===
+This is the only executor available for optimize operations, and it's only available for this operation (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/OnDemandOptimizeExecutor.java OnDemandOptimizeExecutor]).
+With On Demand Executor the o peration will only be executed when the user specify so, just once (for example, hitting the "Opimize Now" button from the UI).
+
+== Custom Executors ==
+/* TODO */
