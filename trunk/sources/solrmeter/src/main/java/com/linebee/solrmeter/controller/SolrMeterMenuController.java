@@ -51,14 +51,12 @@ public class SolrMeterMenuController {
 	
 	@Inject
 	public SolrMeterMenuController(
-			QueryExecutor queryExecutor, 
-			UpdateExecutor updateExecutor,
-			OptimizeExecutor optimizeExecutor, 
+			ExecutorFactory factory, 
 			StatisticsRepository repository) {
 		super();
-		this.queryExecutor = queryExecutor;
-		this.updateExecutor = updateExecutor;
-		this.optimizeExecutor = optimizeExecutor;
+		this.queryExecutor = factory.getCurrentQueryExecutor();
+		this.updateExecutor = factory.getCurrentUpdateExecutor();
+		this.optimizeExecutor = factory.getCurrentOptimizeExecutor();
 		this.repository = repository;
 	}
 

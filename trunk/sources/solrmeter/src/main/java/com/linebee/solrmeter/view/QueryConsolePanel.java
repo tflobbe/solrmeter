@@ -33,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.google.inject.Inject;
+import com.linebee.solrmeter.controller.ExecutorFactory;
 import com.linebee.solrmeter.controller.QueryExecutorController;
 import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
@@ -74,11 +75,11 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	@Inject
 	public QueryConsolePanel(QueryExecutorController controller, 
 			SimpleQueryStatistic simpleQueryStatistic,
-			QueryExecutor queryExecutor) {
+			ExecutorFactory factory) {
 		super(I18n.get("queryConsolePanel.title"));
 		this.simpleQueryStatistic = simpleQueryStatistic;
 		this.controller = controller;
-		this.queryExecutor = queryExecutor;
+		this.queryExecutor = factory.getCurrentQueryExecutor();
 		this.initGUI();
 	}
 

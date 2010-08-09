@@ -50,6 +50,7 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 		this.add(new PropertyPanel(I18n.get("settings.query.queryFile"), "solr.queriesFiles", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.queryType"), "solr.search.queryType", editable, this));
 		this.add(new PropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this));
+		this.add(new PropertyPanel(I18n.get("settings.query.queryExecutor"), "executor.queryExecutor", editable, this));
 		
 	}
 

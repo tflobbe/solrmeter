@@ -23,19 +23,23 @@ import com.linebee.solrmeter.view.SettingsPanel;
 import com.linebee.solrmeter.view.component.PropertyPanel;
 import com.linebee.solrmeter.view.exception.InvalidPropertyException;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
+/**
+ * Settings panel for optimize operation settings
+ * @author tflobbe
+ *
+ */
+public class OptimizeSettingsPanel extends SettingsPanel implements PropertyChangeListener {
 
-public class UpdateSettingsPanel extends SettingsPanel implements PropertyChangeListener {
-	
-	private static final long serialVersionUID = -1176374120440517941L;
+	private static final long serialVersionUID = 7691155409986605585L;
 	private SettingsController controller;
 	private boolean editable;
 
 	@Override
 	public String getSettingsName() {
-		return I18n.get("settings.update.title");
+		return I18n.get("settings.optimize.title");
 	}
 	
-	public UpdateSettingsPanel(SettingsController controller, boolean editable) {
+	public OptimizeSettingsPanel(SettingsController controller, boolean editable) {
 		super();
 		this.controller = controller;
 		this.editable = editable;
@@ -44,12 +48,7 @@ public class UpdateSettingsPanel extends SettingsPanel implements PropertyChange
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new PropertyPanel(I18n.get("settings.update.solrUrl"), "solr.addUrl", editable, this));
-		this.add(new PropertyPanel(I18n.get("settings.update.solrAutocommit"), "solr.update.solrAutocommit", editable, this));
-		this.add(new PropertyPanel(I18n.get("settings.update.documentsToCommit"), "solr.update.documentsToCommit",editable, this));
-		this.add(new PropertyPanel(I18n.get("settings.update.timeToCommit"), "solr.update.timeToCommit",editable, this));
-		this.add(new PropertyPanel(I18n.get("settings.update.updateFile"), "solr.updatesFiles", editable, this));
-		this.add(new PropertyPanel(I18n.get("settings.update.updateExecutor"), "executor.updateExecutor", editable, this));
+		this.add(new PropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this));
 		
 	}
 

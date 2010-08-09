@@ -30,6 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.google.inject.Inject;
+import com.linebee.solrmeter.controller.ExecutorFactory;
 import com.linebee.solrmeter.controller.UpdateExecutorController;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.statistic.CommitHistoryStatistic;
@@ -66,11 +67,11 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	private UpdateExecutorController controller;
 	
 	@Inject
-	public UpdateConsolePanel(UpdateExecutor updateExecutor, 
+	public UpdateConsolePanel(ExecutorFactory factory, 
 			UpdateExecutorController controller,
 			CommitHistoryStatistic commitHistoryStatistic) {
 		super(I18n.get("updateConsolePanel.title"));
-		this.updateExecutor = updateExecutor;
+		this.updateExecutor = factory.getCurrentUpdateExecutor();
 		this.controller = controller;
 		this.commitHistoryStatistic = commitHistoryStatistic;
 		this.initGUI();

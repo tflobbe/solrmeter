@@ -28,6 +28,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import com.linebee.solrmeter.controller.ExecutorFactory;
 import com.linebee.solrmeter.controller.StatisticDescriptor;
 import com.linebee.solrmeter.controller.StatisticType;
 import com.linebee.solrmeter.controller.StatisticsRepository;
@@ -99,21 +100,21 @@ public class SolrMeterMain {
 	}
 
 	private static Module createModule(String moduleKey) {
-		String statisticsModuleClass = SolrMeterConfiguration.getProperty(moduleKey);
-		Logger.getLogger(SolrMeterMain.class).info("Using module: " + statisticsModuleClass);
+		String moduleClassName = SolrMeterConfiguration.getProperty(moduleKey);
+		Logger.getLogger(SolrMeterMain.class).info("Using module: " + moduleClassName);
 		Class<?> moduleClass;
 		try {
-			moduleClass = Class.forName(statisticsModuleClass);
+			moduleClass = Class.forName(moduleClassName);
 		} catch (ClassNotFoundException e) {
-			Logger.getLogger(SolrMeterMain.class).error("Module for name " + statisticsModuleClass + " can't be found! Make sure it is in classpath.", e);
-			throw new RuntimeException("Could not start application, module for name " + statisticsModuleClass + " was not found.", e);
+			Logger.getLogger(SolrMeterMain.class).error("Module for name " + moduleClassName + " can't be found! Make sure it is in classpath.", e);
+			throw new RuntimeException("Could not start application, module for name " + moduleClassName + " was not found.", e);
 		}
 		Module moduleInstance;
 		try {
 			moduleInstance = (Module) moduleClass.newInstance();
 		} catch (Exception e) {
-			Logger.getLogger(SolrMeterMain.class).error("Module for name " + statisticsModuleClass + " could not be instantiated.", e);
-			throw new RuntimeException("Module for name " + statisticsModuleClass + " could not be instantiated.", e);
+			Logger.getLogger(SolrMeterMain.class).error("Module for name " + moduleClassName + " could not be instantiated.", e);
+			throw new RuntimeException("Module for name " + moduleClassName + " could not be instantiated.", e);
 		}
 		return moduleInstance;
 	}
@@ -144,9 +145,10 @@ public class SolrMeterMain {
 	}
 	
 	private static void addStatistics(Injector injector) {
-		QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
-		UpdateExecutor updateExecutor = injector.getInstance(UpdateExecutor.class);
-		OptimizeExecutor optimizeExecutor = injector.getInstance(OptimizeExecutor.class);
+		ExecutorFactory factory = injector.getInstance(ExecutorFactory.class);
+		QueryExecutor queryExecutor = factory.getCurrentQueryExecutor();
+		UpdateExecutor updateExecutor = factory.getCurrentUpdateExecutor();
+		OptimizeExecutor optimizeExecutor = factory.getCurrentOptimizeExecutor();
 		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
 		for(StatisticDescriptor stat:repository.getActiveStatistics()) {
 			Logger.getLogger("boot").info("Adding Statistic " + stat.getName());

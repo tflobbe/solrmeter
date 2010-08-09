@@ -33,8 +33,8 @@ public class OptimizeExecutorController {
 	@Inject
 	public OptimizeExecutorController(
 			@Named("optimizeConsolePanel")Refreshable optimizeConsolePanel, 
-			OptimizeExecutor executor) {
-		this.executor = executor;
+			ExecutorFactory factory) {
+		this.executor = factory.getCurrentOptimizeExecutor();
 		this.panel = optimizeConsolePanel;
 	}
 
