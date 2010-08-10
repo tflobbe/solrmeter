@@ -28,7 +28,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.linebee.solrmeter.controller.ExecutorFactory;
 import com.linebee.solrmeter.controller.StatisticDescriptor;
 import com.linebee.solrmeter.controller.StatisticType;
 import com.linebee.solrmeter.controller.StatisticsRepository;
@@ -145,10 +144,9 @@ public class SolrMeterMain {
 	}
 	
 	private static void addStatistics(Injector injector) {
-		ExecutorFactory factory = injector.getInstance(ExecutorFactory.class);
-		QueryExecutor queryExecutor = factory.getCurrentQueryExecutor();
-		UpdateExecutor updateExecutor = factory.getCurrentUpdateExecutor();
-		OptimizeExecutor optimizeExecutor = factory.getCurrentOptimizeExecutor();
+		QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
+		UpdateExecutor updateExecutor = injector.getInstance(UpdateExecutor.class);
+		OptimizeExecutor optimizeExecutor = injector.getInstance(OptimizeExecutor.class);
 		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
 		for(StatisticDescriptor stat:repository.getActiveStatistics()) {
 			Logger.getLogger("boot").info("Adding Statistic " + stat.getName());

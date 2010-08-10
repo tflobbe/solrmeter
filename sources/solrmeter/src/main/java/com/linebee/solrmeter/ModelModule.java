@@ -15,11 +15,15 @@
  */
 package com.linebee.solrmeter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Provides;
-import com.google.inject.multibindings.MapBinder;
 import com.google.inject.name.Named;
-import com.linebee.solrmeter.controller.ExecutorFactory;
+import com.google.inject.name.Names;
 import com.linebee.solrmeter.model.FieldExtractor;
 import com.linebee.solrmeter.model.InputDocumentExtractor;
 import com.linebee.solrmeter.model.OptimizeExecutor;
@@ -44,34 +48,76 @@ public class ModelModule extends AbstractModule {
 	
 	@Override
 	protected void configure() {
-		MapBinder<String, QueryExecutor> queryMapBinder = MapBinder.newMapBinder(binder(), String.class, QueryExecutor.class);
-		configureQueryExecutors(queryMapBinder);
-
-		MapBinder<String, UpdateExecutor> updateMapBinder = MapBinder.newMapBinder(binder(), String.class, UpdateExecutor.class);
-		configureUpdateExecutors(updateMapBinder);
-
-		MapBinder<String, OptimizeExecutor> optimizeMapBinder = MapBinder.newMapBinder(binder(), String.class, OptimizeExecutor.class);
-		configureOptimizeExecutors(optimizeMapBinder);
-		
-		bind(ExecutorFactory.class);
+		configureQueryExecutors();
+		configureUpdateExecutors();
+		configureOptimizeExecutors();
 
 	}
-
-	private void configureOptimizeExecutors(
-			MapBinder<String, OptimizeExecutor> optimizeMapBinder) {
-		optimizeMapBinder.addBinding("ondemand").to(OnDemandOptimizeExecutor.class);
+	
+	private void configureQueryExecutors() {
+		Map<String, Class<? extends QueryExecutor>> map = getQueryExecutorsMap();
+		for(String executorName:map.keySet()) {
+			bind(QueryExecutor.class).annotatedWith(Names.named(executorName)).to(map.get(executorName));
+		}
+	}
+	
+	private void configureUpdateExecutors() {
+		Map<String, Class<? extends UpdateExecutor>> map = getUpdateExecutorsMap();
+		for(String executorName:map.keySet()) {
+			bind(UpdateExecutor.class).annotatedWith(Names.named(executorName)).to(map.get(executorName));
+		}
+	}
+	
+	private void configureOptimizeExecutors() {
+		Map<String, Class<? extends OptimizeExecutor>> map = getOptimizeExecutorsMap();
+		for(String executorName:map.keySet()) {
+			bind(OptimizeExecutor.class).annotatedWith(Names.named(executorName)).to(map.get(executorName));
+		}
+	}
+	/**
+	 * @return The map with name and class of optimize executors to be added to SolrMeter. Override
+	 * this method to add plugin optimize executors.
+	 */
+	protected Map<String, Class<? extends OptimizeExecutor>> getOptimizeExecutorsMap() {
+		Map<String, Class<? extends OptimizeExecutor>> map = new HashMap<String, Class<? extends OptimizeExecutor>>();
+		map.put("ondemand", OnDemandOptimizeExecutor.class);
+		return map;
+	}
+	
+	protected Map<String, Class<? extends UpdateExecutor>> getUpdateExecutorsMap() {
+		Map<String, Class<? extends UpdateExecutor>> map = new HashMap<String, Class<? extends UpdateExecutor>>();
+		map.put("constant", UpdateExecutorConstantImpl.class);
+		map.put("random", UpdateExecutorRandomImpl.class);
+		return map;
 	}
 
-	private void configureUpdateExecutors(
-			MapBinder<String, UpdateExecutor> updateMapBinder) {
-		updateMapBinder.addBinding("constant").to(UpdateExecutorConstantImpl.class);
-		updateMapBinder.addBinding("random").to(UpdateExecutorRandomImpl.class);
+	protected Map<String, Class<? extends QueryExecutor>> getQueryExecutorsMap() {
+		Map<String, Class<? extends QueryExecutor>> map = new HashMap<String, Class<? extends QueryExecutor>>();
+		map.put("constant", QueryExecutorConstantImpl.class);
+		map.put("random", QueryExecutorRandomImpl.class);
+		return map;
 	}
 
-	protected void configureQueryExecutors(MapBinder<String, QueryExecutor> queryMapBinder) {
-		queryMapBinder.addBinding("constant").to(QueryExecutorConstantImpl.class);
-		queryMapBinder.addBinding("random").to(QueryExecutorRandomImpl.class);
+	@Provides
+	public QueryExecutor getQueryExecutor(Injector injector) {
+		final String name = SolrMeterConfiguration.getProperty("executor.queryExecutor");
+		final Key<QueryExecutor> key = Key.get(QueryExecutor.class,	Names.named(name));
+		return injector.getInstance(key);
 	}
+	
+	@Provides
+	public UpdateExecutor getUpdateExecutor(Injector injector) {
+		final String name = SolrMeterConfiguration.getProperty("executor.updateExecutor");
+		final Key<UpdateExecutor> key = Key.get(UpdateExecutor.class, Names.named(name));
+		return injector.getInstance(key);
+	} 
+	
+	@Provides
+	public OptimizeExecutor getOptimizeExecutor(Injector injector) {
+		final String name = SolrMeterConfiguration.getProperty("executor.optimizeExecutor");
+		final Key<OptimizeExecutor> key = Key.get(OptimizeExecutor.class, Names.named(name));
+		return injector.getInstance(key);
+	} 
 
 	@Provides @Named("queryExtractor")
 	public QueryExtractor createQueryExtractor() {
