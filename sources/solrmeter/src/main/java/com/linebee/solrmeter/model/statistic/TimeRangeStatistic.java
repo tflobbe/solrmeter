@@ -179,7 +179,10 @@ public class TimeRangeStatistic implements QueryStatistic {
 	}
 
 	public void removeAllRanges() {
-		counter.clear();
+		List<TimeRange> ranges = new LinkedList<TimeRange>(getActualRanges());
+		for(TimeRange range:ranges) {
+			this.removeRange(range.getMinTime(), range.getMaxTime());
+		}
 		
 	}
 
