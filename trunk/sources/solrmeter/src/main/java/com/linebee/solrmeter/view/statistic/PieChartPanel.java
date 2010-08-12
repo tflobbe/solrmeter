@@ -15,11 +15,19 @@
  */
 package com.linebee.solrmeter.view.statistic;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -27,6 +35,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.google.inject.Inject;
+import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.statistic.TimeRange;
 import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
 import com.linebee.solrmeter.view.I18n;
@@ -48,6 +57,27 @@ public class PieChartPanel extends StatisticPanel {
 		imageLabel = new JLabel();
 		this.add(imageLabel);
 		this.timeRangeStatistic = timeRangeStatistic;
+		this.add(this.createCustomizePanel());
+	}
+
+	private Component createCustomizePanel() {
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.red);
+		panel.setOpaque(true);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.add(Box.createHorizontalGlue());
+		JButton jButtonCustomize = new JButton(I18n.get("statistic.pieChartPanel.customize"));
+		panel.add(jButtonCustomize);
+		jButtonCustomize.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialogCustomizePieChart dialog = new JDialogCustomizePieChart(SolrMeterMain.mainFrame, timeRangeStatistic);
+				dialog.setVisible(true);
+			}
+			
+		});
+		return panel;
 	}
 
 	@Override

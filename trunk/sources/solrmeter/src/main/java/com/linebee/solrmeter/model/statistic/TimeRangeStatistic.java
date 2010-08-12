@@ -15,13 +15,21 @@
  */
 package com.linebee.solrmeter.model.statistic;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.model.QueryStatistic;
+import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.stressTestScope.StressTestScope;
 
@@ -41,11 +49,38 @@ public class TimeRangeStatistic implements QueryStatistic {
 	@Inject
 	public TimeRangeStatistic() {
 		counter = new HashMap<TimeRange, Integer>();
-		//TODO parameterize
-		counter.put(new TimeRange(0, 500), 0);
-		counter.put(new TimeRange(501, 1000), 0);
-		counter.put(new TimeRange(1001, 2000), 0);
-		counter.put(new TimeRange(2001), 0);
+		this.addConfiguredRanges();
+	}
+
+	public TimeRangeStatistic(boolean useDefault) {
+		this();
+		if(useDefault) {
+			addNewRange(0, 500);
+			addNewRange(501, 1000);
+			addNewRange(1001, 2000);
+			addNewRange(2001, Integer.MAX_VALUE);
+		}
+	}
+	
+	private void addConfiguredRanges() {
+		List<String> keys = SolrMeterConfiguration.getKeys(Pattern.compile("statistic\\.timeRange\\.range\\d*_\\d*"));
+		for(String key:keys) {
+			int min = getMinValue(key);
+			int max = getMaxValue(key);
+			addNewRange(min, max);
+		}
+		if(this.overlap()) {
+			Logger.getLogger(this.getClass()).warn("Warning! the time range statistic ranges overlap");
+		}
+		
+	}
+
+	private int getMaxValue(String property) {
+		return Integer.valueOf(property.replaceAll("statistic\\.timeRange\\.range\\d*_", ""));
+	}
+
+	private int getMinValue(String property) {
+		return Integer.valueOf(property.replaceAll("statistic\\.timeRange\\.range", "").replaceAll("_\\d*", ""));
 	}
 
 	@Override
@@ -82,6 +117,69 @@ public class TimeRangeStatistic implements QueryStatistic {
 	@Override
 	public void onQueryError(QueryException exception) {
 		
+		
+	}
+	
+	/**
+	 * Sets all counters to 0.
+	 */
+	public void restartCounter() {
+		for(TimeRange range:counter.keySet()) {
+			counter.put(range, 0);
+		}
+		totalQueries = 0;
+	}
+	
+	public void addNewRange(int init, int end) {
+		counter.put(new TimeRange(init, end), 0);
+		SolrMeterConfiguration.setProperty(getPropertyKey(init, end), "true");
+	}
+
+	private String getPropertyKey(int init, int end) {
+		return "statistic.timeRange.range" + init + "_" + end;
+	}
+	
+	public void removeRange(int init, int end) {
+		if(counter.remove(new TimeRange(init, end)) == null) {
+			throw new RuntimeException();
+		}
+		SolrMeterConfiguration.removeProperty(getPropertyKey(init, end));
+	}
+	
+	public boolean overlap() {
+		LinkedList<TimeRange> ranges = new LinkedList<TimeRange>(counter.keySet());
+		Collections.sort(ranges, new Comparator<TimeRange>() {
+
+			@Override
+			public int compare(TimeRange arg0, TimeRange arg1) {
+				if(arg0.getMinTime() > arg1.getMinTime()) {
+					return 1;
+				}
+				if(arg0.getMinTime() < arg1.getMinTime()) {
+					return -1;
+				}
+				return 0;
+			}
+			
+		});
+		for(int i = 0; i < (ranges.size() - 1); i++) {
+			if(ranges.get(i).getMaxTime() >= ranges.get(i + 1).getMinTime()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int getCounterCount() {
+		return counter.size();
+	}
+	
+	public Collection<TimeRange> getActualRanges() {
+		return counter.keySet();
+	}
+
+	public void removeAllRanges() {
+		counter.clear();
 		
 	}
 
