@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 
@@ -86,6 +88,19 @@ public class SolrMeterConfigurationTestCase extends BaseTestCase {
 			fail(e);
 		}
 		assertEquals("importValue", SolrMeterConfiguration.getProperty("test.import.key"));
-		
+	}
+	
+	public void testGetKeys() {
+		SolrMeterConfiguration.setProperty("test.testProperty1", "test1");
+		SolrMeterConfiguration.setProperty("test.testProperty2", "test2");
+		SolrMeterConfiguration.setProperty("test.testProperty3", "test3");
+		SolrMeterConfiguration.setProperty("test.testProperty4", "test4");
+		SolrMeterConfiguration.setProperty("test.testProperty5", "test5");
+		SolrMeterConfiguration.setProperty("test.testProperty6", "test6");
+		List<String> keys = SolrMeterConfiguration.getKeys(Pattern.compile("test\\.testProperty."));
+		assertEquals(6, keys.size());
+		for(int i = 1; i <=6; i++) {
+			assertTrue(keys.contains("test.testProperty" + i));
+		}
 	}
 }

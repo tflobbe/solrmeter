@@ -24,8 +24,11 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +78,20 @@ public class SolrMeterConfiguration {
 	
 	public static String setProperty(String propertyName, String value) {
 		return (String) prop.setProperty(propertyName, value);
+	}
+	
+	public static void removeProperty(String propertyKey) {
+		prop.remove(propertyKey);
+	}
+	
+	public static List<String> getKeys(Pattern pattern) {
+		List<String> keys = new LinkedList<String>();
+		for(Object propertyKey:prop.keySet()) {
+			if(pattern.matcher((String)propertyKey).matches()) {
+				keys.add((String)propertyKey);
+			}
+		}
+		return keys;
 	}
 	
 	public static String getTransientProperty(String propertyName) {
@@ -129,5 +146,5 @@ public class SolrMeterConfiguration {
 			LoggerFactory.getLogger("boot").error("Error", e);
 		}
 	}
-	
+
 }
