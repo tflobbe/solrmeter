@@ -1,6 +1,6 @@
 #summary Available Executors and How to build new ones
 #labels Since-0.2.0
-
+<wiki:toc max_depth="3" />
 = Executors =
 The responsibility of _executors_ is to organize the execution of operations against a Solr server. Operations are _query_, _update_ and _optimize_.
 
