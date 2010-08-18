@@ -6,7 +6,7 @@ The following steps should be followed to get !SolrMeter up and running.
   # run it from the command line with "java -jar solrmeter-{version}-jar-with-dependencies.jar"
   # create files with information of [queries], [fields], [updates] and [filterqueries filter queries]
   # specify the URL of Solr for updates and queries.
-  # run the executors with the "Run" button.
+  # run the executors with the "Start" button.
 
 =Compile from trunk=
 The following steps should be followed to compile and package !SolrMeter ([http://maven.apache.org/index.html Maven] is required)
