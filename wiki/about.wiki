@@ -18,7 +18,7 @@ See [Overview] for more details and some screenshots.
 
 =What's next and what's new?=
 Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see the issues that are going to be added for the next version (0.2.0) of !SolrMeter.
-There are some of them are already implemented (click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see them) and are available [Usage#Compile_from_trunk downloading the project from trunk].
+There are some of them are already implemented (click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see them) and available [Usage#Compile_from_trunk downloading the project from trunk].
 
 Two of the most important new functionalities are:
  * [custom_statistics Build your own custom statistics]
