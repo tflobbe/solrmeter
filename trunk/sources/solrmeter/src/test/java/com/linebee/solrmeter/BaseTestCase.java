@@ -105,4 +105,15 @@ public abstract class BaseTestCase extends TestCase {
 		return response;
 	}
 	
+	protected void assertEquals(String[] array1, String[] array2) {
+		if(array1.length != array2.length) {
+			fail("Array1 has " + array1.length + " objects and array 2 has " + array2.length);
+		}
+		for(int i = 0; i < array1.length;i++) {
+			if(!array1[i].equals(array2[i])) {
+				fail("Element " + i + " is '" + array1[i] + "' for array1 and '" + array2[i] + "' for array 2.");
+			}
+		}
+	}
+	
 }

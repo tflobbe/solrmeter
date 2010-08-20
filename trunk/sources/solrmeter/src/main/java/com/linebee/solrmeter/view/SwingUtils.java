@@ -28,4 +28,17 @@ public class SwingUtils {
 	    int screenWidth = screenSize.width;
 	    window.setLocation((int)(screenWidth - window.getSize().getWidth()) / 2, (int)(screenHeight -window.getSize().getHeight()) / 2);
 	}
+	
+	public static String getStackTraceString(Throwable exception) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(exception.getMessage() + "\n");
+		for(StackTraceElement element:exception.getStackTrace()) {
+			buffer.append("\tat " + element.toString() + "\n");
+		}
+		if(exception.getCause() != null) {
+			buffer.append("\n");
+			buffer.append(getStackTraceString(exception.getCause()));
+		}
+		return buffer.toString();
+	}
 }

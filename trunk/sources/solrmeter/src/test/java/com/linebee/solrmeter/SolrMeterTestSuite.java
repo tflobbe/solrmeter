@@ -59,6 +59,7 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(ExpectedParameterTestCase.class);
 		suite.addTestSuite(ConstantOperationExecutorThreadTestCase.class);
 		suite.addTestSuite(QueryExecutorConstantImplTestCase.class);
+		suite.addTestSuite(QueryServiceSolrJImplTestCase.class);
 		//$JUnit-END$
 		return suite;
 	}
