@@ -42,6 +42,7 @@ import com.linebee.solrmeter.view.ConsoleFrame;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.OptimizeConsolePanel;
 import com.linebee.solrmeter.view.QueryConsolePanel;
+import com.linebee.solrmeter.view.QueryPanel;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.solrmeter.view.StatisticsContainer;
 import com.linebee.solrmeter.view.UpdateConsolePanel;
@@ -66,6 +67,7 @@ public class SolrMeterMain {
 		loadLookAndFeel();
 		initView(injector);
 		addStatistics(injector);
+		addQueryPanel(injector);
 	}
 	
 	private static void addPlugins(String statisticsPath) {
@@ -127,6 +129,12 @@ public class SolrMeterMain {
 		mainFrame.setMenuBar(injector.getInstance(MenuBar.class));
 		mainFrame.onConfigurationChanged();
 		addStatistics(injector);
+		addQueryPanel(injector);
+	}
+
+	private static void addQueryPanel(Injector injector2) {
+		mainFrame.getStatisticsContainer().addStatistic(injector.getInstance(QueryPanel.class));
+		
 	}
 
 	private static void initView(Injector injector) {

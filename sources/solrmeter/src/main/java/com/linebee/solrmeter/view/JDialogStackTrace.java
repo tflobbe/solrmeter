@@ -131,23 +131,10 @@ public class JDialogStackTrace extends JDialog {
 		textArea.setEditable(false);
 		textArea.setOpaque(false);
 		textArea.setBorder(null);
-		textArea.setText(this.getStackTraceString(exception));
+		textArea.setText(SwingUtils.getStackTraceString(exception));
 		textArea.setSize(200, 200);
 		exception.printStackTrace();
 		return new JScrollPane(textArea);
-	}
-
-	private String getStackTraceString(Throwable exception) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(exception.getMessage() + "\n");
-		for(StackTraceElement element:exception.getStackTrace()) {
-			buffer.append("\tat " + element.toString() + "\n");
-		}
-		if(exception.getCause() != null) {
-			buffer.append("\n");
-			buffer.append(getStackTraceString(exception.getCause()));
-		}
-		return buffer.toString();
 	}
 
 	private Component createLabelDate(OperationException exception) {

@@ -39,6 +39,8 @@ import com.linebee.solrmeter.model.executor.UpdateExecutorRandomImpl;
 import com.linebee.solrmeter.model.extractor.FileFieldExtractor;
 import com.linebee.solrmeter.model.extractor.FileInputDocumentExtractor;
 import com.linebee.solrmeter.model.extractor.FileQueryExtractor;
+import com.linebee.solrmeter.model.service.QueryService;
+import com.linebee.solrmeter.model.service.impl.QueryServiceSolrJImpl;
 /**
  * 
  * @author tflobbe
@@ -51,6 +53,7 @@ public class ModelModule extends AbstractModule {
 		configureQueryExecutors();
 		configureUpdateExecutors();
 		configureOptimizeExecutors();
+		bind(QueryService.class).to(QueryServiceSolrJImpl.class);
 
 	}
 	
