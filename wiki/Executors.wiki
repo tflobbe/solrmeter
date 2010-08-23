@@ -93,7 +93,7 @@ guice.standalonePresentationModule=com.linebee.solrmeter.StandalonePresentationM
 (I know, modify the solrmeter.properties file is an ugly thing to do inside the jar file, this way of changing properties will be eliminated when issues [http://code.google.com/p/solrmeter/issues/detail?id=38 #38] and [http://code.google.com/p/solrmeter/issues/detail?id=39 #39] are done :) )
 
 
-Run solrmeter and you can select this new executor by typing "example" on the Query Executor Field of the Query Settings. The example will run 20 queries like the QueryExecutorConstantImpl and the stops itself.
+Run solrmeter and you can select this new executor by typing "example" on the Query Executor Field of the Query Settings. The example will run 20 queries like the QueryExecutorConstantImpl and then stops itself.
 
 The full example code can be downloaded from the [http://code.google.com/p/solrmeter/downloads/list downloads] page.
 
