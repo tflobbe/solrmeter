@@ -72,6 +72,11 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	private QueryExtractor filterQueryExtractor;
 	
 	/**
+	 * The extra parameters query extractor
+	 */
+	private QueryExtractor extraParamExtractor;
+	
+	/**
 	 * The facet fields extractor
 	 */
 	private FieldExtractor facetFieldExtractor;
@@ -85,12 +90,14 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	public QueryExecutorRandomImpl(
 			@Named("queryExtractor") QueryExtractor queryExtractor,
 			@Named("filterQueryExtractor") QueryExtractor filterQueryExtractor,
-			FieldExtractor facetFieldExtractor) {
+			FieldExtractor facetFieldExtractor, 
+			@Named("extraParamExtractor")QueryExtractor extraParamExtractor) {
 		super();
 		statistics = new LinkedList<QueryStatistic>();
 		this.queryExtractor = queryExtractor;
 		this.filterQueryExtractor = filterQueryExtractor;
 		this.facetFieldExtractor = facetFieldExtractor;
+		this.extraParamExtractor= extraParamExtractor;
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
@@ -118,7 +125,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor), 60);
+		return new RandomOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor, extraParamExtractor), 60);
 	}
 
 	/**

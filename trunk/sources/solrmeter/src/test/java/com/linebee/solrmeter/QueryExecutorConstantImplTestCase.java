@@ -12,6 +12,7 @@ public class QueryExecutorConstantImplTestCase extends BaseTestCase {
 		QueryExecutorConstantImpl executor = new QueryExecutorConstantImpl(
 				new MockFieldExtractor(), 
 				new MockQueryExtractor(),
+				new MockQueryExtractor(),
 				new MockQueryExtractor());
 		assertEquals(2, executor.getExtraParameters().size());
 		assertEquals("true", executor.getExtraParameters().get("indent"));
@@ -20,6 +21,7 @@ public class QueryExecutorConstantImplTestCase extends BaseTestCase {
 		SolrMeterConfiguration.setProperty("solr.query.extraParameters", "");
 		executor = new QueryExecutorConstantImpl(
 				new MockFieldExtractor(), 
+				new MockQueryExtractor(),
 				new MockQueryExtractor(),
 				new MockQueryExtractor());
 		assertEquals(0, executor.getExtraParameters().size());
