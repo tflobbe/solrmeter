@@ -164,7 +164,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 		standardDeviationInfoPanel.setValue(getString(fullQueryStatictic.getStandardDeviation()));
 		totalAverageInfoPanel.setValue(fullQueryStatictic.getTotaAverage().toString());
 		lastMinuteAverageInfoPanel.setValue(fullQueryStatictic.getLastMinuteAverage().toString());
-		lastTenMinutesAverageInfoPanel.setValue(fullQueryStatictic.getlastTenMinutesAverage().toString());
+		lastTenMinutesAverageInfoPanel.setValue(fullQueryStatictic.getLastTenMinutesAverage().toString());
 		if(fullQueryStatictic.getLastErrorTime() != null) {
 			lastErrorInfoPanel.setValue(SimpleDateFormat.getInstance().format(fullQueryStatictic.getLastErrorTime()));
 		} else {
