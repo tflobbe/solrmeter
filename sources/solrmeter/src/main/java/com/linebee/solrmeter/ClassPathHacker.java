@@ -27,7 +27,7 @@ public class ClassPathHacker {
 	}//end method
 	 
 	 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void addURL(URL u) throws IOException {
 			
 		URLClassLoader sysloader = (URLClassLoader)ClassLoader.getSystemClassLoader();
