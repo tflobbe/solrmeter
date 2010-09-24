@@ -82,6 +82,8 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	 */
 	private QueryExtractor queryExtractor;
 	
+	private QueryExtractor extraParamExtractor;
+	
 	/**
 	 * Indicates wether the Executor is running or not
 	 */
@@ -97,7 +99,8 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	@Inject
 	public QueryExecutorConstantImpl(FieldExtractor facetFieldExtractor,
 			@Named("filterQueryExtractor") QueryExtractor filterQueryExtractor,
-			@Named("queryExtractor") QueryExtractor queryExtractor) {
+			@Named("queryExtractor") QueryExtractor queryExtractor,
+			@Named("extraParamExtractor")QueryExtractor extraParamExtractor) {
 		super();
 		statistics = new LinkedList<QueryStatistic>();
 		this.filterQueryExtractor = filterQueryExtractor;
@@ -105,6 +108,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 		this.queryExtractor = queryExtractor;
 		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
+		this.extraParamExtractor = extraParamExtractor;
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 	}
 	
@@ -176,7 +180,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	@Override
 	public void start() {
 		running = true;
-		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor));
+		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor, extraParamExtractor));
 		this.updateThreadWaitTime();
 		executerThread.start();
 	}

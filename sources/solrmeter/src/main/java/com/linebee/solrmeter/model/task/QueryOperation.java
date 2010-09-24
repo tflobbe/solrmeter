@@ -52,18 +52,26 @@ public class QueryOperation implements Operation {
 	
 	private boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
 	
+	private boolean addRandomExtraParams = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.addRandomExtraParams", "true"));
+	
 	private QueryExtractor queryExtractor;
 	
 	private QueryExtractor filterQueryExtractor;
 	
 	private FieldExtractor facetFieldExtractor;
 	
+	private QueryExtractor extraParameterExtractor;
+	
 	public QueryOperation(QueryExecutor executor,
-			QueryExtractor queryExtractor, QueryExtractor filterQueryExtractor, FieldExtractor facetFieldExtractor) {
+			QueryExtractor queryExtractor, 
+			QueryExtractor filterQueryExtractor, 
+			FieldExtractor facetFieldExtractor,
+			QueryExtractor extraParamExtractor) {
 		this.executor = executor;
 		this.queryExtractor = queryExtractor;
 		this.filterQueryExtractor = filterQueryExtractor;
 		this.facetFieldExtractor = facetFieldExtractor;
+		this.extraParameterExtractor = extraParamExtractor;
 		
 	}
 
@@ -79,6 +87,9 @@ public class QueryOperation implements Operation {
 		}
 		if(useFilterQueries) {
 			addFilterQueriesParameters(query);
+		}
+		if(addRandomExtraParams) {
+			this.addRandomExtraParameters(query);
 		}
 		try {
 			logger.debug("executing query: " + query);
@@ -101,6 +112,23 @@ public class QueryOperation implements Operation {
 	private void addExtraParameters(SolrQuery query) {
 		for(String paramKey:executor.getExtraParameters().keySet()) {
 			query.add(paramKey, executor.getExtraParameters().get(paramKey));
+		}
+	}
+	
+	/**
+	 * Adds a random line of the extra parameters extractor
+	 * @param query
+	 */
+	private void addRandomExtraParameters(SolrQuery query) {
+		String randomExtraParam = extraParameterExtractor.getRandomQuery();
+		if(randomExtraParam == null || "".equals(randomExtraParam.trim())) {
+			return;
+		}
+		for(String param:randomExtraParam.split("&")) {
+			int equalSignIndex = param.indexOf("=");
+			if(equalSignIndex > 0) {
+				query.add(param.substring(0, equalSignIndex).trim(), param.substring(equalSignIndex + 1).trim());
+			}
 		}
 	}
 

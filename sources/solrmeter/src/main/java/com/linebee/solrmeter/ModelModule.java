@@ -131,6 +131,11 @@ public class ModelModule extends AbstractModule {
 	public QueryExtractor createFilterQueryExtractor() {
 		return new FileQueryExtractor(SolrMeterConfiguration.getProperty("solr.query.filterQueriesFile"));
 	}
+	
+	@Provides @Named("extraParamExtractor")
+	public QueryExtractor createExtraParamExtractor() {
+		return new FileQueryExtractor(SolrMeterConfiguration.getProperty("solr.query.extraParams"));
+	}
 
 	@Provides
 	public FieldExtractor createFieldExtractor() {
