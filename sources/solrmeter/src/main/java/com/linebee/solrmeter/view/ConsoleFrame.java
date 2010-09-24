@@ -47,6 +47,7 @@ public class ConsoleFrame extends JFrame {
 			UpdateConsolePanel updatePanel, OptimizeConsolePanel optimizePanel,
 			StatisticsContainer statisticsContainer) throws HeadlessException {
 		super();
+		this.setLocale(I18n.getLocale());
 		this.queryPanel = queryPanel;
 		this.updatePanel = updatePanel;
 		this.optimizePanel = optimizePanel;
