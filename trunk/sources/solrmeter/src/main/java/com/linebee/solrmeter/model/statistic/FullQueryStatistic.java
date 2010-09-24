@@ -153,7 +153,7 @@ public class FullQueryStatistic implements QueryStatistic {
 		return getAverageSince(calendar.getTime());
 	}
 	
-	public Integer getlastTenMinutesAverage() {
+	public Integer getLastTenMinutesAverage() {
 		Calendar calendar = new GregorianCalendar();
 		calendar.roll(Calendar.MINUTE, -10);
 		return getAverageSince(calendar.getTime());
