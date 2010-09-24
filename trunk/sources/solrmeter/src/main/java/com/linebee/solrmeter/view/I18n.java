@@ -15,6 +15,8 @@
  */
 package com.linebee.solrmeter.view;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -24,7 +26,9 @@ import com.linebee.solrmeter.model.SolrMeterConfiguration;
 
 public class I18n {
 	
-	private ResourceBundle resources;
+	private List<ResourceBundle> resources;
+	
+	private Locale locale;
 	
 	private static I18n instance = new I18n();
 	
@@ -39,15 +43,39 @@ public class I18n {
 			locale = Locale.getDefault();
 		}
 		Logger.getLogger(this.getClass()).info("Using Locale " + locale);
-		this.resources = ResourceBundle.getBundle("messages", locale);
+		this.locale = locale;
+//		this.resources = ResourceBundle.getBundle("messages", locale); This is not working??
+//		http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=d7adaa31e312a97d6d0854a3fc241?bug_id=4303146
+		this.resources = this.getResources(locale);
 	}
 	
+	private List<ResourceBundle> getResources(Locale locale) {
+		List<ResourceBundle> list = new LinkedList<ResourceBundle>();
+		if(this.getClass().getClassLoader().getResource(("messages_" + locale.getLanguage() + "_" + locale.getCountry() + ".properties")) != null) {
+			list.add(ResourceBundle.getBundle("messages_" + locale.getLanguage() + "_" + locale.getCountry()));
+		}
+		if(this.getClass().getClassLoader().getResource(("messages_" + locale.getLanguage() + ".properties")) != null) {
+			list.add(ResourceBundle.getBundle("messages_" + locale.getLanguage()));
+		}
+		list.add(ResourceBundle.getBundle("messages"));
+		return list;
+	}
+
 	public static void onConfigurationChange() {
 		instance = new I18n();
 	}
 	
 	public static String get(String key) {
-		return instance.resources.getString(key);
+		for(ResourceBundle resourceBundle:instance.resources) {
+			if(resourceBundle.containsKey(key)) {
+				return resourceBundle.getString(key);
+			}
+		}
+		throw new RuntimeException("No resource value for key " + key);
+	}
+	
+	public static Locale getLocale() {
+		return instance.locale;
 	}
 
 }

@@ -16,7 +16,6 @@
 package com.linebee.solrmeter.view.component;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.LinkedList;
@@ -77,7 +76,6 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.add(Box.createRigidArea(new Dimension(paddingLeft, paddingLeft)));
 		label = new JLabel(text + ":");
-		label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
 		this.add(label);
 		this.add(Box.createRigidArea(new Dimension(paddingCenter, paddingCenter)));
 		if(editable) {
