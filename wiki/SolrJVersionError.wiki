@@ -1,0 +1,66 @@
+#summary Invalid version or the data in not in 'javabin' format error when using solrmeter v1.1.0 with Solr 3_x or Solr 4.
+#labels FAQ
+
+= Invalid version or the data in not in 'javabin' format =
+
+The reason for this error is that Solr has changed the javabin format on 3_x brunch and on trunk and SolrMeter uses 1.4 version of SolrJ. 
+The whole trace would be something like this:
+
+{{{
+org.apache.solr.client.solrj.SolrServerException: Error executing query
+        at org.apache.solr.client.solrj.request.QueryRequest.process(QueryRequest.java:95)
+        at org.apache.solr.client.solrj.SolrServer.query(SolrServer.java:118)
+        at com.linebee.solrmeter.model.task.QueryThread.executeQuery(QueryThread.java:103)
+        at com.linebee.solrmeter.model.task.QueryThread.executeOperation(QueryThread.java:74)
+        at com.linebee.solrmeter.model.task.AbstractOperationThread.run(AbstractOperationThread.java:53)
+Caused by: java.lang.RuntimeException: Invalid version or the data in not in 'javabin' format
+        at org.apache.solr.common.util.JavaBinCodec.unmarshal(JavaBinCodec.java:99)
+        at org.apache.solr.client.solrj.impl.BinaryResponseParser.processResponse(BinaryResponseParser.java:39)
+        at org.apache.solr.client.solrj.impl.CommonsHttpSolrServer.request(CommonsHttpSolrServer.java:466)
+        at org.apache.solr.client.solrj.impl.CommonsHttpSolrServer.request(CommonsHttpSolrServer.java:243)
+        at org.apache.solr.client.solrj.request.QueryRequest.process(QueryRequest.java:89)
+        ... 4 more
+
+}}}
+
+On this link you can see the discussion of the change:
+http://lucene.472066.n3.nabble.com/SolrJ-new-javabin-format-td1715912.html
+
+
+= How to fix this problem =
+
+If you are using the *SolrMeter version 0.1.1*, then download this other jar.
+
+If you are using the *SolrMeter trunk* follow this steps:
+  # download Solr sources if you haven’t do it yet.
+  # go to the solr folder of your console and run the command ant generate-maven-artifacts
+  # on the pom.xml file of SolrMeter change the version of SolrJ from:
+
+{{{
+<dependency>
+	<artifactId>solr-solrj</artifactId>
+	<groupId>org.apache.solr</groupId>
+	<version>1.4.0</version>
+</dependency>
+}}}
+to
+{{{
+<dependency>
+	<artifactId>solr-solrj</artifactId>
+	<groupId>org.apache.solr</groupId>
+	<version>4.0-SNAPSHOT</version>
+</dependency>
+}}}
+If you are using the trunk of Solr or
+{{{
+<dependency>
+	<artifactId>solr-solrj</artifactId>
+	<groupId>org.apache.solr</groupId>
+	<version>3.1-dev</version>
+</dependency>
+}}}
+If you are using the 3_x branch.
+
+4. generate the executable jar like it says [http://code.google.com/p/solrmeter/wiki/Usage#Compile_from_trunk here]
+
+After the release of SolrJ 4.0 and SolrJ 3.1 we will update SolrMeter code to use it.
