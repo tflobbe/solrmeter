@@ -50,8 +50,7 @@ public class FileUtils {
 		List<String> list = new LinkedList<String>();
 		try {
 			stream = findFileAsStream(filePath);
-//			stream = new FileInputStream(new File(filePath));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, SolrMeterConfiguration.getProperty("files.charset", "UTF-8")));
 			String nextLine = reader.readLine();
 			while(nextLine != null) {
 				list.add(nextLine);
