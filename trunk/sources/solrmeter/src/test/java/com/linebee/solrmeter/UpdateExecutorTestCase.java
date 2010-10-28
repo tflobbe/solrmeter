@@ -36,84 +36,84 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		super.tearDown();
 		SolrMeterConfiguration.loadDefatultConfiguration();
 	}
-	
-	public void testMaxTimeBeforeCommit() throws InterruptedException {
-		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
-		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
-		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
-		updateExecutor.prepare();
-		updateExecutor.start();
-		for(int i = 1; i <= 10; i++) {
-			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
-			assertEquals(i, updateExecutor.getNotCommitedDocuments());
-		}
-		Thread.sleep(1100);
-		assertEquals(0, updateExecutor.getNotCommitedDocuments());
-		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
-		updateExecutor.stop();
-	}
-	
-	public void testIncrementMaxTimeBeforeCommit() throws InterruptedException {
-		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
-		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
-		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
-		updateExecutor.prepare();
-		updateExecutor.start();
-		updateExecutor.setMaxTimeBeforeCommit(2000);
-		for(int i = 1; i <= 10; i++) {
-			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
-			assertEquals(i, updateExecutor.getNotCommitedDocuments());
-		}
-		Thread.sleep(500);
-		assertEquals(10, updateExecutor.getNotCommitedDocuments());
-		Thread.sleep(500);
-		assertEquals(10, updateExecutor.getNotCommitedDocuments());
-		Thread.sleep(500);
-		assertEquals(10, updateExecutor.getNotCommitedDocuments());
-		Thread.sleep(700);
-		assertEquals(0, updateExecutor.getNotCommitedDocuments());
-		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
-		updateExecutor.stop();
-		
-		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "2147483600");
-		updateExecutor.prepare();
-	}
-	
-	public void testDecrementMaxTimeBeforeCommit() throws InterruptedException {
-		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
-		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
-		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
-		updateExecutor.prepare();
-		updateExecutor.start();
-		updateExecutor.setMaxTimeBeforeCommit(500);
-		while(((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits() == 0) {
-			//changed time before commit will be materialized on next commit
-		}
-		for(int i = 1; i <= 10; i++) {
-			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
-			assertEquals(i, updateExecutor.getNotCommitedDocuments());
-		}
-		Thread.sleep(700);
-		assertEquals(0, updateExecutor.getNotCommitedDocuments());
-		assertEquals(2, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
-		updateExecutor.stop();
-		
-		try {
-			updateExecutor.setMaxTimeBeforeCommit(-1);
-			fail("Exception should be thrown");
-		}catch(RuntimeException e) {
-			//extected
-		}
-	}
+//	TODO rethink this tests. Can't rely on java sleep
+//	public void testMaxTimeBeforeCommit() throws InterruptedException {
+//		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
+//		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+//		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
+//		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
+//		updateExecutor.prepare();
+//		updateExecutor.start();
+//		for(int i = 1; i <= 10; i++) {
+//			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
+//			assertEquals(i, updateExecutor.getNotCommitedDocuments());
+//		}
+//		Thread.sleep(1100);
+//		assertEquals(0, updateExecutor.getNotCommitedDocuments());
+//		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
+//		updateExecutor.stop();
+//	}
+//	
+//	public void testIncrementMaxTimeBeforeCommit() throws InterruptedException {
+//		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
+//		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+//		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
+//		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
+//		updateExecutor.prepare();
+//		updateExecutor.start();
+//		updateExecutor.setMaxTimeBeforeCommit(2000);
+//		for(int i = 1; i <= 10; i++) {
+//			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
+//			assertEquals(i, updateExecutor.getNotCommitedDocuments());
+//		}
+//		Thread.sleep(500);
+//		assertEquals(10, updateExecutor.getNotCommitedDocuments());
+//		Thread.sleep(500);
+//		assertEquals(10, updateExecutor.getNotCommitedDocuments());
+//		Thread.sleep(500);
+//		assertEquals(10, updateExecutor.getNotCommitedDocuments());
+//		Thread.sleep(700);
+//		assertEquals(0, updateExecutor.getNotCommitedDocuments());
+//		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
+//		updateExecutor.stop();
+//		
+//		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "2147483600");
+//		updateExecutor.prepare();
+//	}
+//	
+//	public void testDecrementMaxTimeBeforeCommit() throws InterruptedException {
+//		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000");
+//		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+//		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "1000");
+//		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
+//		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
+//		updateExecutor.prepare();
+//		updateExecutor.start();
+//		updateExecutor.setMaxTimeBeforeCommit(500);
+//		while(((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits() == 0) {
+//			//changed time before commit will be materialized on next commit
+//		}
+//		for(int i = 1; i <= 10; i++) {
+//			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
+//			assertEquals(i, updateExecutor.getNotCommitedDocuments());
+//		}
+//		Thread.sleep(700);
+//		assertEquals(0, updateExecutor.getNotCommitedDocuments());
+//		assertEquals(2, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
+//		updateExecutor.stop();
+//		
+//		try {
+//			updateExecutor.setMaxTimeBeforeCommit(-1);
+//			fail("Exception should be thrown");
+//		}catch(RuntimeException e) {
+//			//extected
+//		}
+//	}
 	
 
 	public void testMaxDocsBeforeCommit() throws InterruptedException{
