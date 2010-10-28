@@ -15,18 +15,19 @@
  */
 package com.linebee.solrmeter.view;
 
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.SolrMeterMenuController;
 import com.linebee.stressTestScope.StressTestScope;
 
 @StressTestScope
-public class SolrMeterMenuBar extends MenuBar {
+public class SolrMeterMenuBar extends JMenuBar {
 	
 	private static final long serialVersionUID = 1L;
 	private SolrMeterMenuController controller;
@@ -44,16 +45,15 @@ public class SolrMeterMenuBar extends MenuBar {
 		
 	}
 
-	private Menu createEditMenu() {
-		Menu menu = new Menu();
-		menu.setLabel(I18n.get("menu.edit"));
+	private JMenu createEditMenu() {
+		JMenu menu = new JMenu(I18n.get("menu.edit"));
 		menu.setName("editMenu");
 		menu.add(this.createSettingsMenuItem());
 		return menu;
 	}
 
-	private MenuItem createSettingsMenuItem() {
-		MenuItem item = new MenuItem(I18n.get("menu.edit.settings"));
+	private JMenuItem createSettingsMenuItem() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.edit.settings"));
 		item.addActionListener(new ActionListener() {
 
 			@Override
@@ -65,9 +65,8 @@ public class SolrMeterMenuBar extends MenuBar {
 		return item;
 	}
 
-	private Menu createFileMenu() {
-		Menu menu = new Menu();
-		menu.setLabel(I18n.get("menu.file"));
+	private JMenu createFileMenu() {
+		JMenu menu = new JMenu(I18n.get("menu.file"));
 		menu.setName("fileMenu");
 		menu.add(this.createImportConfigurationMenuItem());
 		menu.add(this.createExportConfigurationMenuItem());
@@ -76,8 +75,8 @@ public class SolrMeterMenuBar extends MenuBar {
 		return menu;
 	}
 
-	private MenuItem createExportConfigurationMenuItem() {
-		MenuItem item = new MenuItem(I18n.get("menu.file.export"));
+	private JMenuItem createExportConfigurationMenuItem() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.file.export"));
 		item.addActionListener(new ActionListener() {
 
 			@Override
@@ -89,8 +88,8 @@ public class SolrMeterMenuBar extends MenuBar {
 		return item;
 	}
 
-	private MenuItem createImportConfigurationMenuItem() {
-		MenuItem item = new MenuItem(I18n.get("menu.file.import"));
+	private JMenuItem createImportConfigurationMenuItem() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.file.import"));
 		item.addActionListener(new ActionListener() {
 
 			@Override
@@ -102,8 +101,8 @@ public class SolrMeterMenuBar extends MenuBar {
 		return item;
 	}
 
-	private MenuItem getMenuItemExit() {
-		MenuItem item = new MenuItem(I18n.get("menu.file.exit"));
+	private JMenuItem getMenuItemExit() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.file.exit"));
 		item.addActionListener(new ActionListener() {
 
 			@Override
