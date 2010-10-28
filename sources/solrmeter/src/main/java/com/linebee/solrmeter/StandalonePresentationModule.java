@@ -15,9 +15,8 @@
  */
 package com.linebee.solrmeter;
 
-import java.awt.MenuBar;
-
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
@@ -48,7 +47,7 @@ public class StandalonePresentationModule extends AbstractModule {
 		bind(UpdateConsolePanel.class);
 		bind(OptimizeConsolePanel.class);
 		bind(StatisticsContainer.class);
-		bind(MenuBar.class).to(SolrMeterMenuBar.class);
+		bind(JMenuBar.class).to(SolrMeterMenuBar.class);
 		bind(QueryExecutorController.class);
 		bind(ConsolePanel.class).annotatedWith(Names.named("queryConsolePanel")).to(QueryConsolePanel.class);
 		bind(ConsolePanel.class).annotatedWith(Names.named("updateConsolePanel")).to(UpdateConsolePanel.class);

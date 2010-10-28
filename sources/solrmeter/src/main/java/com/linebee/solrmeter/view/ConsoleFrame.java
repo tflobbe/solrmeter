@@ -20,13 +20,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
-import java.awt.MenuBar;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import com.google.inject.Inject;
@@ -106,10 +106,10 @@ public class ConsoleFrame extends JFrame {
 	
 	@Inject
 	@Override
-	public void setMenuBar(MenuBar mb) {
-		super.setMenuBar(mb);
+	public void setJMenuBar(JMenuBar mb) {
+		super.setJMenuBar(mb);
 	}
-
+	
 	public StatisticsContainer getStatisticsContainer() {
 		return statisticsContainer;
 	}
