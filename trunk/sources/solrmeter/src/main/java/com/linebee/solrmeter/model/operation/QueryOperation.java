@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.solrmeter.model.task;
+package com.linebee.solrmeter.model.operation;
 
 import java.util.Date;
 
@@ -75,7 +75,7 @@ public class QueryOperation implements Operation {
 		
 	}
 
-	public void execute() {
+	public boolean execute() {
 		SolrQuery query = new SolrQuery();
 		query.setQuery(queryExtractor.getRandomQuery());
 		query.setQueryType(executor.getQueryType());
@@ -97,12 +97,17 @@ public class QueryOperation implements Operation {
 			QueryResponse response = this.executeQuery(query);
 			long clientTime = new Date().getTime() - init;
 			logger.debug(response.getResults().getNumFound() + " results found in " + response.getQTime() + " ms");
+			if(response.getQTime() < 0) {
+				throw new RuntimeException("The query returned less than 0 as q time: " + response.getResponseHeader().get("q") + response.getQTime());
+			}
 			executor.notifyQueryExecuted(response, clientTime);
 		} catch (SolrServerException e) {
 			logger.error("Error on Query " + query);
 			e.printStackTrace();
 			executor.notifyError(new QueryException(e, query));
+			return false;
 		}
+		return true;
 	}
 
 	/**
@@ -124,7 +129,7 @@ public class QueryOperation implements Operation {
 		if(randomExtraParam == null || "".equals(randomExtraParam.trim())) {
 			return;
 		}
-		for(String param:randomExtraParam.split("&")) {
+		for(String param:randomExtraParam.split("&")) {//TODO parametrize
 			int equalSignIndex = param.indexOf("=");
 			if(equalSignIndex > 0) {
 				query.add(param.substring(0, equalSignIndex).trim(), param.substring(equalSignIndex + 1).trim());

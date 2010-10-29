@@ -22,14 +22,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.OptimizeExecutorController;
 import com.linebee.solrmeter.model.OptimizeExecutor;
+import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.model.SolrServerRegistry;
+import com.linebee.solrmeter.model.operation.PingOperation;
 import com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
+import com.linebee.solrmeter.view.component.SolrConnectedButton;
 import com.linebee.stressTestScope.StressTestScope;
 
 @StressTestScope
@@ -58,7 +61,7 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 	
 	private InfoPanel totalOptimizeErrors;
 	
-	private JButton optimizeButton;
+	private SolrConnectedButton optimizeButton;
 	
 	@Inject
 	public OptimizeConsolePanel(OptimizeExecutorController controller,
@@ -87,7 +90,7 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 		this.addAndPadd(lastOptimizationResult);
 		totalOptimizeErrors = new InfoPanel(I18n.get("optimizeConsolePanel.totalOptimizationErrors"), "0");
 		this.addAndPadd(totalOptimizeErrors);
-		optimizeButton = new JButton(I18n.get("optimizeConsolePanel.optimizeNow"));
+		optimizeButton = new SolrConnectedButton(I18n.get("optimizeConsolePanel.optimizeNow"), I18n.get("optimizeConsolePanel.pingFailing"), this.createPingOperation());
 		this.addAndPadd(optimizeButton);
 		optimizeButton.addActionListener(new ActionListener() {
 
@@ -97,6 +100,10 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 			}
 			
 		});
+	}
+	
+	private PingOperation createPingOperation() {
+		return new PingOperation(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL)));
 	}
 	
 	private void optimizing() {

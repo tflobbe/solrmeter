@@ -31,14 +31,14 @@ import com.linebee.solrmeter.model.QueryExtractor;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.exception.QueryException;
-import com.linebee.solrmeter.model.task.QueryOperation;
-import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.QueryOperation;
+import com.linebee.solrmeter.model.operation.RandomOperationExecutorThread;
 import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * Creates and manages query execution Threads. The queries are executed with 
  * RandomOperationExectionThread.
- * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
+ * @see com.linebee.solrmeter.model.operation.RandomOperationExecutorThread
  * @author tflobbe
  *
  */

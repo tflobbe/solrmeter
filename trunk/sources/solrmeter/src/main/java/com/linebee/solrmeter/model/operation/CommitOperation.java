@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.solrmeter.model.task;
+package com.linebee.solrmeter.model.operation;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ public class CommitOperation implements Operation {
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		Logger.getLogger(this.getClass()).info("commiting");
 		try {
 			UpdateResponse response = executor.getSolrServer().commit();
@@ -47,10 +47,13 @@ public class CommitOperation implements Operation {
 		} catch (SolrServerException e) {
 			Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
 			executor.notifyCommitError(new CommitException(e));
+			return false;
 		} catch (IOException e) {
 			Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
 			executor.notifyCommitError(new CommitException(e));
+			return false;
 		}
+		return true;
 	}
 
 }

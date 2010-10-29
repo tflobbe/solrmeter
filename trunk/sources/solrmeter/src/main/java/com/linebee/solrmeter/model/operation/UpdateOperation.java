@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.solrmeter.model.task;
+package com.linebee.solrmeter.model.operation;
 
 import java.io.IOException;
 
@@ -45,7 +45,7 @@ public class UpdateOperation implements Operation {
 	}
 
 	@Override
-	public void execute() {
+	public boolean execute() {
 		SolrInputDocument updateDocument = documentExtractor.getRandomDocument();
 		try {
 			logger.debug("updating document " + updateDocument);
@@ -54,14 +54,17 @@ public class UpdateOperation implements Operation {
 		} catch (IOException e) {
 			logger.error(e);
 			executor.notifyUpdateError(new UpdateException(e));
+			return false;
 		} catch (SolrServerException e) {
 			logger.error(e);
 			executor.notifyUpdateError(new UpdateException(e));
+			return false;
 		} catch (RuntimeException e) {
 			logger.error(e);
 			executor.notifyUpdateError(new UpdateException(e));
 			throw e;
 		}
+		return true;
 	}
 
 }

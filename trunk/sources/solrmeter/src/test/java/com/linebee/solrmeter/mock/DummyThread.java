@@ -15,7 +15,7 @@
  */
 package com.linebee.solrmeter.mock;
 
-import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.RandomOperationExecutorThread;
 
 public class DummyThread extends RandomOperationExecutorThread {
 	
