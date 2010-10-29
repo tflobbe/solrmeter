@@ -2,7 +2,7 @@ package com.linebee.solrmeter.task;
 
 import com.linebee.solrmeter.BaseTestCase;
 import com.linebee.solrmeter.mock.MockOperation;
-import com.linebee.solrmeter.model.task.ConstantOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.ConstantOperationExecutorThread;
 
 public class ConstantOperationExecutorThreadTestCase extends BaseTestCase {
 

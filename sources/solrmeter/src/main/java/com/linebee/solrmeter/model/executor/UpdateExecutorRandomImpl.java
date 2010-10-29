@@ -29,16 +29,16 @@ import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.UpdateStatistic;
 import com.linebee.solrmeter.model.exception.CommitException;
 import com.linebee.solrmeter.model.exception.UpdateException;
-import com.linebee.solrmeter.model.task.CommitOperation;
-import com.linebee.solrmeter.model.task.ConstantOperationExecutorThread;
-import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
-import com.linebee.solrmeter.model.task.UpdateOperation;
+import com.linebee.solrmeter.model.operation.CommitOperation;
+import com.linebee.solrmeter.model.operation.ConstantOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.RandomOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.UpdateOperation;
 import com.linebee.stressTestScope.StressTestScope;
 
 /** 
  * manages update execution Threads. The updates are executed with 
  * RandomOperationExectionThread.
- * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
+ * @see com.linebee.solrmeter.model.operation.RandomOperationExecutorThread
  * @author tflobbe
  *
  */

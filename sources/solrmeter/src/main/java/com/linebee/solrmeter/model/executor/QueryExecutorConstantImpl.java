@@ -32,15 +32,15 @@ import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.SolrServerRegistry;
 import com.linebee.solrmeter.model.exception.QueryException;
-import com.linebee.solrmeter.model.task.ConstantOperationExecutorThread;
-import com.linebee.solrmeter.model.task.QueryOperation;
+import com.linebee.solrmeter.model.operation.ConstantOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.QueryOperation;
 import com.linebee.stressTestScope.StressTestScope;
 
 /**
  * This query executor calculates the interval between queries to achieve
  * the specified number of queries per minute and tries to execute them in
  * constant time.
- * @see com.linebee.solrmeter.model.task.ConstantOperationExecutorThread
+ * @see com.linebee.solrmeter.model.operation.ConstantOperationExecutorThread
  * @author tflobbe
  *
  */

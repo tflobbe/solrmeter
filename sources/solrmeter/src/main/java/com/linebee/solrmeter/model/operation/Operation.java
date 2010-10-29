@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.solrmeter.model.task;
+package com.linebee.solrmeter.model.operation;
 
 /**
  * Interface of all operations
@@ -22,5 +22,5 @@ package com.linebee.solrmeter.model.task;
  */
 public interface Operation {
 
-	void execute();
+	boolean execute();
 }

@@ -24,11 +24,11 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import com.linebee.solrmeter.model.FileUtils;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.SolrServerRegistry;
-import com.linebee.solrmeter.model.task.RandomOperationExecutorThread;
+import com.linebee.solrmeter.model.operation.RandomOperationExecutorThread;
 
 /**
  * Base class for operation executors that run multiple threads.
- * @see com.linebee.solrmeter.model.task.RandomOperationExecutorThread
+ * @see com.linebee.solrmeter.model.operation.RandomOperationExecutorThread
  * @author tflobbe
  *
  */

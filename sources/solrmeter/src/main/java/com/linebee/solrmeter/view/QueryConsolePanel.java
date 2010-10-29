@@ -35,9 +35,13 @@ import javax.swing.event.ChangeListener;
 import com.google.inject.Inject;
 import com.linebee.solrmeter.controller.QueryExecutorController;
 import com.linebee.solrmeter.model.QueryExecutor;
+import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.model.SolrServerRegistry;
+import com.linebee.solrmeter.model.operation.PingOperation;
 import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
+import com.linebee.solrmeter.view.component.SolrConnectedButton;
 import com.linebee.stressTestScope.StressTestScope;
 
 /**
@@ -67,7 +71,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	
 	private JSpinner concurrentQueries;
 	
-	private JButton startButton;
+	private SolrConnectedButton startButton;
 	
 	private JButton stopButton;
 	
@@ -99,7 +103,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		totalErrors = new InfoPanel(I18n.get("queryConsolePanel.totalErrors"), "0");
 		this.addAndPadd(totalErrors);
 		this.addAndPadd(this.getCurrentQueriesSpinner());
-		startButton = new JButton(I18n.get("queryConsolePanel.start"));
+		startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -120,6 +124,11 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		auxiliarPanel.add(stopButton);
 		this.addAndPadd(auxiliarPanel);
 		stopped();
+	}
+
+	private PingOperation createPingOperation() {
+		PingOperation operation = new PingOperation(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL)));
+		return operation;
 	}
 
 	private void addAndPadd(Component component) {
