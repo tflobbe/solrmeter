@@ -18,6 +18,8 @@ import com.linebee.solrmeter.model.operation.PingOperation;
 public class SolrConnectedButton extends JButton {
 	
 	private static final long serialVersionUID = -3480106669296431011L;
+	
+	private static final String DEFAULT_PING_INTERVAL = "-1";
 
 	private String notConnectedToolTip;
 	
@@ -39,7 +41,7 @@ public class SolrConnectedButton extends JButton {
 	}
 	
 	public SolrConnectedButton(String text, String tooltip, PingOperation operation) {
-		this(text, tooltip, operation, Integer.valueOf(SolrMeterConfiguration.getProperty("solrConnectedButton.pingInterval")));
+		this(text, tooltip, operation, Integer.valueOf(SolrMeterConfiguration.getProperty("solrConnectedButton.pingInterval", DEFAULT_PING_INTERVAL)));
 	}
 	
 	private void setConnectionOK() {
@@ -57,11 +59,17 @@ public class SolrConnectedButton extends JButton {
 	}
 	
 	
+	
+	
 	private class Pinger implements Runnable {
 		
 		@Override
 		public synchronized void run() {
-			while(true) {
+			boolean wasShownForFirstTime = false;
+			while(isShowing() || !wasShownForFirstTime) {
+				if(isShowing()) {
+					wasShownForFirstTime = true;
+				}
 				try {
 					if(operation.execute()) {
 						setConnectionOK();
@@ -77,7 +85,5 @@ public class SolrConnectedButton extends JButton {
 		}
 		
 	}
-	
-	
 
 }
