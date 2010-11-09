@@ -61,9 +61,11 @@ public class QueryLogStatistic implements QueryStatistic {
 	}
 	
 	private void addToList(QueryLogValue objectToAdd) {
-		queries.add(0, objectToAdd);
-		if(queries.size() > maxStored) {
-			queries.remove(queries.size() -1);
+		synchronized (queries) {
+			queries.add(0, objectToAdd);
+			if(queries.size() > maxStored) {
+				queries.remove(queries.size() -1);
+			}
 		}
 	}
 	
