@@ -48,7 +48,7 @@ public class TimeRangeStatistic implements QueryStatistic {
 	
 	@Inject
 	public TimeRangeStatistic() {
-		counter = new HashMap<TimeRange, Integer>();
+		counter = Collections.synchronizedMap(new HashMap<TimeRange, Integer>());
 		this.addConfiguredRanges();
 	}
 
@@ -85,9 +85,11 @@ public class TimeRangeStatistic implements QueryStatistic {
 
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {
-		for(TimeRange range:counter.keySet()) {
-			if(range.isIncluded(response.getQTime())) {
-				counter.put(range, counter.get(range) + 1);
+		synchronized (counter) {
+			for(TimeRange range:counter.keySet()) {
+				if(range.isIncluded(response.getQTime())) {
+					counter.put(range, counter.get(range) + 1);
+				}
 			}
 		}
 		totalQueries++;
@@ -108,8 +110,10 @@ public class TimeRangeStatistic implements QueryStatistic {
 		if(totalQueries == 0) {
 			return map;
 		}
-		for(TimeRange range:counter.keySet()) {
-			map.put(range, (counter.get(range) * 100) / totalQueries);
+		synchronized (counter) {
+			for(TimeRange range:counter.keySet()) {
+				map.put(range, (counter.get(range) * 100) / totalQueries);
+			}
 		}
 		return map;
 	}
@@ -124,8 +128,10 @@ public class TimeRangeStatistic implements QueryStatistic {
 	 * Sets all counters to 0.
 	 */
 	public void restartCounter() {
-		for(TimeRange range:counter.keySet()) {
-			counter.put(range, 0);
+		synchronized (counter) {
+			for(TimeRange range:counter.keySet()) {
+				counter.put(range, 0);
+			}
 		}
 		totalQueries = 0;
 	}
