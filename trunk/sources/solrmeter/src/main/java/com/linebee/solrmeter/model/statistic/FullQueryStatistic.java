@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -47,7 +48,7 @@ public class FullQueryStatistic implements QueryStatistic {
 	 * The idea of always sorting the same collection is tha it's faster to sort a "pretty much sorted"
 	 * collection than a completly unsorted one.
 	 */
-	private LinkedList<Integer> sortedQueryTimes;
+	private List<Integer> sortedQueryTimes;
 	
 	private Date lastErrorDate;
 	
@@ -56,8 +57,8 @@ public class FullQueryStatistic implements QueryStatistic {
 	@Inject
 	public FullQueryStatistic() {
 		lastErrorDate = null;
-		queryTimeByDate = new TreeMap<Long, Integer>();
-		sortedQueryTimes = new LinkedList<Integer>();
+		queryTimeByDate = Collections.synchronizedSortedMap(new TreeMap<Long, Integer>());
+		sortedQueryTimes = Collections.synchronizedList(new LinkedList<Integer>());
 		totalQTime = 0;
 	}
 	
@@ -89,13 +90,15 @@ public class FullQueryStatistic implements QueryStatistic {
 		if(sortedQueryTimes.isEmpty()) {
 			return new Double(0);
 		}
-		Collections.sort(sortedQueryTimes);
-		if((sortedQueryTimes.size()&1) ==0) {
-			int firstIndex = sortedQueryTimes.size()/2 - 1;
-			int secondIndex = sortedQueryTimes.size()/2 ;
-			return new Double(((double)sortedQueryTimes.get(firstIndex) + (double)sortedQueryTimes.get(secondIndex))/ 2);
-		}else {
-			return new Double(sortedQueryTimes.get(sortedQueryTimes.size()/2));
+		synchronized (sortedQueryTimes) {
+			Collections.sort(sortedQueryTimes);
+			if((sortedQueryTimes.size()&1) ==0) {
+				int firstIndex = sortedQueryTimes.size()/2 - 1;
+				int secondIndex = sortedQueryTimes.size()/2 ;
+				return new Double(((double)sortedQueryTimes.get(firstIndex) + (double)sortedQueryTimes.get(secondIndex))/ 2);
+			}else {
+				return new Double(sortedQueryTimes.get(sortedQueryTimes.size()/2));
+			}
 		}
 	}
 	
@@ -104,17 +107,19 @@ public class FullQueryStatistic implements QueryStatistic {
 		int actualValueCount = 0;
 		int maxValueCount = -1;
 		int actualMode = -1;
-		Collections.sort(sortedQueryTimes);
-		for(Integer integer:sortedQueryTimes) {
-			if(integer == actualValue) {
-				actualValueCount++;
-			}else {
-				if(actualValueCount > maxValueCount) {
-					maxValueCount = actualValueCount;
-					actualMode = actualValue;
+		synchronized (sortedQueryTimes) {
+			Collections.sort(sortedQueryTimes);
+			for(Integer integer:sortedQueryTimes) {
+				if(integer == actualValue) {
+					actualValueCount++;
+				}else {
+					if(actualValueCount > maxValueCount) {
+						maxValueCount = actualValueCount;
+						actualMode = actualValue;
+					}
+					actualValue = integer;
+					actualValueCount = 1;
 				}
-				actualValue = integer;
-				actualValueCount = 1;
 			}
 		}
 		if(actualValueCount > maxValueCount) {
@@ -130,10 +135,12 @@ public class FullQueryStatistic implements QueryStatistic {
 		}
 		double average = (double)totalQTime/sortedQueryTimes.size();
 		double sumation = 0;
-		for(Integer value:sortedQueryTimes) {
-			sumation+= Math.pow((double)(value - average), 2.0);
+		synchronized (sortedQueryTimes) {
+			for(Integer value:sortedQueryTimes) {
+				sumation+= Math.pow((double)(value - average), 2.0);
+			}
+			return sumation / sortedQueryTimes.size();
 		}
-		return sumation / sortedQueryTimes.size();
 	}
 	
 	public Double getStandardDeviation() {
@@ -163,10 +170,12 @@ public class FullQueryStatistic implements QueryStatistic {
 		int sumation = 0;
 		int cantItems = 0;
 		long minDate = sinceDate.getTime();
-		for(Long value:queryTimeByDate.keySet()) {
-			if(value >= minDate) {
-				sumation+=queryTimeByDate.get(value);
-				cantItems++;
+		synchronized (queryTimeByDate) {
+			for(Long value:queryTimeByDate.keySet()) {
+				if(value >= minDate) {
+					sumation+=queryTimeByDate.get(value);
+					cantItems++;
+				}
 			}
 		}
 		if(cantItems != 0) {

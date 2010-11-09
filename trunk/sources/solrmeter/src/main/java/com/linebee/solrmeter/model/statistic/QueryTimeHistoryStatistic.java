@@ -52,8 +52,8 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 	@Inject
 	public QueryTimeHistoryStatistic() {
 		super();
-		timePerInterval = new HashMap<Long, Integer>();
-		queriesPerInterval = new HashMap<Long, Integer>();
+		timePerInterval = Collections.synchronizedMap(new HashMap<Long, Integer>());
+		queriesPerInterval = Collections.synchronizedMap(new HashMap<Long, Integer>());
 	}
 	
 	public QueryTimeHistoryStatistic(String filePath) {

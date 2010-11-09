@@ -16,6 +16,8 @@
 package com.linebee.solrmeter.model.statistic;
 
 import java.util.Date;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -66,10 +68,10 @@ public class OperationTimeHistory implements QueryStatistic, UpdateStatistic,
 	
 	@Inject
 	public OperationTimeHistory() {
-		queriesTime = new TreeMap<Long, Long>();
-		updatesTime = new TreeMap<Long, Long>();
-		commitTime = new TreeMap<Long, Long>();
-		optimizeTime = new TreeMap<Long, Long>();
+		queriesTime = Collections.synchronizedSortedMap(new TreeMap<Long, Long>());
+		updatesTime = Collections.synchronizedSortedMap(new TreeMap<Long, Long>());
+		commitTime = Collections.synchronizedSortedMap(new TreeMap<Long, Long>());
+		optimizeTime = Collections.synchronizedSortedMap(new TreeMap<Long, Long>());
 		initTime = new Date().getTime();
 	}
 

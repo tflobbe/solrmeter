@@ -15,6 +15,7 @@
  */
 package com.linebee.solrmeter.model.statistic;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,13 +38,13 @@ public class QueryLogStatistic implements QueryStatistic {
 	
 	private static int maxStored;
 	
-	private LinkedList<QueryLogValue> queries;
+	private List<QueryLogValue> queries;
 	
 	@Inject
 	public QueryLogStatistic() {
 		super();
 		maxStored = Integer.parseInt(SolrMeterConfiguration.getProperty("solr.queryLogStatistic.maxStored", "400"));
-		queries = new LinkedList<QueryLogValue>();
+		queries = Collections.synchronizedList(new LinkedList<QueryLogValue>());
 	}
 
 	@Override
@@ -60,14 +61,14 @@ public class QueryLogStatistic implements QueryStatistic {
 	}
 	
 	private void addToList(QueryLogValue objectToAdd) {
-		queries.addFirst(objectToAdd);
+		queries.add(0, objectToAdd);
 		if(queries.size() > maxStored) {
-			queries.removeLast();
+			queries.remove(queries.size() -1);
 		}
 	}
 	
 	public LinkedList<QueryLogValue> getLastQueries() {
-		return queries;
+		return new LinkedList<QueryLogStatistic.QueryLogValue>(queries);
 	}
 	
 	public class QueryLogValue {

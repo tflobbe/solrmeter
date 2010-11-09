@@ -15,6 +15,7 @@
  */
 package com.linebee.solrmeter.model.statistic;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class SimpleOptimizeStatistic implements OptimizeStatistic {
 	@Inject
 	public SimpleOptimizeStatistic() {
 		super();
-		optimizeErrors = new LinkedList<String>();
+		optimizeErrors = Collections.synchronizedList(new LinkedList<String>());
 		optimizationCount = 0;
 	}
 	

@@ -132,8 +132,10 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 
 	private XYSeries createSeries(String string, Map<Long, Long> operations) {
 		XYSeries series = new XYSeries(string);
-		for(Long executionInstant:operations.keySet()) {
-			series.add(executionInstant, operations.get(executionInstant));
+		synchronized (operations) {
+			for(Long executionInstant:operations.keySet()) {
+				series.add(executionInstant, operations.get(executionInstant));
+			}
 		}
 		return series;
 	}

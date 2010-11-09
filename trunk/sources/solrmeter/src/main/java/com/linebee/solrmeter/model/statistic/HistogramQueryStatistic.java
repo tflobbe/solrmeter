@@ -47,7 +47,7 @@ public class HistogramQueryStatistic implements QueryStatistic {
 	@Inject
 	public HistogramQueryStatistic() {
 		super();
-		histogram = new HashMap<Long, Integer>();
+		histogram = Collections.synchronizedMap(new HashMap<Long, Integer>());
 	}
 	
 	public HistogramQueryStatistic(String filePath) {
