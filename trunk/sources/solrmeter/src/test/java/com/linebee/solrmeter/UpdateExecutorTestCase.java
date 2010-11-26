@@ -34,7 +34,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		SolrMeterConfiguration.loadDefatultConfiguration();
+		SolrMeterConfiguration.loadConfiguration();
 	}
 //	TODO rethink this tests. Can't rely on java sleep
 //	public void testMaxTimeBeforeCommit() throws InterruptedException {

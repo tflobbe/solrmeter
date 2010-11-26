@@ -65,8 +65,8 @@ public class PropertyPanel extends JPanel implements FocusListener {
 	
 	public PropertyPanel(String text, String property, boolean editable) {
 		super();
-		this.editable = editable;
-		listeners = new LinkedList<PropertyChangeListener>();
+		this.editable = (editable && System.getProperty(property) == null);// system properties can't be modified on runtime
+		this.listeners = new LinkedList<PropertyChangeListener>();
 		this.property = property;
 		this.initGUI(text);
 	}
@@ -75,7 +75,7 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.add(Box.createRigidArea(new Dimension(paddingLeft, paddingLeft)));
-		label = new JLabel(text + ":");
+		this.label = new JLabel(text + ":");
 		this.add(label);
 		this.add(Box.createRigidArea(new Dimension(paddingCenter, paddingCenter)));
 		if(editable) {

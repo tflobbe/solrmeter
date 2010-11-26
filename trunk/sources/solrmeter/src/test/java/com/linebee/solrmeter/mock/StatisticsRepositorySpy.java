@@ -8,7 +8,7 @@ public class StatisticsRepositorySpy extends StatisticsRepository{
 		super(null);
 	}
 
-	protected void parseAvailable() {
+	protected void parseAvailableStatyistics() {
 		
 	}
 }
