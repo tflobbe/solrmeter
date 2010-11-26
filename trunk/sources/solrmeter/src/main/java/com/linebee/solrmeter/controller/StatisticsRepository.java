@@ -47,10 +47,10 @@ public class StatisticsRepository {
 		super();
 		availableStatistics = new LinkedList<StatisticDescriptor>();
 		this.statisticParser = statisticParser;
-		parseAvailable();
+		parseAvailableStatyistics();
 	}
 
-	protected void parseAvailable() {
+	protected void parseAvailableStatyistics() {
 		try {
 			List<StatisticDescriptor> descriptors = statisticParser.getStatisticDescriptors(SolrMeterConfiguration.getProperty("statistic.configuration.filePath"));
 			if(SolrMeterConfiguration.getTransientProperty(PLUGIN_STATISTICS_CONF_FILE_PROPERTY) != null && 
