@@ -30,7 +30,7 @@ public class SolrMeterConfigurationTestCase extends BaseTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		SolrMeterConfiguration.loadDefatultConfiguration();
+		SolrMeterConfiguration.loadConfiguration();
 	}
 
 	public void testBasics() {

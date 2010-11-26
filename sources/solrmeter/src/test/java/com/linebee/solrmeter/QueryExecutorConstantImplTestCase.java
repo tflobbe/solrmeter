@@ -29,7 +29,7 @@ public class QueryExecutorConstantImplTestCase extends BaseTestCase {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		SolrMeterConfiguration.loadDefatultConfiguration();
+		SolrMeterConfiguration.loadConfiguration();
 	}
 
 }

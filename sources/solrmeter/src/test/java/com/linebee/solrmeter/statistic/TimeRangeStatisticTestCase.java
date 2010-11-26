@@ -161,7 +161,7 @@ public class TimeRangeStatisticTestCase extends BaseTestCase {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		SolrMeterConfiguration.loadDefatultConfiguration();
+		SolrMeterConfiguration.loadConfiguration();
 	}
 	
 }

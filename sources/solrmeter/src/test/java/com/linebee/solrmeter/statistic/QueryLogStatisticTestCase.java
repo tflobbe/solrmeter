@@ -59,7 +59,7 @@ public class QueryLogStatisticTestCase extends BaseTestCase {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		SolrMeterConfiguration.loadDefatultConfiguration();
+		SolrMeterConfiguration.loadConfiguration();
 	}
 	
 	private QueryException createQueryException() {
