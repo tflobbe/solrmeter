@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 /**
  * 
@@ -52,6 +53,8 @@ public class PropertyPanel extends JPanel implements FocusListener {
 	private String property;
 	
 	private boolean editable;
+	
+	private JLabel propertyValue;
 	
 	public PropertyPanel(String text, String property, PropertyChangeListener listener) {
 		this(text, property, true);
@@ -81,7 +84,11 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		if(editable) {
 			this.createInput();
 		}else {
-			this.add(new JLabel(SolrMeterConfiguration.getProperty(property)));
+			propertyValue = new JLabel(SolrMeterConfiguration.getProperty(property)); 
+			this.add(propertyValue);
+			if(System.getProperty(property) != null) {
+				propertyValue.setToolTipText(I18n.get("propertyPanel.toolTipText.blockedBySystemProperty"));
+			}
 		}
 		this.add(Box.createRigidArea(new Dimension(paddingRight, paddingRight)));
 	}
@@ -107,6 +114,6 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		for(PropertyChangeListener listener:listeners) {
 			listener.onPropertyChanged(property, textField.getText());
 		}
-		
 	}
+
 }
