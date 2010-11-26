@@ -7,6 +7,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.apache.solr.common.SolrException;
 
+import com.linebee.solrmeter.model.exception.PingNotConfiguredException;
+
 /**
  * Operation that executes one ping to a SolrServer
  * @author tflobbe
@@ -21,7 +23,7 @@ public class PingOperation implements Operation {
 	}
 
 	@Override
-	public boolean execute() {
+	public boolean execute() throws PingNotConfiguredException {
 		try {
 			SolrPingResponse response = server.ping();
 			if(response.getStatus() == 0) {
@@ -32,6 +34,9 @@ public class PingOperation implements Operation {
 		} catch (IOException e) {
 			return false;
 		} catch (SolrException e) {
+			if(e.getMessage().startsWith("pingQuery_not_configured")) {
+				throw new PingNotConfiguredException("Ping command is not configured on server.");
+			}
 			return false;
 		}
 		return false;
