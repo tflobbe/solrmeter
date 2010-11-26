@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
+import org.apache.solr.common.SolrException;
 
 /**
  * Operation that executes one ping to a SolrServer
@@ -29,6 +30,8 @@ public class PingOperation implements Operation {
 		} catch (SolrServerException e) {
 			return false;
 		} catch (IOException e) {
+			return false;
+		} catch (SolrException e) {
 			return false;
 		}
 		return false;
