@@ -21,7 +21,11 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.exception.QueryException;
 import com.linebee.stressTestScope.StressTestScope;
-
+/**
+ * Statistic that will show basic information about queries 
+ * @author tflobbe
+ *
+ */
 @StressTestScope
 public class SimpleQueryStatistic implements QueryStatistic {
 	
