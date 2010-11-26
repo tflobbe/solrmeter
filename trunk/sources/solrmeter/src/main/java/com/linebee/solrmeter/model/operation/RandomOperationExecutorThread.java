@@ -19,6 +19,8 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.linebee.solrmeter.model.exception.OperationException;
+
 /**
  * 
  * An Operation that has to be executed every N seconds. The interval of execution
@@ -77,7 +79,11 @@ public class RandomOperationExecutorThread extends Thread {
 	}
 	
 	protected void executeOperation() {
-		operation.execute();
+		try {
+			operation.execute();
+		} catch (OperationException e) {
+			logger.error("There was an error executing operation " + operation, e);
+		}
 	}
 
 	protected boolean isStopping() {

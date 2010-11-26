@@ -83,7 +83,11 @@ public class ConstantOperationExecutorThread extends Thread {
 			
 			@Override
 			public void run() {
-				operation.execute();
+				try {
+					operation.execute();
+				} catch (OperationException e) {
+					Logger.getLogger(this.getClass()).error("There was an error executing operation " + operation, e);
+				}
 			}
 		};
 		thread.run();

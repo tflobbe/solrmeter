@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import org.apache.log4j.Logger;
 
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.model.exception.PingNotConfiguredException;
 import com.linebee.solrmeter.model.operation.PingOperation;
 
 /**
@@ -63,10 +64,12 @@ public class SolrConnectedButton extends JButton {
 	
 	private class Pinger implements Runnable {
 		
+		private boolean stop = false;
+		
 		@Override
 		public synchronized void run() {
 			boolean wasShownForFirstTime = false;
-			while(isShowing() || !wasShownForFirstTime) {
+			while((isShowing() || !wasShownForFirstTime) && !stop) {
 				if(isShowing()) {
 					wasShownForFirstTime = true;
 				}
@@ -77,11 +80,19 @@ public class SolrConnectedButton extends JButton {
 						setConnectionFailed();
 					}
 					this.wait(timeInterval);
-				} catch (InterruptedException e) {
+				} catch (PingNotConfiguredException e) {
+					Logger.getLogger(this.getClass()).info(e.getMessage());
+					setConnectionOK();
+					stop();
+				}catch (InterruptedException e) {
 					Logger.getLogger(this.getClass()).error("Error on SolrConnectedButton", e);
 				}
 			}
 			
+		}
+		
+		private void stop() {
+			this.stop = true;
 		}
 		
 	}

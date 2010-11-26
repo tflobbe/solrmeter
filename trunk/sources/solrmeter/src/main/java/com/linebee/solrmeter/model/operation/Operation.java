@@ -15,6 +15,8 @@
  */
 package com.linebee.solrmeter.model.operation;
 
+import com.linebee.solrmeter.model.exception.OperationException;
+
 /**
  * Interface of all operations
  * @author tflobbe
@@ -22,5 +24,5 @@ package com.linebee.solrmeter.model.operation;
  */
 public interface Operation {
 
-	boolean execute();
+	boolean execute() throws OperationException;
 }
