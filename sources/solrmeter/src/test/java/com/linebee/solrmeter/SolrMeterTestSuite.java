@@ -21,6 +21,7 @@ import junit.framework.TestSuite;
 import com.linebee.solrmeter.controller.StatisticsRepositoryTestCase;
 import com.linebee.solrmeter.extractor.FileInputDocumentExtractorTestCase;
 import com.linebee.solrmeter.extractor.FileStringExtractorTestCase;
+import com.linebee.solrmeter.model.operations.SolrQueryGeneratorTest;
 import com.linebee.solrmeter.statistic.ErrorLogStatisticTestCase;
 import com.linebee.solrmeter.statistic.FullQueryStatisticTestCase;
 import com.linebee.solrmeter.statistic.HistogramQueryStatisticTestCase;
@@ -60,6 +61,7 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(ConstantOperationExecutorThreadTestCase.class);
 		suite.addTestSuite(QueryExecutorConstantImplTestCase.class);
 		suite.addTestSuite(QueryServiceSolrJImplTestCase.class);
+		suite.addTestSuite(SolrQueryGeneratorTest.class);
 		//$JUnit-END$
 		return suite;
 	}
