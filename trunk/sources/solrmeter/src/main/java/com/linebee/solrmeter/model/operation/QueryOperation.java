@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.linebee.solrmeter.model.operation;
+import static com.linebee.solrmeter.QueryModeParam.*;
 
 import java.util.Date;
 
@@ -42,6 +43,8 @@ public class QueryOperation implements Operation {
 	private static Integer facetLimit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.limit", "8"));
 	
 	private QueryExecutor executor;
+	
+	private String queryMode = SolrMeterConfiguration.getProperty("solr.query.queryMode");
 	
 	/**
 	 * If set, strings are executed adding random felds as facet.
@@ -73,23 +76,35 @@ public class QueryOperation implements Operation {
 		this.facetFieldExtractor = facetFieldExtractor;
 		this.extraParameterExtractor = extraParamExtractor;
 		
+		
+	}
+
+	private boolean isExternalQueryMode() {
+		return (queryMode.equals(EXTERNAL));
 	}
 
 	public boolean execute() {
-		SolrQuery query = new SolrQuery();
-		query.setQuery(queryExtractor.getRandomQuery());
-		query.setQueryType(executor.getQueryType());
-		query.setIncludeScore(true);
-		this.addExtraParameters(query);
+		SolrQuery query = null;
 		
-		if(useFacets) {
-			addFacetParameters(query);
-		}
-		if(useFilterQueries) {
-			addFilterQueriesParameters(query);
-		}
-		if(addRandomExtraParams) {
-			this.addRandomExtraParameters(query);
+		if(isExternalQueryMode()){
+			String randomQuery = queryExtractor.getRandomQuery();
+			query = new SolrQueryGenerator().fromString(randomQuery);
+		}else{
+			query = new SolrQuery();
+			query.setQuery(queryExtractor.getRandomQuery());
+			query.setQueryType(executor.getQueryType());
+			query.setIncludeScore(true);
+			this.addExtraParameters(query);
+			
+			if(useFacets) {
+				addFacetParameters(query);
+			}
+			if(useFilterQueries) {
+				addFilterQueriesParameters(query);
+			}
+			if(addRandomExtraParams) {
+				this.addRandomExtraParameters(query);
+			}
 		}
 		try {
 			logger.debug("executing query: " + query);
