@@ -15,24 +15,20 @@
  */
 package com.linebee.solrmeter.view.statistic;
 
-import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYBarDataset;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic;
+import com.linebee.solrmeter.util.ChartUtils;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.stressTestScope.StressTestScope;
@@ -41,17 +37,26 @@ import com.linebee.stressTestScope.StressTestScope;
 public class QueryTimeHistoryPanel extends StatisticPanel {
 	
 	private static final long serialVersionUID = 2781214713297030466L;
+	
+	private static final int LOWER_TICK_UNIT = 10;
+	
+	private static final int BAR_WIDTH = LOWER_TICK_UNIT-1;
+	
+	private static final String SERIES_KEY = "queryTime";
 
 	private QueryTimeHistoryStatistic queryTimeStatistic;
 	
-	private JLabel imageLabel;
+	private ChartPanel chartPanel;
+	
+	private DefaultXYDataset dataset;
 	
 	@Inject
 	public QueryTimeHistoryPanel(QueryTimeHistoryStatistic queryTimeStatistic) {
 		super();
 		this.queryTimeStatistic = queryTimeStatistic;
-		imageLabel = new JLabel();
-		this.add(imageLabel);
+		this.dataset = new DefaultXYDataset();
+		createChartPanel();
+		this.add(chartPanel);
 	}
 
 	@Override
@@ -62,27 +67,43 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 	@Override
 	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing query Time History");
-		JFreeChart chart = ChartFactory.createBarChart(I18n.get("statistic.queryTimeHistoryPanel.queryHistory"), 
-				I18n.get("statistic.queryTimeHistoryPanel.time"), 
-				I18n.get("statistic.queryTimeHistoryPanel.averageQueryTime"),
-				createDataset(), PlotOrientation.VERTICAL, false, true, false);
-		BufferedImage image = chart.createBufferedImage(GRAPH_DEFAULT_WIDTH, GRAPH_DEFAULT_HEIGHT);
-		imageLabel.setIcon(new ImageIcon(image));
-	}
-	
-	private CategoryDataset createDataset() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		
 		Map<Integer, Integer> histogramData = queryTimeStatistic.getCurrentHistory();
-		if(histogramData.isEmpty()) {
-			return dataset;
+		int size = histogramData.size();
+		double[][] data = new double[2][size];
+		
+		int i=0;
+		for(Map.Entry<Integer, Integer> entry: histogramData.entrySet()) {
+			data[0][i] = entry.getKey().doubleValue();
+			data[1][i] = entry.getValue().doubleValue();
+			i++;
 		}
 		
-		List<Integer> sortedIntegers = new LinkedList<Integer>(histogramData.keySet());
-		Collections.sort(sortedIntegers);
-		for(Integer category:sortedIntegers) {
-			dataset.addValue(histogramData.get(category), "", category);
-		}
-		return dataset;
+		dataset.addSeries(SERIES_KEY, data);
+	}
+	
+	/**
+	 * Creates and initializes the chart panel.
+	 */
+	public void createChartPanel() {
+		XYBarDataset barDataset = new XYBarDataset(dataset, BAR_WIDTH);
+		NumberAxis xaxis = new NumberAxis(I18n.get("statistic.queryTimeHistoryPanel.time"));
+		NumberAxis yaxis = new NumberAxis(I18n.get("statistic.queryTimeHistoryPanel.averageQueryTime"));
+		
+		Logger.getLogger(getClass()).info(xaxis.getStandardTickUnits().getClass().getName());
+		xaxis.setStandardTickUnits(new ChartUtils.LowerBoundedTickUnitSource(xaxis.getStandardTickUnits(), LOWER_TICK_UNIT));
+		
+		XYPlot plot = new XYPlot(barDataset, xaxis, yaxis, new XYBarRenderer());
+		
+		JFreeChart chart = new JFreeChart(I18n.get("statistic.queryTimeHistoryPanel.queryHistory"),
+				null, plot, false);
+		
+		chartPanel = new ChartPanel(chart);
+		
+		chartPanel.setMinimumDrawHeight(0);
+		chartPanel.setMinimumDrawWidth(0);
+		chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
+		chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
 	}
 
 }
