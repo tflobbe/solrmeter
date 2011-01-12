@@ -48,6 +48,7 @@ public class SolrMeterMenuBar extends JMenuBar {
 	private JMenu createEditMenu() {
 		JMenu menu = new JMenu(I18n.get("menu.edit"));
 		menu.setName("editMenu");
+		menu.add(this.createRestartTestMenuItem());
 		menu.add(this.createSettingsMenuItem());
 		return menu;
 	}
@@ -73,6 +74,19 @@ public class SolrMeterMenuBar extends JMenuBar {
 		menu.addSeparator();
 		menu.add(this.getMenuItemExit());
 		return menu;
+	}
+
+	private JMenuItem createRestartTestMenuItem() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.edit.restart"));
+		item.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.onRestartMenu();
+			}
+			
+		});
+		return item;
 	}
 
 	private JMenuItem createExportConfigurationMenuItem() {

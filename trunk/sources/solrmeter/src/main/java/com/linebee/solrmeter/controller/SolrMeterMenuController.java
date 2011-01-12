@@ -40,15 +40,15 @@ import com.linebee.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class SolrMeterMenuController {
-	
+
 	private QueryExecutor queryExecutor;
-	
+
 	private UpdateExecutor updateExecutor;
-	
+
 	private OptimizeExecutor optimizeExecutor;
-	
+
 	private StatisticsRepository repository;
-	
+
 	@Inject
 	public SolrMeterMenuController(
 			StatisticsRepository repository, 
@@ -90,7 +90,7 @@ public class SolrMeterMenuController {
 			}
 		}
 	}
-	
+
 	public void onExportMenu() {
 		try {
 			JFileChooser fileChooser = new JFileChooser();
@@ -101,9 +101,9 @@ public class SolrMeterMenuController {
 				File selectedFile = this.addExtension(fileChooser.getSelectedFile());
 				if(selectedFile.exists()) {
 					int optionResultPane = JOptionPane.showConfirmDialog(SolrMeterMain.mainFrame, 
-								I18n.get("menu.file.export.fileExists.message"), 
-								I18n.get("menu.file.export.fileExists.title"),
-								JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
+							I18n.get("menu.file.export.fileExists.message"), 
+							I18n.get("menu.file.export.fileExists.title"),
+							JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
 					if(optionResultPane == JOptionPane.OK_OPTION) {
 						this.doExport(selectedFile);
 					}
@@ -115,7 +115,7 @@ public class SolrMeterMenuController {
 			Logger.getLogger(this.getClass()).error("Error exporting configuration", e);
 			//TODO show error
 		}
-		
+
 	}
 
 	private File addExtension(File selectedFile) {
@@ -144,7 +144,7 @@ public class SolrMeterMenuController {
 			public String getDescription() {
 				return "*.smc.xml";
 			}
-			
+
 		};
 		return fileFilter;
 	}
@@ -169,6 +169,19 @@ public class SolrMeterMenuController {
 			return false;
 		}
 		return true;
+	}
+
+
+	public void onRestartMenu() {
+		int optionResultPane = JOptionPane.showConfirmDialog(SolrMeterMain.mainFrame, 
+				I18n.get("menu.edit.restart.confirm.message"), 
+				I18n.get("menu.edit.restart.confirm.title"),
+				JOptionPane.OK_CANCEL_OPTION);
+		if(optionResultPane == JOptionPane.OK_OPTION) {
+			queryExecutor.stop();
+			updateExecutor.stop();
+			SolrMeterMain.restartApplication();
+		}
 	}
 
 }
