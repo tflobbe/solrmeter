@@ -15,6 +15,8 @@
  */
 package com.linebee.solrmeter.view;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 public abstract class StatisticPanel extends JPanel implements Refreshable {
@@ -24,6 +26,10 @@ public abstract class StatisticPanel extends JPanel implements Refreshable {
 	protected static final int GRAPH_DEFAULT_WIDTH = 800;
 	
 	protected static final int GRAPH_DEFAULT_HEIGHT = 300;
+	
+	public StatisticPanel() {
+		setLayout(new BorderLayout());
+	}
 
 	public abstract String getStatisticName();
 	

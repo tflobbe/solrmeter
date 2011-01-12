@@ -15,8 +15,8 @@
  */
 package com.linebee.solrmeter.view.statistic;
 
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -54,6 +54,7 @@ public class PieChartPanel extends StatisticPanel {
 	@Inject
 	public PieChartPanel(TimeRangeStatistic timeRangeStatistic) {
 		super();
+		setLayout(new FlowLayout());
 		imageLabel = new JLabel();
 		this.add(imageLabel);
 		this.timeRangeStatistic = timeRangeStatistic;
@@ -62,7 +63,6 @@ public class PieChartPanel extends StatisticPanel {
 
 	private Component createCustomizePanel() {
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.red);
 		panel.setOpaque(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.add(Box.createHorizontalGlue());
