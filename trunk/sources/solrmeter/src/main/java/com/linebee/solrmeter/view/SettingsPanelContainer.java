@@ -60,6 +60,8 @@ public class SettingsPanelContainer extends JPanel {
 	
 	private JButton buttonCancel;
 	
+	private JButton okAndDefault;
+	
 	private SettingsController settingsController;
 	
 	private boolean editable;
@@ -123,6 +125,15 @@ public class SettingsPanelContainer extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		okAndDefault = new JButton(I18n.get("settings.button.okAndSetDefault"));
+		okAndDefault.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settingsController.okAndSetDefault();
+			}
+		});
+		panel.add(okAndDefault);
+		
 		panel.add(Box.createHorizontalGlue());
 		
 		buttonApply = new JButton(I18n.get("settings.button.apply"));

@@ -16,11 +16,18 @@
 package com.linebee.solrmeter.controller;
 
 import java.awt.Window;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
+
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
 
 import com.google.inject.Singleton;
 import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
+import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.SettingsPanelContainer;
 
 @Singleton
@@ -64,6 +71,33 @@ public class SettingsController {
 	public void setProperty(String property, String value) {
 		changedProps.put(property, value);
 		panel.hasChangedValues(true);
+	}
+
+	public void okAndSetDefault() {
+		applyChanges();
+		
+		int optionResultPane = JOptionPane.showConfirmDialog(SolrMeterMain.mainFrame, 
+				I18n.get("settings.file.export.overrideDefault.text"), 
+				I18n.get("settings.file.export.overrideDefault.title"),
+				JOptionPane.WARNING_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
+		if(optionResultPane == JOptionPane.OK_OPTION) {
+			try {
+				this.doSetDefaultExport(new File("solrmeter.smc.xml"));
+				window.dispose();
+			} catch (IOException e) {
+				Logger.getLogger(this.getClass()).error("Error exporting configuration", e);
+				JOptionPane.showMessageDialog(SolrMeterMain.mainFrame, 
+						I18n.get("settings.file.export.overrideDefault.error.message") + e.getMessage(), 
+						I18n.get("settings.file.export.overrideDefault.error.title"), 
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+		
+	}
+
+	private void doSetDefaultExport(File file) throws IOException {
+		SolrMeterConfiguration.exportConfiguration(file);
 	}
 
 }
