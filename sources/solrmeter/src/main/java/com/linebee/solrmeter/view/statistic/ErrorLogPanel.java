@@ -73,15 +73,20 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 	}
 
 	private void initGUI() {
-		this.add(this.createJPanelCheckBox());
-		logTable = new JTable();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new JScrollPane(logTable));
+		
+		JPanel checkBoxPanel = this.createJPanelCheckBox();
+		
+		logTable = new JTable();
 		logTable.setModel(this.createTableModel());
 		logTable.getColumnModel().getColumn(0).setMaxWidth(150);
 		logTable.getColumnModel().getColumn(1).setMaxWidth(150);
 		logTable.getColumnModel().getColumn(1).setPreferredWidth(150);
 		logTable.addMouseListener(this);
+		
+		
+		this.add(new JScrollPane(logTable));
+		this.add(checkBoxPanel);
 	}
 	
 	private JPanel createJPanelCheckBox() {
@@ -94,9 +99,13 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 		showQueries = new JCheckBox(I18n.get("statistic.errorLogPanel.showQueryErrors"));
 		this.checkAll();
 		this.addCheckBoxListeners();
+		panel.add(Box.createHorizontalGlue());
 		panel.add(showAdds);
+		panel.add(Box.createHorizontalGlue());
 		panel.add(showCommits);
+		panel.add(Box.createHorizontalGlue());
 		panel.add(showOptimizes);
+		panel.add(Box.createHorizontalGlue());
 		panel.add(showQueries);
 		panel.add(Box.createHorizontalGlue());
 		return panel;

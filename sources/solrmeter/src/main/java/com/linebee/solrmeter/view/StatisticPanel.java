@@ -17,7 +17,9 @@ package com.linebee.solrmeter.view;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public abstract class StatisticPanel extends JPanel implements Refreshable {
 	
@@ -26,6 +28,8 @@ public abstract class StatisticPanel extends JPanel implements Refreshable {
 	protected static final int GRAPH_DEFAULT_WIDTH = 800;
 	
 	protected static final int GRAPH_DEFAULT_HEIGHT = 300;
+	
+	protected static final Border CHART_BORDER = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 	
 	public StatisticPanel() {
 		setLayout(new BorderLayout());

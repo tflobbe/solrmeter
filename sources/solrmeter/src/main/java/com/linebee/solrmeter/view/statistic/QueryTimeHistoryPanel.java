@@ -46,8 +46,6 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 
 	private QueryTimeHistoryStatistic queryTimeStatistic;
 	
-	private ChartPanel chartPanel;
-	
 	private DefaultXYDataset dataset;
 	
 	@Inject
@@ -55,8 +53,7 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 		super();
 		this.queryTimeStatistic = queryTimeStatistic;
 		this.dataset = new DefaultXYDataset();
-		createChartPanel();
-		this.add(chartPanel);
+		this.add(createChartPanel());
 	}
 
 	@Override
@@ -85,12 +82,11 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 	/**
 	 * Creates and initializes the chart panel.
 	 */
-	public void createChartPanel() {
+	public ChartPanel createChartPanel() {
 		XYBarDataset barDataset = new XYBarDataset(dataset, BAR_WIDTH);
 		NumberAxis xaxis = new NumberAxis(I18n.get("statistic.queryTimeHistoryPanel.time"));
 		NumberAxis yaxis = new NumberAxis(I18n.get("statistic.queryTimeHistoryPanel.averageQueryTime"));
 		
-		Logger.getLogger(getClass()).info(xaxis.getStandardTickUnits().getClass().getName());
 		xaxis.setStandardTickUnits(new ChartUtils.LowerBoundedTickUnitSource(xaxis.getStandardTickUnits(), LOWER_TICK_UNIT));
 		
 		XYPlot plot = new XYPlot(barDataset, xaxis, yaxis, new XYBarRenderer());
@@ -98,12 +94,15 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 		JFreeChart chart = new JFreeChart(I18n.get("statistic.queryTimeHistoryPanel.queryHistory"),
 				null, plot, false);
 		
-		chartPanel = new ChartPanel(chart);
+		ChartPanel chartPanel = new ChartPanel(chart);
 		
+		chartPanel.setBorder(CHART_BORDER);
 		chartPanel.setMinimumDrawHeight(0);
 		chartPanel.setMinimumDrawWidth(0);
 		chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
 		chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
+		
+		return chartPanel;
 	}
 
 }

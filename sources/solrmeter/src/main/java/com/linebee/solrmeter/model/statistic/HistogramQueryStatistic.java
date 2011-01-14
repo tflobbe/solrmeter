@@ -36,13 +36,13 @@ import com.linebee.stressTestScope.StressTestScope;
 @StressTestScope
 public class HistogramQueryStatistic implements QueryStatistic {
 	
+	public static final long HISTOGRAM_INTERVAL = 100L;
+	
 	protected Logger logger = Logger.getLogger(this.getClass());
 	
 	private Map<Long, Integer> histogram;
 	
 	private String histogramFilePath = null;
-	
-	private long histogramInterval = 100L;
 	
 	@Inject
 	public HistogramQueryStatistic() {
@@ -57,7 +57,7 @@ public class HistogramQueryStatistic implements QueryStatistic {
 	
 	@Override
 	public void onExecutedQuery(QueryResponse response, long clientTime) {
-		long time = response.getQTime() / histogramInterval;
+		long time = response.getQTime() / HISTOGRAM_INTERVAL;
 		int cant;
 		if(histogram.containsKey(time)) {
 			cant = histogram.get(time);
@@ -85,9 +85,9 @@ public class HistogramQueryStatistic implements QueryStatistic {
 		}
 		for(long i = 0; i <=maxValue; i++) {
 			if(histogram.containsKey(i)) {
-				map.put(new Long(i*histogramInterval).intValue(), histogram.get(i));
+				map.put(new Long(i*HISTOGRAM_INTERVAL).intValue(), histogram.get(i));
 			}else {
-				map.put(new Long(i*histogramInterval).intValue(), 0);
+				map.put(new Long(i*HISTOGRAM_INTERVAL).intValue(), 0);
 			}
 		}
 		return map;
@@ -111,9 +111,9 @@ public class HistogramQueryStatistic implements QueryStatistic {
 			long maxValue = Collections.max(histogram.keySet());
 			for(long i = 0; i <=maxValue; i++) {
 				if(histogram.containsKey(i)) {
-					print(outputStream, (i*histogramInterval) + "ms - " + ((i+1) * histogramInterval) + "ms", histogram.get(i));
+					print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", histogram.get(i));
 				}else {
-					print(outputStream, (i*histogramInterval) + "ms - " + ((i+1) * histogramInterval) + "ms", 0);
+					print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", 0);
 				}
 			}
 			outputStream.close();

@@ -15,24 +15,21 @@
  */
 package com.linebee.solrmeter.view.statistic;
 
-import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.Component;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYBarDataset;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.HistogramQueryStatistic;
+import com.linebee.solrmeter.util.ChartUtils;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.stressTestScope.StressTestScope;
@@ -42,16 +39,46 @@ public class HistogramChartPanel extends StatisticPanel {
 
 	private static final long serialVersionUID = 2779231592485893152L;
 	
+	private static final String SERIES_KEY = "histogram";
+	
+	private static final double BAR_WIDTH = HistogramQueryStatistic.HISTOGRAM_INTERVAL*0.9;
+	
+	private static final double LOWER_TICK_UNIT = HistogramQueryStatistic.HISTOGRAM_INTERVAL;
+	
 	private HistogramQueryStatistic histogram;
 	
-	private JLabel imageLabel;
+	private DefaultXYDataset xyDataset;
 	
 	@Inject
 	public HistogramChartPanel(HistogramQueryStatistic histogram) {
 		super();
 		this.histogram = histogram;
-		imageLabel = new JLabel();
-		this.add(imageLabel);
+		this.xyDataset = new DefaultXYDataset();
+		this.add(createChartPanel());
+	}
+	
+	private Component createChartPanel() {
+		XYBarDataset xyBarDataset = new XYBarDataset(xyDataset, BAR_WIDTH);
+		NumberAxis xaxis = new NumberAxis(I18n.get("statistic.histogramChartPanel.time"));
+		NumberAxis yaxis = new NumberAxis(I18n.get("statistic.histogramChartPanel.numberOfQueries"));
+		
+		xaxis.setStandardTickUnits(new ChartUtils.LowerBoundedTickUnitSource(xaxis.getStandardTickUnits(), LOWER_TICK_UNIT));
+		
+		XYPlot plot = new XYPlot(xyBarDataset, xaxis, yaxis, new XYBarRenderer());
+		
+		JFreeChart chart = new JFreeChart(I18n.get(
+				"statistic.histogramChartPanel.title"),
+				null, plot, false);
+		
+		ChartPanel chartPanel = new ChartPanel(chart);
+		
+		chartPanel.setBorder(CHART_BORDER);
+		chartPanel.setMinimumDrawHeight(0);
+		chartPanel.setMinimumDrawWidth(0);
+		chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
+		chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
+		
+		return chartPanel;
 	}
 	
 	@Override
@@ -60,28 +87,20 @@ public class HistogramChartPanel extends StatisticPanel {
 	}
 	
 	@Override
-	public void refreshView() {
+	public synchronized void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing histogram");
-		JFreeChart chart = ChartFactory.createBarChart(I18n.get("statistic.histogramChartPanel.histogram"), 
-				I18n.get("statistic.histogramChartPanel.time"), 
-				I18n.get("statistic.histogramChartPanel.numberOfQueries"), createDataset(), PlotOrientation.VERTICAL, false, true, false);
-		BufferedImage image = chart.createBufferedImage(GRAPH_DEFAULT_WIDTH, GRAPH_DEFAULT_HEIGHT);
-		imageLabel.setIcon(new ImageIcon(image));
-	}
-
-	private CategoryDataset createDataset() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		
 		Map<Integer, Integer> histogramData = histogram.getCurrentHisogram();
-		if(histogramData.isEmpty()) {
-			return dataset;
+		double[][] data = new double[2][histogramData.size()];
+		
+		int i =0;
+		for(Map.Entry<Integer, Integer> entry: histogramData.entrySet()) {
+			data[0][i] = entry.getKey().doubleValue();
+			data[1][i] = entry.getValue().doubleValue();
+			i++;
 		}
 		
-		List<Integer> sortedIntegers = new LinkedList<Integer>(histogramData.keySet());
-		Collections.sort(sortedIntegers);
-		for(Integer integer:sortedIntegers) {
-			dataset.addValue(histogramData.get(integer), "", integer);
-		}
-		return dataset;
+		xyDataset.addSeries(SERIES_KEY, data);
 	}
 
 }
