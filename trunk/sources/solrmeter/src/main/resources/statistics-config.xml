@@ -21,17 +21,7 @@
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
-		<name>errorLog</name>
-		<description>Shows the log of all produced errors</description>
-		<types>query, update, optimize</types>
-		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.ErrorLogPanel
-		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.ErrorLogStatistic
-		</model-class>
-	</statistic>
-	<statistic hasView="true">
-		<name>queryHistort</name>
+		<name>queryHistory</name>
 		<description>Shows a chart with the past query times</description>
 		<types>query</types>
 		<scope>stress_test</scope>
@@ -60,6 +50,16 @@
 		<view-class>com.linebee.solrmeter.view.statistic.FullQueryStatisticPanel
 		</view-class>
 		<model-class>com.linebee.solrmeter.model.statistic.FullQueryStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>errorLog</name>
+		<description>Shows the log of all produced errors</description>
+		<types>query, update, optimize</types>
+		<scope>stress_test</scope>
+		<view-class>com.linebee.solrmeter.view.statistic.ErrorLogPanel
+		</view-class>
+		<model-class>com.linebee.solrmeter.model.statistic.ErrorLogStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">

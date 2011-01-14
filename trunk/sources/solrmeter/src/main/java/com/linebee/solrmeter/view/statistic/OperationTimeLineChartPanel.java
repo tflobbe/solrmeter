@@ -19,23 +19,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.ui.RectangleEdge;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.model.statistic.OperationTimeHistory;
@@ -47,8 +48,16 @@ import com.linebee.stressTestScope.StressTestScope;
 public class OperationTimeLineChartPanel extends StatisticPanel implements ActionListener {
 
 	private static final long serialVersionUID = 3661614439597184136L;
-
-	private JLabel imageLabel;
+	
+	private static final String SERIES_KEY_COMMIT_TIME = "commitTime";
+	
+	private static final String SERIES_KEY_QUERIES_TIME = "queriesTime";
+	
+	private static final String SERIES_KEY_UPDATES_TIME = "updatesTime";
+	
+	private static final String SERIES_KEY_OPTIMIZE_TIME = "optimizeTime";
+	
+	private DefaultXYDataset xyDataset = new DefaultXYDataset();
 	
 	private OperationTimeHistory statistic;
 	
@@ -61,16 +70,15 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 	public OperationTimeLineChartPanel(OperationTimeHistory statistic) {
 		super();
 		this.statistic = statistic;
+		this.xyDataset = new DefaultXYDataset();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.add(this.createChartPanel());
 		this.add(this.createCheckBoxPanel());
-		imageLabel = new JLabel();
-		JPanel auxPanel = new JPanel();
-		auxPanel.add(imageLabel);
-		this.add(auxPanel);
 	}
 	
 	private Component createCheckBoxPanel() {
 		JPanel panelCheckBox = new JPanel();
+		panelCheckBox.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		panelCheckBox.setLayout(new BoxLayout(panelCheckBox, BoxLayout.X_AXIS));
 		checkBoxShowCommit = new JCheckBox(I18n.get("statistic.operationTimeLineChartPanel.checkbox.commit"));
 		checkBoxShowCommit.addActionListener(this);
@@ -80,14 +88,39 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 		checkBoxShowAdd.addActionListener(this);
 		checkBoxShowQueries = new JCheckBox(I18n.get("statistic.operationTimeLineChartPanel.checkbox.query"));
 		checkBoxShowQueries.addActionListener(this);
+		panelCheckBox.add(Box.createHorizontalGlue());
 		panelCheckBox.add(checkBoxShowCommit);
+		panelCheckBox.add(Box.createHorizontalGlue());
 		panelCheckBox.add(checkBoxShowOptimize);
+		panelCheckBox.add(Box.createHorizontalGlue());
 		panelCheckBox.add(checkBoxShowQueries);
+		panelCheckBox.add(Box.createHorizontalGlue());
 		panelCheckBox.add(checkBoxShowAdd);
 		panelCheckBox.add(Box.createHorizontalGlue());
 		panelCheckBox.setMaximumSize(new Dimension(800, 25));
 		checkAll();
 		return panelCheckBox;
+	}
+	
+	private Component createChartPanel() {
+		NumberAxis xaxis = new NumberAxis(I18n.get("statistic.operationTimeLineChartPanel.executionInstant"));
+		NumberAxis yaxis = new NumberAxis(I18n.get("statistic.operationTimeLineChartPanel.qTime"));
+		
+		XYPlot plot = new XYPlot(xyDataset, xaxis, yaxis, new XYLineAndShapeRenderer(true, true));
+		
+		JFreeChart chart = new JFreeChart(I18n.get("statistic.operationTimeLineChartPanel.title"),
+				null, plot, true);
+		chart.getLegend().setPosition(RectangleEdge.RIGHT);
+		
+		ChartPanel chartPanel = new ChartPanel(chart);
+		
+		chartPanel.setBorder(CHART_BORDER);
+		chartPanel.setMinimumDrawHeight(0);
+		chartPanel.setMinimumDrawWidth(0);
+		chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
+		chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
+		
+		return chartPanel;
 	}
 
 	private void checkAll() {
@@ -105,50 +138,61 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 	@Override
 	public synchronized void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing Time Line");
-		JFreeChart chart = ChartFactory.createXYLineChart(I18n.get("statistic.operationTimeLineChartPanel.timeLine"), 
-				I18n.get("statistic.operationTimeLineChartPanel.executionInstance"), 
-				I18n.get("statistic.operationTimeLineChartPanel.qTime"), createDataset(), PlotOrientation.VERTICAL, true, true, false);
-		BufferedImage image = chart.createBufferedImage(GRAPH_DEFAULT_WIDTH, GRAPH_DEFAULT_HEIGHT);
-		imageLabel.setIcon(new ImageIcon(image));
-
-	}
-
-	private XYDataset createDataset() {
-		XYSeriesCollection seriesCollection = new XYSeriesCollection();
-		if(checkBoxShowQueries.isSelected()) {
-			seriesCollection.addSeries(this.createSeries(I18n.get("statistic.operationTimeLineChartPanel.query"), statistic.getQueriesTime()));
-		}
-		if(checkBoxShowOptimize.isSelected()) {
-			seriesCollection.addSeries(this.createSeries(I18n.get("statistic.operationTimeLineChartPanel.optimize"), statistic.getOptimizeTime()));
-		}
-		if(checkBoxShowAdd.isSelected()) {
-			seriesCollection.addSeries(this.createSeries(I18n.get("statistic.operationTimeLineChartPanel.add"), statistic.getUpdatesTime()));
-		}
+		
+		// instead of deleting the series when a checkbox is unchecked,
+		// I prefer to use an empty map because in this way the legend
+		// and colors of the chart remain unchanged
+		Map<Long,Long> emptyMap = Collections.emptyMap();
+		
 		if(checkBoxShowCommit.isSelected()) {
-			seriesCollection.addSeries(this.createSeries(I18n.get("statistic.operationTimeLineChartPanel.commit"), statistic.getCommitTime()));
+			refreshSeries(statistic.getCommitTime(), SERIES_KEY_COMMIT_TIME);
+		} else {
+			refreshSeries(emptyMap, SERIES_KEY_COMMIT_TIME);
 		}
-		return seriesCollection;
+		
+		if(checkBoxShowQueries.isSelected()) {
+			refreshSeries(statistic.getQueriesTime(), SERIES_KEY_QUERIES_TIME);
+		} else {
+			refreshSeries(emptyMap, SERIES_KEY_QUERIES_TIME);
+		}
+		
+		if(checkBoxShowAdd.isSelected()) {
+			refreshSeries(statistic.getUpdatesTime(), SERIES_KEY_UPDATES_TIME);
+		} else {
+			refreshSeries(emptyMap, SERIES_KEY_UPDATES_TIME);
+		}
+		
+		if(checkBoxShowOptimize.isSelected()) {
+			refreshSeries(statistic.getOptimizeTime(), SERIES_KEY_OPTIMIZE_TIME);
+		} else {
+			refreshSeries(emptyMap, SERIES_KEY_OPTIMIZE_TIME);
+		}
 	}
-
-	private XYSeries createSeries(String string, Map<Long, Long> operations) {
-		XYSeries series = new XYSeries(string);
-		synchronized (operations) {
-			for(Long executionInstant:operations.keySet()) {
-				series.add(executionInstant, operations.get(executionInstant));
+	
+	private void refreshSeries(Map<Long, Long> data, Comparable<?> seriesKey) {
+		int i = 0;
+		double[][] seriesData;
+		
+		synchronized(data) {
+			seriesData = new double[2][data.size()];
+			
+			for(Map.Entry<Long, Long> xy: data.entrySet()) {
+				seriesData[0][i] = xy.getKey()/1000.0;
+				seriesData[1][i] = xy.getValue();
+				i++;
 			}
 		}
-		return series;
+		xyDataset.addSeries(seriesKey, seriesData);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Thread thread = new Thread() {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				refreshView();
 			}
-		};
-		thread.start();
+		});
 	}
 
 }

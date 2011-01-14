@@ -126,12 +126,13 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	private Component createQueryLogPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(this.createButtonPanel());
 		logTable = new JTable();
 		logTable.setModel(this.createTableModel());
 		panel.add(new JScrollPane(logTable));
 		logTable.getColumnModel().getColumn(1).setMaxWidth(250);
 		logTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+		panel.add(Box.createHorizontalGlue());
+		panel.add(this.createButtonPanel());
 		return panel;
 	}
 

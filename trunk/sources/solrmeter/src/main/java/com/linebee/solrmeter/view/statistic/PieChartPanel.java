@@ -16,23 +16,22 @@
 package com.linebee.solrmeter.view.statistic;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
 
 import com.google.inject.Inject;
 import com.linebee.solrmeter.SolrMeterMain;
@@ -47,27 +46,22 @@ public class PieChartPanel extends StatisticPanel {
 
 	private static final long serialVersionUID = -3022639027937641338L;
 	
-	private JLabel imageLabel;
+	private DefaultPieDataset pieDataset;
 	
 	private TimeRangeStatistic timeRangeStatistic;
 
 	@Inject
 	public PieChartPanel(TimeRangeStatistic timeRangeStatistic) {
 		super();
-		setLayout(new FlowLayout());
-		imageLabel = new JLabel();
-		this.add(imageLabel);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.timeRangeStatistic = timeRangeStatistic;
+		this.pieDataset = new DefaultPieDataset();
+		this.add(this.createChartPanel());
 		this.add(this.createCustomizePanel());
 	}
 
 	private Component createCustomizePanel() {
-		JPanel panel = new JPanel();
-		panel.setOpaque(true);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.add(Box.createHorizontalGlue());
 		JButton jButtonCustomize = new JButton(I18n.get("statistic.pieChartPanel.customize"));
-		panel.add(jButtonCustomize);
 		jButtonCustomize.addActionListener(new ActionListener() {
 
 			@Override
@@ -77,7 +71,33 @@ public class PieChartPanel extends StatisticPanel {
 			}
 			
 		});
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+		panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10));
+		panel.add(Box.createHorizontalGlue());
+		panel.add(jButtonCustomize);
+		
 		return panel;
+	}
+	
+	private Component createChartPanel() {
+		PiePlot plot = new PiePlot(pieDataset);
+		
+		JFreeChart chart = new JFreeChart(
+				I18n.get("statistic.pieChartPanel.title"),
+				null, plot, true);
+		chart.getLegend().setPosition(RectangleEdge.RIGHT);
+		
+		ChartPanel chartPanel = new ChartPanel(chart);
+		
+		chartPanel.setBorder(CHART_BORDER);
+		chartPanel.setMinimumDrawHeight(0);
+		chartPanel.setMinimumDrawWidth(0);
+		chartPanel.setMaximumDrawHeight(Integer.MAX_VALUE);
+		chartPanel.setMaximumDrawWidth(Integer.MAX_VALUE);
+		
+		return chartPanel;
 	}
 
 	@Override
@@ -88,23 +108,13 @@ public class PieChartPanel extends StatisticPanel {
 	@Override
 	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("Refreshing pie chart");
-		DefaultPieDataset pieDataset = this.generatePieDataset();
-		JFreeChart chart = ChartFactory.createPieChart(
-			I18n.get("statistic.pieChartPanel.intervals"),
-			pieDataset,
-			true,
-			true,
-			false);
-		BufferedImage image = chart.createBufferedImage(GRAPH_DEFAULT_WIDTH, GRAPH_DEFAULT_HEIGHT);
-		imageLabel.setIcon(new ImageIcon(image));
-	}
-
-	private DefaultPieDataset generatePieDataset() {
-		DefaultPieDataset pieDataset = new DefaultPieDataset();
+		
+		pieDataset.clear();
+		
 		Map<TimeRange, Integer> percentages = timeRangeStatistic.getActualPercentage();
-		for(TimeRange range:percentages.keySet()) {
+		for(TimeRange range: percentages.keySet()) {
 			pieDataset.setValue(range.toString(), percentages.get(range));
 		}
-		return pieDataset;
 	}
+
 }
