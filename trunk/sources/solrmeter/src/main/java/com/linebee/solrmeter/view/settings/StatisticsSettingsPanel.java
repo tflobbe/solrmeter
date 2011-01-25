@@ -48,6 +48,7 @@ public class StatisticsSettingsPanel extends SettingsPanel implements PropertyCh
 		this.add(new TextPropertyPanel(I18n.get("settings.statistics.timeToRefresh"), "statistic.refreshTime", editable, this));
 		this.add(new JLabel(I18n.get("settings.statistics.showing")));
 		this.addStatistics();
+		this.add(Box.createVerticalGlue());
 	}
 
 	private void addStatistics() {

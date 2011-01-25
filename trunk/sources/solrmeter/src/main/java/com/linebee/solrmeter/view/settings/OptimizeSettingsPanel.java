@@ -15,6 +15,7 @@
  */
 package com.linebee.solrmeter.view.settings;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 import com.linebee.solrmeter.controller.SettingsController;
@@ -49,7 +50,7 @@ public class OptimizeSettingsPanel extends SettingsPanel implements PropertyChan
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(new ComboPropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this, new String[]{"ondemand"}));
-		
+		this.add(Box.createVerticalGlue());
 	}
 
 	@Override
