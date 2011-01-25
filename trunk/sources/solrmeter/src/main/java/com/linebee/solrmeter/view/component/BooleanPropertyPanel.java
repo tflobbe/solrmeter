@@ -8,20 +8,16 @@ public class BooleanPropertyPanel extends ComboPropertyPanel {
 
 	public BooleanPropertyPanel(String text, String property, boolean editable,
 			PropertyChangeListener listener) {
-		super(text, property, editable, listener, new String[]{"true", "false"});
+		super(text, property, editable, listener, new String[]{"true", "false"}, false);
 	}
 
 	public BooleanPropertyPanel(String text, String property, boolean editable) {
-		super(text, property, editable, new String[]{"true", "false"});
+		super(text, property, editable, new String[]{"true", "false"}, false);
 	}
 
 	public BooleanPropertyPanel(String text, String property,
 			PropertyChangeListener listener) {
-		super(text, property, listener, new String[]{"true", "false"});
-	}
-
-	protected boolean isComboEditable() {
-		return false;
+		super(text, property, listener, new String[]{"true", "false"}, false);
 	}
 
 }
