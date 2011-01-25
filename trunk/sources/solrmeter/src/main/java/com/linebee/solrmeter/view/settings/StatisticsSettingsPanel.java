@@ -18,7 +18,7 @@ import com.linebee.solrmeter.controller.StatisticsRepository;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.SettingsPanel;
-import com.linebee.solrmeter.view.component.PropertyPanel;
+import com.linebee.solrmeter.view.component.TextPropertyPanel;
 import com.linebee.solrmeter.view.exception.InvalidPropertyException;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 
@@ -45,7 +45,7 @@ public class StatisticsSettingsPanel extends SettingsPanel implements PropertyCh
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new PropertyPanel(I18n.get("settings.statistics.timeToRefresh"), "statistic.refreshTime", editable, this));
+		this.add(new TextPropertyPanel(I18n.get("settings.statistics.timeToRefresh"), "statistic.refreshTime", editable, this));
 		this.add(new JLabel(I18n.get("settings.statistics.showing")));
 		this.addStatistics();
 	}

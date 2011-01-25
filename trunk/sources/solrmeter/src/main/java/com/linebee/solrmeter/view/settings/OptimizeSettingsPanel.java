@@ -20,7 +20,7 @@ import javax.swing.BoxLayout;
 import com.linebee.solrmeter.controller.SettingsController;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.SettingsPanel;
-import com.linebee.solrmeter.view.component.PropertyPanel;
+import com.linebee.solrmeter.view.component.ComboPropertyPanel;
 import com.linebee.solrmeter.view.exception.InvalidPropertyException;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 /**
@@ -48,7 +48,7 @@ public class OptimizeSettingsPanel extends SettingsPanel implements PropertyChan
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new PropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this));
+		this.add(new ComboPropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this, new String[]{"ondemand"}));
 		
 	}
 

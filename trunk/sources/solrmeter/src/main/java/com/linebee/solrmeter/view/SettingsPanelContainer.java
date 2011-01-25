@@ -177,7 +177,8 @@ public class SettingsPanelContainer extends JPanel {
 
 	public void addSetting(SettingsPanel panel) {
 		statistics.put(panel.getSettingsName(), panel);
-		tabPanel.addTab(panel.getSettingsName(),  new JScrollPane(panel));
+		JScrollPane scrollPane =  new JScrollPane(panel);
+		tabPanel.addTab(panel.getSettingsName(), scrollPane);
 	}
 
 	public void hasChangedValues(boolean hasChangedValues) {

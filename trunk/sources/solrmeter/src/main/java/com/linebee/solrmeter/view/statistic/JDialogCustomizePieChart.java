@@ -45,7 +45,6 @@ import com.linebee.solrmeter.model.FileUtils;
 import com.linebee.solrmeter.model.statistic.TimeRange;
 import com.linebee.solrmeter.model.statistic.TimeRangeStatistic;
 import com.linebee.solrmeter.view.I18n;
-import com.linebee.solrmeter.view.SettingsPanelContainer;
 import com.linebee.solrmeter.view.SwingUtils;
 import com.linebee.solrmeter.view.component.IntegerField;
 /**
@@ -113,7 +112,7 @@ public class JDialogCustomizePieChart extends JDialog {
 			try {
 				messageLabel.setIcon(new ImageIcon(FileUtils.findFileAsResource("./images/warning.png")));
 			} catch (FileNotFoundException e) {
-				Logger.getLogger(SettingsPanelContainer.class).error("Image not found", e);
+				Logger.getLogger(JDialogCustomizePieChart.class).error("Image not found", e);
 				//no image added, but stil working.
 			}
 			this.add(messageLabel, constraints);
