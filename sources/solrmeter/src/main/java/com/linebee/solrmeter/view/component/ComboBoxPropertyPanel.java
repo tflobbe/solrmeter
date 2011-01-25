@@ -58,7 +58,7 @@ public class ComboBoxPropertyPanel extends JPanel implements FocusListener {
 	
 	protected void initGUI(String text){
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+//		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		this.add(Box.createRigidArea(new Dimension(paddingLeft, paddingLeft)));
 		label = new JLabel(text + ":");
 		this.add(label);

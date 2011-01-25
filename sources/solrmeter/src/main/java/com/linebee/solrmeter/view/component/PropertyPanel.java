@@ -15,17 +15,20 @@
  */
 package com.linebee.solrmeter.view.component;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.I18n;
@@ -36,25 +39,28 @@ import com.linebee.solrmeter.view.listener.PropertyChangeListener;
  * @author tflobbe
  *
  */
-public class PropertyPanel extends JPanel implements FocusListener {
+public abstract class PropertyPanel extends JPanel implements FocusListener {
 
 	private static final long serialVersionUID = -6531190706130757263L;
 	
-	private static final int paddingLeft = 1;
-	private static final int paddingCenter = 1;
-	private static final int paddingRight = 1;
+	protected static final int MAX_COMPONENT_WIDTH = 250;
+	protected static final int LABEL_WIDTH = 200;
+	
+	private static final int paddingLeft = 2;
+	private static final int paddingCenter = 2;
+	private static final int paddingRight = 2;
 
 	private JLabel label;
 	
-	private JTextField textField;
-	
 	private List<PropertyChangeListener> listeners;
 	
-	private String property;
+	protected String property;
 	
 	private boolean editable;
 	
 	private JLabel propertyValue;
+	
+	private boolean guiInitialized = false;
 	
 	public PropertyPanel(String text, String property, PropertyChangeListener listener) {
 		this(text, property, true);
@@ -71,14 +77,17 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		this.editable = (editable && System.getProperty(property) == null);// system properties can't be modified on runtime
 		this.listeners = new LinkedList<PropertyChangeListener>();
 		this.property = property;
-		this.initGUI(text);
 	}
 
 	protected void initGUI(String text) {
+		if(guiInitialized) {
+			throw new RuntimeException("initGUI is being called twice!");
+		}
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.add(Box.createRigidArea(new Dimension(paddingLeft, paddingLeft)));
 		this.label = new JLabel(text + ":");
+		label.setPreferredSize(new Dimension(LABEL_WIDTH, 0));
 		this.add(label);
 		this.add(Box.createRigidArea(new Dimension(paddingCenter, paddingCenter)));
 		if(editable) {
@@ -91,14 +100,12 @@ public class PropertyPanel extends JPanel implements FocusListener {
 			}
 		}
 		this.add(Box.createRigidArea(new Dimension(paddingRight, paddingRight)));
+		setBorder(this.createBorder());
+		guiInitialized = true;
 	}
 
-	private void createInput() {
-		textField = new JTextField();
-		this.add(textField);
-		textField.setText(SolrMeterConfiguration.getProperty(property));
-		textField.addFocusListener(this);
-		
+	protected void createInput() {
+		this.add(getVisualComponent());
 	}
 
 	@Override
@@ -110,10 +117,26 @@ public class PropertyPanel extends JPanel implements FocusListener {
 		
 	}
 
-	private void notifyObservers() {
+	protected void notifyObservers() {
 		for(PropertyChangeListener listener:listeners) {
-			listener.onPropertyChanged(property, textField.getText());
+			listener.onPropertyChanged(property, getSelectedValue());
 		}
 	}
+	
+	@Override
+	public void paint(Graphics g) {
+		if(!guiInitialized) {
+			throw new RuntimeException("GUI was not initialized");
+		}
+		super.paint(g);
+	}
+	
+	protected Border createBorder() {
+		return BorderFactory.createEmptyBorder(2, 2, 2, 2);
+	}
+	
+	protected abstract String getSelectedValue();
+	
+	protected abstract Component getVisualComponent();
 
 }
