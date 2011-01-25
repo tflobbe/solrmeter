@@ -18,6 +18,7 @@ package com.linebee.solrmeter;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
@@ -125,6 +126,7 @@ public class SolrMeterMain {
 		mainFrame.setQueryPanel(injector.getInstance(QueryConsolePanel.class));
 		mainFrame.setUpdatePanel(injector.getInstance(UpdateConsolePanel.class));
 		mainFrame.setOptimizePanel(injector.getInstance(OptimizeConsolePanel.class));
+		mainFrame.setJMenuBar(injector.getInstance(JMenuBar.class));
 		mainFrame.onConfigurationChanged();
 		addStatistics(injector);
 		addQueryPanel(injector);
