@@ -39,7 +39,7 @@ public class QueryResultsTableModel extends DefaultTableModel {
 
 	@Override
 	public int getColumnCount() {
-		if(response == null) {
+		if(response == null || response.getResults().size() == 0) {
 			return 0;
 		}
 		return response.getResults().get(0).getFieldNames().size();
@@ -47,7 +47,7 @@ public class QueryResultsTableModel extends DefaultTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if(response == null) {
+		if(response == null || response.getResults().size() == 0) {
 			return "";
 		}
 		List<String> list = new LinkedList<String>(response.getResults().get(0).getFieldNames());

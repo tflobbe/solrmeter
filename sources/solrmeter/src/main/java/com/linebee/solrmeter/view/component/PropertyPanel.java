@@ -56,7 +56,7 @@ public abstract class PropertyPanel extends JPanel implements FocusListener {
 	
 	protected String property;
 	
-	private boolean editable;
+	protected boolean editable;
 	
 	private JLabel propertyValue;
 	

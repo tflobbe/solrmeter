@@ -53,7 +53,7 @@ public class UpdateSettingsPanel extends SettingsPanel implements PropertyChange
 		this.add(new TextPropertyPanel(I18n.get("settings.update.documentsToCommit"), "solr.update.documentsToCommit",editable, this));
 		this.add(new TextPropertyPanel(I18n.get("settings.update.timeToCommit"), "solr.update.timeToCommit",editable, this));
 		this.add(new FilePropertyPanel(I18n.get("settings.update.updateFile"), "solr.updatesFiles", editable, this));
-		this.add(new ComboPropertyPanel(I18n.get("settings.update.updateExecutor"), "executor.updateExecutor", editable, this, new String[]{"random", "constant"}));
+		this.add(new ComboPropertyPanel(I18n.get("settings.update.updateExecutor"), "executor.updateExecutor", editable, this, new String[]{"random", "constant"}, true));
 		this.add(Box.createVerticalGlue());
 	}
 

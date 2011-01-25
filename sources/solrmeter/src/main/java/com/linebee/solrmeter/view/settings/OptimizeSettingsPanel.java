@@ -49,7 +49,7 @@ public class OptimizeSettingsPanel extends SettingsPanel implements PropertyChan
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new ComboPropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this, new String[]{"ondemand"}));
+		this.add(new ComboPropertyPanel(I18n.get("settings.optimize.optimizeExecutor"), "executor.optimizeExecutor", editable, this, new String[]{"ondemand"}, true));
 		this.add(Box.createVerticalGlue());
 	}
 
