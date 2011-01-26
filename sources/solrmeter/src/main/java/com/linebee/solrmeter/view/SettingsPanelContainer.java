@@ -22,8 +22,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -47,8 +45,6 @@ import com.linebee.solrmeter.view.settings.UpdateSettingsPanel;
 public class SettingsPanelContainer extends JPanel {
 	
 	private static final long serialVersionUID = 6009079148719374295L;
-
-	private Map<String, SettingsPanel> statistics;
 	
 	private JTabbedPane tabPanel;
 	
@@ -72,7 +68,6 @@ public class SettingsPanelContainer extends JPanel {
 		super();
 		this.editable = editable;
 		this.repository = repository;
-		statistics = new HashMap<String, SettingsPanel>();
 		tabPanel = new JTabbedPane();
 		settingsController = new SettingsController(this, parent);
 		this.initGUI();
@@ -176,7 +171,6 @@ public class SettingsPanelContainer extends JPanel {
 	}
 
 	public void addSetting(SettingsPanel panel) {
-		statistics.put(panel.getSettingsName(), panel);
 		JScrollPane scrollPane =  new JScrollPane(panel);
 		tabPanel.addTab(panel.getSettingsName(), scrollPane);
 	}
