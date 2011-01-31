@@ -55,8 +55,12 @@ public class FileStringExtractor {
 	/**
 	 * 
 	 * @return A random string of the ones obtained from the file
+	 * @return null if the strings list is null or empty
 	 */
 	public String getRandomString() {
+		if(strings == null || strings.isEmpty()) {
+			return null;
+		}
 		return (String)FileUtils.getNextRandomObject(strings);
 	}
 	
