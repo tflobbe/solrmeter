@@ -24,6 +24,7 @@ import com.linebee.solrmeter.view.SettingsPanel;
 import com.linebee.solrmeter.view.component.BooleanPropertyPanel;
 import com.linebee.solrmeter.view.component.ComboPropertyPanel;
 import com.linebee.solrmeter.view.component.FilePropertyPanel;
+import com.linebee.solrmeter.view.component.IntegerPropertyPanel;
 import com.linebee.solrmeter.view.component.TextPropertyPanel;
 import com.linebee.solrmeter.view.exception.InvalidPropertyException;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
@@ -50,8 +51,8 @@ public class UpdateSettingsPanel extends SettingsPanel implements PropertyChange
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(new TextPropertyPanel(I18n.get("settings.update.solrUrl"), "solr.addUrl", editable, this));
 		this.add(new BooleanPropertyPanel(I18n.get("settings.update.solrAutocommit"), "solr.update.solrAutocommit", editable, this));
-		this.add(new TextPropertyPanel(I18n.get("settings.update.documentsToCommit"), "solr.update.documentsToCommit",editable, this));
-		this.add(new TextPropertyPanel(I18n.get("settings.update.timeToCommit"), "solr.update.timeToCommit",editable, this));
+		this.add(new IntegerPropertyPanel(I18n.get("settings.update.documentsToCommit"), "solr.update.documentsToCommit",editable, this));
+		this.add(new IntegerPropertyPanel(I18n.get("settings.update.timeToCommit"), "solr.update.timeToCommit",editable, this));
 		this.add(new FilePropertyPanel(I18n.get("settings.update.updateFile"), "solr.updatesFiles", editable, this));
 		this.add(new ComboPropertyPanel(I18n.get("settings.update.updateExecutor"), "executor.updateExecutor", editable, this, new String[]{"random", "constant"}, true));
 		this.add(Box.createVerticalGlue());

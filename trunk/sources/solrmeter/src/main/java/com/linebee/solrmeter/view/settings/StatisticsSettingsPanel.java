@@ -1,4 +1,19 @@
-package com.linebee.solrmeter.view.settings;
+/**
+ * Copyright Linebee LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ package com.linebee.solrmeter.view.settings;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,9 +33,10 @@ import com.linebee.solrmeter.controller.StatisticsRepository;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.SettingsPanel;
-import com.linebee.solrmeter.view.component.TextPropertyPanel;
 import com.linebee.solrmeter.view.exception.InvalidPropertyException;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
+import com.linebee.solrmeter.view.component.IntegerPropertyPanel;
+
 
 public class StatisticsSettingsPanel extends SettingsPanel implements PropertyChangeListener {
 
@@ -45,7 +61,7 @@ public class StatisticsSettingsPanel extends SettingsPanel implements PropertyCh
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(new TextPropertyPanel(I18n.get("settings.statistics.timeToRefresh"), "statistic.refreshTime", editable, this));
+		this.add(new IntegerPropertyPanel(I18n.get("settings.statistics.timeToRefresh"), "statistic.refreshTime", editable, this));
 		this.add(new JLabel(I18n.get("settings.statistics.showing")));
 		this.addStatistics();
 		this.add(Box.createVerticalGlue());
