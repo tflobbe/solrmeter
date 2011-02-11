@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -149,7 +150,13 @@ public class SettingsPanelContainer extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				settingsController.acceptChanges();
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						settingsController.acceptChanges();
+					}
+				});
+					
 			}
 			
 		});
