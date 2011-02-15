@@ -116,4 +116,17 @@ public abstract class BaseTestCase extends TestCase {
 		}
 	}
 	
+	protected void sleep(long delay) {
+		long now = System.currentTimeMillis();
+		long wakeUp = now + delay;
+		while(now<wakeUp) {
+			try {
+				Thread.sleep(wakeUp - now);
+			} catch(InterruptedException ex) {
+				
+			}
+			now = System.currentTimeMillis();
+		}
+	}
+	
 }
