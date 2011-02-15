@@ -90,4 +90,11 @@
 		<model-class>com.linebee.solrmeter.model.statistic.SimpleQueryStatistic
 		</model-class>
 	</statistic>
+	<statistic hasView="false">
+		<name>OperationRateStatistic</name>
+		<description>A statistic to </description>
+		<types>query,update</types>
+		<scope>stress_test</scope>
+		<model-class>com.linebee.solrmeter.model.statistic.OperationRateStatistic</model-class>
+	</statistic>
 </statistics>

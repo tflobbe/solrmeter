@@ -38,6 +38,7 @@ import com.linebee.solrmeter.model.QueryExecutor;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.SolrServerRegistry;
 import com.linebee.solrmeter.model.operation.PingOperation;
+import com.linebee.solrmeter.model.statistic.OperationRateStatistic;
 import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
@@ -57,6 +58,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	private static final int paddingSize = 1;
 	
 	private SimpleQueryStatistic simpleQueryStatistic;
+	private OperationRateStatistic operationRateStatistic;
 	
 	private QueryExecutorController controller;
 	private QueryExecutor queryExecutor;
@@ -68,6 +70,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	private InfoPanel averageClientTime;
 	private InfoPanel totalErrors;
 	private InfoPanel startedAt;
+	private InfoPanel actualQueryRate;
 	
 	private JSpinner concurrentQueries;
 	
@@ -78,9 +81,11 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	@Inject
 	public QueryConsolePanel(QueryExecutorController controller, 
 			SimpleQueryStatistic simpleQueryStatistic,
+			OperationRateStatistic operationRateStatistic,
 			QueryExecutor queryExecutor) {
 		super(I18n.get("queryConsolePanel.title"));
 		this.simpleQueryStatistic = simpleQueryStatistic;
+		this.operationRateStatistic = operationRateStatistic;
 		this.controller = controller;
 		this.queryExecutor = queryExecutor;
 		this.initGUI();
@@ -103,6 +108,8 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		totalErrors = new InfoPanel(I18n.get("queryConsolePanel.totalErrors"), "0");
 		this.addAndPadd(totalErrors);
 		this.addAndPadd(this.getCurrentQueriesSpinner());
+		actualQueryRate = new InfoPanel(I18n.get("queryConsolePanel.actualQueriesPerMinute"), "-");
+		this.addAndPadd(actualQueryRate);
 		startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
 		startButton.addActionListener(new ActionListener() {
 			@Override
@@ -167,6 +174,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 			averageQueryTime.setValue(String.valueOf(simpleQueryStatistic.getTotalQTime() / simpleQueryStatistic.getTotalQueries()));
 			averageClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime() / simpleQueryStatistic.getTotalQueries()));
 		}
+		actualQueryRate.setValue(String.valueOf(operationRateStatistic.getQueryRate()));
 	}
 
 	public void started() {

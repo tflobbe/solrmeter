@@ -36,6 +36,7 @@ import com.linebee.solrmeter.model.SolrServerRegistry;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.operation.PingOperation;
 import com.linebee.solrmeter.model.statistic.CommitHistoryStatistic;
+import com.linebee.solrmeter.model.statistic.OperationRateStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
 import com.linebee.solrmeter.view.component.SolrConnectedButton;
@@ -52,6 +53,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	
 	private UpdateExecutor updateExecutor;
 	private CommitHistoryStatistic commitHistoryStatistic;
+	private OperationRateStatistic operationRateStatistic;
 	private SolrConnectedButton jButtonStart;
 	private JButton jButtonStop;
 	
@@ -62,6 +64,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	private InfoPanel panelErrorsOnUpdate;
 	private InfoPanel panelErrorsOnCommit;
 	private InfoPanel panelAddedDocuments;
+	private InfoPanel panelUpdateRate;
 	
 	private SpinnerPanel concurrentUpdatesSpinnerPanel;
 	private SpinnerPanel docsBeforeCommitSpinnerPanel;
@@ -72,11 +75,13 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	@Inject
 	public UpdateConsolePanel(UpdateExecutor updateExecutor, 
 			UpdateExecutorController controller,
-			CommitHistoryStatistic commitHistoryStatistic) {
+			CommitHistoryStatistic commitHistoryStatistic,
+			OperationRateStatistic operationRatestatistic) {
 		super(I18n.get("updateConsolePanel.title"));
 		this.updateExecutor = updateExecutor;
 		this.controller = controller;
 		this.commitHistoryStatistic = commitHistoryStatistic;
+		this.operationRateStatistic = operationRatestatistic;
 		this.initGUI();
 		stopped();
 	}
@@ -113,6 +118,9 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		this.addAndPadd(panelErrorsOnCommit);
 		
 		this.addAndPadd(getCurrentUpdatesSpinner());
+		
+		panelUpdateRate = new InfoPanel(I18n.get("updateConsolePanel.actualUpdateRate"), "-");
+		this.addAndPadd(panelUpdateRate);
 		
 		jButtonStart = new SolrConnectedButton(I18n.get("updateConsolePanel.start"), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
 		jButtonStart.addActionListener(new ActionListener() {
@@ -174,6 +182,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		panelAddedDocuments.setValue(String.valueOf(commitHistoryStatistic.getTotalAddedDocuments()));
 		panelErrorsOnCommit.setValue(String.valueOf(commitHistoryStatistic.getCommitErrorCount()));
 		panelErrorsOnUpdate.setValue(String.valueOf(commitHistoryStatistic.getUpdateErrorCount()));
+		panelUpdateRate.setValue(String.valueOf(operationRateStatistic.getUpdateRate()));
 	}
 
 	public void started() {
