@@ -59,11 +59,15 @@ public class SettingsPanelContainer extends JPanel {
 	
 	private JButton okAndDefault;
 	
+	private JButton buttonAdvanced;
+	
 	private SettingsController settingsController;
 	
 	private boolean editable;
 	
 	private StatisticsRepository repository;
+	
+	private AdvancedSettingsDialog advancedSettingsDialog;
 
 	public SettingsPanelContainer(Window parent, boolean editable, StatisticsRepository repository) {
 		super();
@@ -73,6 +77,13 @@ public class SettingsPanelContainer extends JPanel {
 		settingsController = new SettingsController(this, parent);
 		this.initGUI();
 		addTabs();
+	}
+	
+	public AdvancedSettingsDialog getAdvancedSettingsDialog(){
+		if(advancedSettingsDialog == null){
+			advancedSettingsDialog = new AdvancedSettingsDialog(settingsController);
+		}
+		return advancedSettingsDialog;
 	}
 
 	private void addTabs() {
@@ -129,6 +140,16 @@ public class SettingsPanelContainer extends JPanel {
 			}
 		});
 		panel.add(okAndDefault);
+		
+		buttonAdvanced = new JButton(I18n.get("settings.button.buttonAdvanced"));
+		buttonAdvanced.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settingsController.advancedSettings();				
+			}
+		});
+		
+		panel.add(buttonAdvanced);
 		
 		panel.add(Box.createHorizontalGlue());
 		

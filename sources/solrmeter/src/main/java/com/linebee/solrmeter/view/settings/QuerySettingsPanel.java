@@ -36,14 +36,11 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 
 	private static final long serialVersionUID = 2171375149115069311L;
 	
-	private SettingsController controller;
-	
 	private boolean editable;
 	
 	public QuerySettingsPanel(SettingsController controller, boolean editable) {
-		super();
+		super(controller);
 		this.editable = editable;
-		this.controller = controller;
 		this.initGUI();
 	}
 

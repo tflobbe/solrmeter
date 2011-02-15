@@ -15,11 +15,27 @@
  */
 package com.linebee.solrmeter.view;
 
+import java.awt.Component;
+
 import javax.swing.JPanel;
+
+import com.linebee.solrmeter.controller.SettingsController;
+import com.linebee.solrmeter.view.component.PropertyPanel;
 
 public abstract class SettingsPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected SettingsController controller;
+	
+	public SettingsPanel(SettingsController controller){
+		this.controller = controller;
+	}
+	
+	public Component add(PropertyPanel comp){
+		this.controller.addPropertyObserver(comp.getPropertyName(), comp);
+		return super.add(comp);
+	}
 	
 	public abstract String getSettingsName();
 
