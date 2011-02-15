@@ -41,7 +41,6 @@ import com.linebee.solrmeter.view.component.IntegerPropertyPanel;
 public class StatisticsSettingsPanel extends SettingsPanel implements PropertyChangeListener {
 
 	private static final long serialVersionUID = -6507961112657893796L;
-	private SettingsController controller;
 	private boolean editable;
 	private StatisticsRepository statisticsRepository;
 	private List<StatisticSelectionPanel> statisticSelectionPanels;
@@ -52,8 +51,7 @@ public class StatisticsSettingsPanel extends SettingsPanel implements PropertyCh
 	}
 	
 	public StatisticsSettingsPanel(SettingsController controller, boolean editable, StatisticsRepository statisticsRepository) {
-		super();
-		this.controller = controller;
+		super(controller);
 		this.editable = editable;
 		this.statisticsRepository = statisticsRepository;
 		this.initGUI();

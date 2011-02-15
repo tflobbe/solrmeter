@@ -19,6 +19,7 @@ import java.awt.Component;
 
 
 import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -64,12 +65,7 @@ public class IntegerPropertyPanel extends PropertyPanel {
 		
 		String initial = SolrMeterConfiguration.getProperty(property);
 		if(initial != null){
-			try {
-				model.setValue(new Integer(initial));
-			} catch(NumberFormatException ex){
-				Logger.getLogger(this.getClass()).error("Can't parse string " + initial + " as integer. Asuming 0");
-				model.setValue(new Integer(0));
-			}			
+			this.setSelectedValue(initial);			
 		}
 		
 		spinner.addChangeListener(new ChangeListener() {			
@@ -80,6 +76,18 @@ public class IntegerPropertyPanel extends PropertyPanel {
 		});
 		
 		return this.spinner;
+	}
+
+	@Override
+	protected void setSelectedValue(String value) {
+		SpinnerModel model = spinner.getModel();
+		try {
+			model.setValue(new Integer(value));
+		} catch(NumberFormatException ex){
+			Logger.getLogger(this.getClass()).error("Can't parse string " + value + " as integer. Asuming 0");
+			model.setValue(new Integer(0));
+		}
+		
 	}
 	
 	

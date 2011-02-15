@@ -32,7 +32,6 @@ import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 public class UpdateSettingsPanel extends SettingsPanel implements PropertyChangeListener {
 	
 	private static final long serialVersionUID = -1176374120440517941L;
-	private SettingsController controller;
 	private boolean editable;
 
 	@Override
@@ -41,8 +40,7 @@ public class UpdateSettingsPanel extends SettingsPanel implements PropertyChange
 	}
 	
 	public UpdateSettingsPanel(SettingsController controller, boolean editable) {
-		super();
-		this.controller = controller;
+		super(controller);
 		this.editable = editable;
 		this.initGUI();
 	}

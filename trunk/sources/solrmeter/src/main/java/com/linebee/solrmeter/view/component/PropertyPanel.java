@@ -32,6 +32,7 @@ import javax.swing.border.Border;
 
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.I18n;
+import com.linebee.solrmeter.view.SolrPropertyObserver;
 import com.linebee.solrmeter.view.listener.PropertyChangeListener;
 /**
  * 
@@ -39,7 +40,7 @@ import com.linebee.solrmeter.view.listener.PropertyChangeListener;
  * @author tflobbe
  *
  */
-public abstract class PropertyPanel extends JPanel implements FocusListener {
+public abstract class PropertyPanel extends JPanel implements FocusListener, SolrPropertyObserver {
 
 	private static final long serialVersionUID = -6531190706130757263L;
 	
@@ -135,7 +136,19 @@ public abstract class PropertyPanel extends JPanel implements FocusListener {
 		return BorderFactory.createEmptyBorder(2, 2, 2, 2);
 	}
 	
+	public void solrPropertyChanged(String prop, String value){
+		if(prop.equals(this.property)){
+			this.setSelectedValue(value);
+		}
+	}
+	
+	public String getPropertyName(){
+		return this.property;
+	}
+	
 	protected abstract String getSelectedValue();
+	
+	protected abstract void setSelectedValue(String value);
 	
 	protected abstract Component getVisualComponent();
 

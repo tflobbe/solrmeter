@@ -18,7 +18,11 @@ package com.linebee.solrmeter.controller;
 import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -29,13 +33,16 @@ import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.SettingsPanelContainer;
+import com.linebee.solrmeter.view.SolrPropertyObserver;
 
 @Singleton
 public class SettingsController {
 	
 	private Properties changedProps;
-	
+		
 	private SettingsPanelContainer panel;
+	
+	private Map<String, Set<SolrPropertyObserver>> observerMap;
 	
 	private Window window;
 	
@@ -45,6 +52,7 @@ public class SettingsController {
 		changedProps = new Properties();
 		panel = settingsPanelContainer;
 		window = parent;
+		observerMap = new HashMap<String, Set<SolrPropertyObserver>>();
 	}
 
 	public void cancel() {
@@ -70,6 +78,7 @@ public class SettingsController {
 
 	public void setProperty(String property, String value) {
 		changedProps.put(property, value);
+		notifyObservers(property, value);
 		panel.hasChangedValues(true);
 	}
 
@@ -98,6 +107,29 @@ public class SettingsController {
 
 	private void doSetDefaultExport(File file) throws IOException {
 		SolrMeterConfiguration.exportConfiguration(file);
+	}
+	
+	public void advancedSettings(){
+		panel.getAdvancedSettingsDialog().setVisible(true);
+	}
+	
+	public void addPropertyObserver(String property, SolrPropertyObserver observer){
+		Set<SolrPropertyObserver> observers = observerMap.get(property);
+		if(observers == null){
+			observers = new HashSet<SolrPropertyObserver>();
+			observerMap.put(property, observers);
+		}
+		
+		observers.add(observer);
+	}
+	
+	protected void notifyObservers(String property, String value){
+		Set<SolrPropertyObserver> observers = observerMap.get(property);
+		if(observers != null){
+			for(SolrPropertyObserver observer: observers){
+				observer.solrPropertyChanged(property, value);
+			}
+		}
 	}
 
 }
