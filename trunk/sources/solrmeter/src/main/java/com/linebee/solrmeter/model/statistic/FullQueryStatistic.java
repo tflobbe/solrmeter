@@ -156,13 +156,13 @@ public class FullQueryStatistic implements QueryStatistic {
 	
 	public Integer getLastMinuteAverage() {
 		Calendar calendar = new GregorianCalendar();
-		calendar.roll(Calendar.MINUTE, false);
+		calendar.add(Calendar.MINUTE, -1);
 		return getAverageSince(calendar.getTime());
 	}
 	
 	public Integer getLastTenMinutesAverage() {
 		Calendar calendar = new GregorianCalendar();
-		calendar.roll(Calendar.MINUTE, -10);
+		calendar.add(Calendar.MINUTE, -10);
 		return getAverageSince(calendar.getTime());
 	}
 	
