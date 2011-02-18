@@ -102,7 +102,7 @@ public class ErrorLogStatistic implements QueryStatistic, UpdateStatistic,
 	@Override
 	public void onOptimizeStared(long initTime) {}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked"})
 	private void addToList(LinkedList list, Object objectToAdd) {
 		list.add(objectToAdd);
 		if(list.size() > maxStored) {
