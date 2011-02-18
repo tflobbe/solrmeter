@@ -73,6 +73,11 @@ public class StatisticsModule extends AbstractModule {
 		}
 	}
 
+	/**
+	 * If the descriptor indicates that the statistic must be observing an operation, the statistic class will be binded to the 
+	 * observer interface (QueryStatistic, UpdateStatistic or OptimizeStatistic).
+	 * @param description
+	 */
 	@SuppressWarnings("unchecked")
 	private void bindStatistic(StatisticDescriptor description) {
 		if(description.isHasView()) {

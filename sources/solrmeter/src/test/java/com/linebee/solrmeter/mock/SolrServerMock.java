@@ -17,8 +17,10 @@ package com.linebee.solrmeter.mock;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -38,9 +40,12 @@ public class SolrServerMock extends CommonsHttpSolrServer {
 	
 	private List<SolrInputDocument> addedDocuments;
 	
+	private Map<String, NamedList<Object>> requestsResponses;
+	
 	public SolrServerMock() throws MalformedURLException {
 		super("http://0.0.0.0:8080/solr");
 		addedDocuments = new LinkedList<SolrInputDocument>();
+		requestsResponses = new HashMap<String, NamedList<Object>>();
 	}
 	
 	@Override
@@ -62,8 +67,7 @@ public class SolrServerMock extends CommonsHttpSolrServer {
 	@Override
 	public NamedList<Object> request(SolrRequest arg0)
 			throws SolrServerException, IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return requestsResponses.get(arg0.getPath());
 	}
 	
 	@Override
@@ -91,6 +95,10 @@ public class SolrServerMock extends CommonsHttpSolrServer {
 
 	public void setNumberOfCommits(int numberOfCommits) {
 		this.numberOfCommits = numberOfCommits;
+	}
+	
+	public void setResponseToRequest(String request, NamedList<Object> response) {
+		requestsResponses.put(request, response);
 	}
 
 }

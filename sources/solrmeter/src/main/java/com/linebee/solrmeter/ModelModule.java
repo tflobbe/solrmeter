@@ -41,6 +41,8 @@ import com.linebee.solrmeter.model.extractor.FileInputDocumentExtractor;
 import com.linebee.solrmeter.model.extractor.FileQueryExtractor;
 import com.linebee.solrmeter.model.service.QueryService;
 import com.linebee.solrmeter.model.service.impl.QueryServiceSolrJImpl;
+import com.linebee.solrmeter.model.statistic.AbstractStatisticConnection;
+import com.linebee.solrmeter.model.statistic.RequestHandlerConnection;
 /**
  * 
  * @author tflobbe
@@ -54,6 +56,7 @@ public class ModelModule extends AbstractModule {
 		configureUpdateExecutors();
 		configureOptimizeExecutors();
 		bind(QueryService.class).to(QueryServiceSolrJImpl.class);
+		bind(AbstractStatisticConnection.class).to(RequestHandlerConnection.class);
 
 	}
 	
