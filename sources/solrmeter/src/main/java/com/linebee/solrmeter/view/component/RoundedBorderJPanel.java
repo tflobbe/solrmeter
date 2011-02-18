@@ -21,7 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public abstract class RoundedBorderJPanel extends JPanel {
+public class RoundedBorderJPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 
