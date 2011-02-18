@@ -22,3 +22,9 @@ http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics.PNG
 
 =Query Statistics2=
 http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics2.PNG
+
+=CacheHistoryStatistic=
+http://solrmeter.googlecode.com/svn/wiki/Screenshots/CacheHistoryChart.jpg
+
+=HitRatioStatistic=
+http://solrmeter.googlecode.com/svn/wiki/Screenshots/CacheHitRatio.jpg
