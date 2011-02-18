@@ -157,6 +157,21 @@ public class QueryLogStatistic implements QueryStatistic {
 		public Long getResults() {
 			return results;
 		}
+		
+		/**
+		 * Gets a comma separated values representation of this log entry
+		 * 
+		 * @return
+		 */
+		
+		public String getCSV(){
+			return String.valueOf(error) + "," +
+							queryString + "," +
+							facetQueryString + "," +
+							filterQueryString + "," +
+							qTime.toString() + "," +
+							results.toString();	
+		}
 	}
 
 }

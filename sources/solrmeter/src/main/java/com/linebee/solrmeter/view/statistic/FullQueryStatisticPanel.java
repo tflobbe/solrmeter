@@ -20,12 +20,21 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,6 +45,7 @@ import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.linebee.solrmeter.SolrMeterMain;
 import com.linebee.solrmeter.model.statistic.FullQueryStatistic;
 import com.linebee.solrmeter.model.statistic.QueryLogStatistic;
 import com.linebee.solrmeter.model.statistic.QueryLogStatistic.QueryLogValue;
@@ -66,7 +76,8 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	private JTable logTable;
 //	private JButton clearButton;
 	private JToggleButton scrollLockButton;
-	
+	private JButton exportButton;
+		
 	@Inject
 	public FullQueryStatisticPanel(FullQueryStatistic statictic, QueryLogStatistic queryLogStatictic) {
 		super();
@@ -143,7 +154,44 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 		buttonPanel.add(Box.createHorizontalGlue());
 //		buttonPanel.add(new JButton(I18n.get("statistic.fullQueryStatistic.clearButton")));
 		scrollLockButton = new JToggleButton(I18n.get("statistic.fullQueryStatistic.freezeButton"));
+		exportButton = new JButton(I18n.get("statistic.fullQueryStatistic.exportButton"));
+		
+		exportButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showSaveDialog(SolrMeterMain.mainFrame);
+				
+		        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            File file = fc.getSelectedFile();
+
+					PrintWriter fileWritter;
+					try {
+						fileWritter = new PrintWriter(
+								new FileOutputStream(file));
+
+						for (QueryLogValue query : queryLogStatictic
+								.getLastQueries()) {
+							fileWritter.println(query.getCSV());
+						}
+						fileWritter.close();
+					} catch (FileNotFoundException e1) {
+						JOptionPane
+								.showMessageDialog(
+										SolrMeterMain.mainFrame,
+										I18n.get("statistic.fullQueryStatistic.exportExceptionMessage"),
+										I18n.get("statistic.fullQueryStatistic.exportExceptionTitle"),
+										JOptionPane.ERROR_MESSAGE);
+					}
+
+		        }				
+			}
+		});
+		
 		buttonPanel.add(scrollLockButton);
+		buttonPanel.add(exportButton);
 		return buttonPanel;
 	}
 
