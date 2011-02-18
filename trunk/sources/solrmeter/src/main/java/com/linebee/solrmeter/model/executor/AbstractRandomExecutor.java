@@ -52,6 +52,11 @@ public abstract class AbstractRandomExecutor {
 	private boolean running;
 	
 	/**
+	 * Indicates whether the Executor is prepared to run or not.
+	 */
+	private boolean prepared = false;
+	
+	/**
 	 * Returns the list of files from the text file at "filePath"
 	 * @param filePath
 	 * @return
@@ -79,6 +84,7 @@ public abstract class AbstractRandomExecutor {
 		for(int i = 0; i < operationsPerMinute; i++) {
 			threads.add(createThread());
 		}
+		prepared = true;
 	}
 	
 	/**
@@ -117,6 +123,9 @@ public abstract class AbstractRandomExecutor {
 		if(running == true) {
 			return;
 		}
+		if(!prepared) {
+			prepare();
+		}
 		running = true;
 		for(Thread thread:threads) {
 			thread.start();
@@ -135,6 +144,8 @@ public abstract class AbstractRandomExecutor {
 			thread.destroy();
 		}
 		stopStatistics();
+		threads = null;
+		prepared = false;
 	}
 
 	protected abstract void stopStatistics();
