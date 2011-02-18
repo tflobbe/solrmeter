@@ -26,9 +26,11 @@ You can also see last executed queries of the test, the time they took, how many
 <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics.PNG" height="250" width="300"/></a> <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics2"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/query-statistics2.PNG" height="250" width="300"/></a>
 
 From version 0.2.0, you have also a Cache History Statistic, in which you can see the usage of every cache:
+
 <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#CacheHistoryStatistic"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/CacheHistoryChart.jpg" height="250" width="300"/></a>
 
-... Or hit ratio comparison of all Solr caches.
+... Or hit ratio comparison of all Solr caches:
+
 <a href="http://code.google.com/p/solrmeter/wiki/Screenshots#HitRatioStatistic"><img src="http://solrmeter.googlecode.com/svn/wiki/Screenshots/CacheHitRatio.jpg" height="250" width="300"/></a>
 
 See the [Usage] page for details on how to download/use/contribute SolrMeter.
