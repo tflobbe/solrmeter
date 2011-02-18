@@ -56,6 +56,7 @@ public class InfoPanel extends JPanel {
 		this.add(jLabelLabel);
 		this.add(Box.createHorizontalGlue());
 		jLabelValue = new JLabel(value);
+		jLabelValue.setToolTipText(value);
 		this.add(jLabelValue);
 		
 	}
@@ -63,6 +64,7 @@ public class InfoPanel extends JPanel {
 	public void setValue(String value) {
 		this.value = value;
 		jLabelValue.setText(value);
+		jLabelValue.setToolTipText(value);
 	}
 
 }
