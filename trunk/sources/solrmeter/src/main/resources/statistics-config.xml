@@ -62,6 +62,16 @@
 		<model-class>com.linebee.solrmeter.model.statistic.ErrorLogStatistic
 		</model-class>
 	</statistic>
+	<statistic hasView="true">
+		<name>CacheStatistic</name>
+		<description>Shows the history of each cache</description>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<view-class>com.linebee.solrmeter.view.statistic.CacheHistoryPanel
+		</view-class>
+		<model-class>com.linebee.solrmeter.model.statistic.CacheHistoryStatistic
+		</model-class>
+	</statistic>
 	<statistic hasView="false">
 		<name>QueryLogStatistic</name>
 		<types>query</types>
