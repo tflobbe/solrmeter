@@ -57,7 +57,7 @@ public class I18n {
 		if(this.getClass().getClassLoader().getResource(("messages_" + locale.getLanguage() + ".properties")) != null) {
 			list.add(ResourceBundle.getBundle("messages_" + locale.getLanguage()));
 		}
-		list.add(ResourceBundle.getBundle("messages"));
+		list.add(ResourceBundle.getBundle("messages", new Locale("", "")));
 		return list;
 	}
 
