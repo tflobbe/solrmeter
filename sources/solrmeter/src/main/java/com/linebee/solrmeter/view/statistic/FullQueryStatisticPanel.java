@@ -15,11 +15,8 @@
  */
 package com.linebee.solrmeter.view.statistic;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -30,6 +27,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -57,9 +55,10 @@ import com.linebee.stressTestScope.StressTestScope;
 @StressTestScope
 public class FullQueryStatisticPanel extends StatisticPanel {
 	
+	private static final int MARGIN = 10;
+	
 	private static final long serialVersionUID = 7432143826253437314L;
 
-	private static final int paddingSize = 2;
 	private static final int doubleScale = 2;
 	
 	private FullQueryStatistic fullQueryStatictic;
@@ -87,62 +86,53 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	}
 
 	private void initGUI() {
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.insets = new Insets(3,3,3,3);
-		this.add(this.createStatsPanel(), constraints);
+		this.setLayout(new BorderLayout());
 		
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		this.add(this.createQueryLogPanel(), constraints);
-		
+		this.add(this.createStatsPanel(), BorderLayout.WEST);
+		this.add(this.createQueryLogPanel(), BorderLayout.CENTER);
 	}
 	
 	private Component createStatsPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setMinimumSize(new Dimension(200, 200));
+		panel.setBorder(BorderFactory.createEmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
 		
 		medianInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.median"));
-		addAndPadd(panel,medianInfoPanel);
+		panel.add(medianInfoPanel);
 
 		modeInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.mode"));
-		addAndPadd(panel,modeInfoPanel);
+		panel.add(modeInfoPanel);
 
 		varianceInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.variance"));
-		addAndPadd(panel,varianceInfoPanel);
+		panel.add(varianceInfoPanel);
 
 		standardDeviationInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.standardDeviation"));
-		addAndPadd(panel,standardDeviationInfoPanel);
+		panel.add(standardDeviationInfoPanel);
 
 		totalAverageInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.totalAverage"));
-		addAndPadd(panel,totalAverageInfoPanel);
+		panel.add(totalAverageInfoPanel);
 
 		lastMinuteAverageInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.lastMinuteAverage"));
-		addAndPadd(panel,lastMinuteAverageInfoPanel);
+		panel.add(lastMinuteAverageInfoPanel);
 
 		lastTenMinutesAverageInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.lastTenMinutesAverage"));
-		addAndPadd(panel,lastTenMinutesAverageInfoPanel);
+		panel.add(lastTenMinutesAverageInfoPanel);
 
 		lastErrorInfoPanel = new InfoPanel(I18n.get("statistic.fullQueryStatistic.lastError"));
-		addAndPadd(panel,lastErrorInfoPanel);
+		panel.add(lastErrorInfoPanel);
+		
 		return panel;
 	}
 
 	private Component createQueryLogPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBorder(BorderFactory.createEmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
 		logTable = new JTable();
 		logTable.setModel(this.createTableModel());
 		panel.add(new JScrollPane(logTable));
 		logTable.getColumnModel().getColumn(1).setMaxWidth(250);
 		logTable.getColumnModel().getColumn(1).setPreferredWidth(250);
-		panel.add(Box.createHorizontalGlue());
 		panel.add(this.createButtonPanel());
 		return panel;
 	}
@@ -150,9 +140,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	private Component createButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-		buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		buttonPanel.add(Box.createHorizontalGlue());
-//		buttonPanel.add(new JButton(I18n.get("statistic.fullQueryStatistic.clearButton")));
 		scrollLockButton = new JToggleButton(I18n.get("statistic.fullQueryStatistic.freezeButton"));
 		exportButton = new JButton(I18n.get("statistic.fullQueryStatistic.exportButton"));
 		
@@ -191,6 +179,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 		});
 		
 		buttonPanel.add(scrollLockButton);
+		buttonPanel.add(Box.createHorizontalStrut(MARGIN));
 		buttonPanel.add(exportButton);
 		return buttonPanel;
 	}
@@ -226,11 +215,6 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	
 	private String getString(Double number) {
 		return new BigDecimal(number).setScale(doubleScale, BigDecimal.ROUND_HALF_DOWN).toString();
-	}
-	
-	private void addAndPadd(JPanel panel, Component component) {
-		panel.add(component);
-		panel.add(Box.createRigidArea(new Dimension(paddingSize, paddingSize)));
 	}
 	
 	public class QueryLogTableModel extends AbstractTableModel {

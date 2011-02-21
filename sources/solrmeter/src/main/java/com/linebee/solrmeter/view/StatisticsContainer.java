@@ -15,6 +15,7 @@
  */
 package com.linebee.solrmeter.view;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,16 @@ public class StatisticsContainer extends JTabbedPane implements ChangeListener, 
 		statistics.clear();
 		this.removeAll();
 		this.revalidate();
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return super.getMinimumSize();
+	}
+	
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 
 }

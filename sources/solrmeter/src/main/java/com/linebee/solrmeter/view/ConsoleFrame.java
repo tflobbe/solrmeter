@@ -15,11 +15,8 @@
  */
 package com.linebee.solrmeter.view;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
 import java.awt.HeadlessException;
-import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -39,28 +36,27 @@ public class ConsoleFrame extends JFrame {
 	private QueryConsolePanel queryPanel;
 	private UpdateConsolePanel updatePanel;
 	private OptimizeConsolePanel optimizePanel;
+	private CommitConsolePanel commitPanel;
 	private StatisticsContainer statisticsContainer;
 	
 	
 	@Inject
 	public ConsoleFrame(QueryConsolePanel queryPanel,
 			UpdateConsolePanel updatePanel, OptimizeConsolePanel optimizePanel,
-			StatisticsContainer statisticsContainer) throws HeadlessException {
+			CommitConsolePanel commitPanel, StatisticsContainer statisticsContainer) throws HeadlessException {
 		super();
 		this.setLocale(I18n.getLocale());
 		this.queryPanel = queryPanel;
 		this.updatePanel = updatePanel;
 		this.optimizePanel = optimizePanel;
+		this.commitPanel = commitPanel;
 		this.statisticsContainer = statisticsContainer;
-//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setSize(new Dimension(800, 700));
 		this.initGUI();
 		this.addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent evt) {
 	        	exitApplication();
 	        }
 	    });
-		SwingUtils.centerWindow(this);
 	}
 
 	private void exitApplication() {
@@ -68,16 +64,17 @@ public class ConsoleFrame extends JFrame {
 	}
 
 	private void initGUI() {
-		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
-		JPanel auxiliarPanel = new JPanel();
-		auxiliarPanel.setLayout(new GridBagLayout());
-		auxiliarPanel.add(this.getQueryPanel(), new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		auxiliarPanel.add(this.getUpdatePanel(), new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		auxiliarPanel.add(this.getOptimizePanel(), new GridBagConstraints(2, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		this.getContentPane().setLayout(new BorderLayout());
 		
-		this.getContentPane().add(auxiliarPanel);
+		JPanel auxiliarPanel = new JPanel();		
+		auxiliarPanel.setLayout(new BoxLayout(auxiliarPanel, BoxLayout.X_AXIS));
+		auxiliarPanel.add(this.getQueryPanel());
+		auxiliarPanel.add(this.getUpdatePanel());
+		auxiliarPanel.add(this.getCommitPanel());
+		auxiliarPanel.add(this.getOptimizePanel());
+		
+		this.getContentPane().add(auxiliarPanel, BorderLayout.NORTH);
 		this.addStatisticsPanel();
-		
 	}
 
 	private OptimizeConsolePanel getOptimizePanel() {
@@ -87,9 +84,13 @@ public class ConsoleFrame extends JFrame {
 	private UpdateConsolePanel getUpdatePanel() {
 		return updatePanel;
 	}
+	
+	private CommitConsolePanel getCommitPanel() {
+		return commitPanel;
+	}
 
 	private void addStatisticsPanel() {
-		this.getContentPane().add(statisticsContainer);
+		this.getContentPane().add(statisticsContainer, BorderLayout.CENTER);
 	}
 
 	private QueryConsolePanel getQueryPanel() {
@@ -124,6 +125,10 @@ public class ConsoleFrame extends JFrame {
 
 	public void setUpdatePanel(UpdateConsolePanel updatePanel) {
 		this.updatePanel = updatePanel;
+	}
+	
+	public void setCommitPanel(CommitConsolePanel commitPanel) {
+		this.commitPanel = commitPanel;
 	}
 
 	public void setOptimizePanel(OptimizeConsolePanel optimizePanel) {

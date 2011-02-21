@@ -15,8 +15,6 @@
  */
 package com.linebee.solrmeter.view;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,7 +37,6 @@ import com.linebee.stressTestScope.StressTestScope;
 public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refreshable {
 	
 	private static final long serialVersionUID = -1971290718269938970L;
-	private static final int paddingSize = 1;
 
 	private OptimizeExecutor executor;
 	
@@ -77,21 +74,25 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		optimizing = new InfoPanel(I18n.get("optimizeConsolePanel.optimizingNow"), "false");
-		this.addAndPadd(optimizing);
+		this.add(optimizing);
 		totalOptimizeCount = new InfoPanel(I18n.get("optimizeConsolePanel.optimizeCount"), "0");
-		this.addAndPadd(totalOptimizeCount);
+		this.add(totalOptimizeCount);
 		lastOptimizationTime = new InfoPanel(I18n.get("optimizeConsolePanel.lastOptimizeTime"), "0");
-		this.addAndPadd(lastOptimizationTime);
+		this.add(lastOptimizationTime);
 		totalOptimizationTime = new InfoPanel(I18n.get("optimizeConsolePanel.totalOptimizeTime"), "0");
-		this.addAndPadd(totalOptimizationTime);
+		this.add(totalOptimizationTime);
 		optimizationTimeAverage = new InfoPanel(I18n.get("optimizeConsolePanel.optimizationTimeAverage"), "0");
-		this.addAndPadd(optimizationTimeAverage);
+		this.add(optimizationTimeAverage);
 		lastOptimizationResult = new InfoPanel(I18n.get("optimizeConsolePanel.lastOptimizationResult"), "-");
-		this.addAndPadd(lastOptimizationResult);
+		this.add(lastOptimizationResult);
 		totalOptimizeErrors = new InfoPanel(I18n.get("optimizeConsolePanel.totalOptimizationErrors"), "0");
-		this.addAndPadd(totalOptimizeErrors);
+		this.add(totalOptimizeErrors);
+		
+		this.add(Box.createVerticalGlue());
+		
 		optimizeButton = new SolrConnectedButton(I18n.get("optimizeConsolePanel.optimizeNow"), I18n.get("optimizeConsolePanel.pingFailing"), this.createPingOperation());
-		this.addAndPadd(optimizeButton);
+		this.add(optimizeButton);
+		optimizeButton.setAlignmentX(0.5f);
 		optimizeButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -130,11 +131,6 @@ public class OptimizeConsolePanel extends RoundedBorderJPanel implements Refresh
 			lastOptimizationResult.setValue(String.valueOf(optimizeStatistic.getLastOptimizationResult()));
 		}
 		totalOptimizeErrors.setValue(String.valueOf(optimizeStatistic.getOptimizeErrorCount()));
-	}
-	
-	private void addAndPadd(Component component) {
-		this.add(component);
-		this.add(Box.createRigidArea(new Dimension(paddingSize, paddingSize)));
 	}
 
 }

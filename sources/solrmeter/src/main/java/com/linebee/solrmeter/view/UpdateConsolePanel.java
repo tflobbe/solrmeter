@@ -16,7 +16,6 @@
 package com.linebee.solrmeter.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -47,9 +46,7 @@ import com.linebee.stressTestScope.StressTestScope;
 public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePanel {
 	
 	private static final int MAX_CONCURRENT_UPDATES = Integer.MAX_VALUE;
-	private static final int TIME_SPINNER_STEP = 500;
 	private static final long serialVersionUID = 7795898682164203946L;
-	private static final int paddingSize = 1;
 	
 	private UpdateExecutor updateExecutor;
 	private CommitHistoryStatistic commitHistoryStatistic;
@@ -57,18 +54,12 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	private SolrConnectedButton jButtonStart;
 	private JButton jButtonStop;
 	
-	private InfoPanel panelNotCommitedDocuments;
-	private InfoPanel panelLastCommit;
-	private InfoPanel panelNumberOfCommits;
 	private InfoPanel panelStartTest;
 	private InfoPanel panelErrorsOnUpdate;
-	private InfoPanel panelErrorsOnCommit;
 	private InfoPanel panelAddedDocuments;
 	private InfoPanel panelUpdateRate;
 	
 	private SpinnerPanel concurrentUpdatesSpinnerPanel;
-	private SpinnerPanel docsBeforeCommitSpinnerPanel;
-	private SpinnerPanel maxTimeBeforeCommitSpinnerPanel;
 	
 	private UpdateExecutorController controller;
 	
@@ -80,6 +71,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		super(I18n.get("updateConsolePanel.title"));
 		this.updateExecutor = updateExecutor;
 		this.controller = controller;
+		this.controller.addObserver(this);
 		this.commitHistoryStatistic = commitHistoryStatistic;
 		this.operationRateStatistic = operationRatestatistic;
 		this.initGUI();
@@ -89,38 +81,21 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		this.addAndPadd(new InfoPanel(I18n.get("updateConsolePanel.performCommits"), String.valueOf(updateExecutor.isAutocommit())));
-		if(!updateExecutor.isAutocommit()) {
-			this.addAndPadd(getNumberOfDocsBeforeCommit());
-			this.addAndPadd(getMaxTimeBeforeCommit());
-//			panelMaxTimeBeforeCommit = new InfoPanel(I18n.get("updateConsolePanel.timeBeforeCommit"), String.valueOf(updateExecutor.getMaxTimeBeforeCommit()));
-//			this.addAndPadd(panelMaxTimeBeforeCommit);
-		}
-		panelNotCommitedDocuments = new InfoPanel(I18n.get("updateConsolePanel.notCommitedDocs"), "0");
-		this.addAndPadd(panelNotCommitedDocuments);
+		panelAddedDocuments = new InfoPanel(I18n.get("updateConsolePanel.addedDocs"), "0");
+		this.add(panelAddedDocuments);
 		
-		panelLastCommit = new InfoPanel(I18n.get("updateConsolePanel.lastCommit"), "-");
-		this.addAndPadd(panelLastCommit);
+		panelStartTest = new InfoPanel(I18n.get("updateConsolePanel.startedAt"), "-");
+		this.add(panelStartTest);
 		
-		panelNumberOfCommits = new InfoPanel(I18n.get("updateConsolePanel.numberOfCommits"), "0");
-		this.addAndPadd(panelNumberOfCommits);
-		
-		panelAddedDocuments = new InfoPanel(I18n.get("updateConsolePanel.addedDocs"));
-		this.addAndPadd(panelAddedDocuments);
-		
-		panelStartTest = new InfoPanel(I18n.get("updateConsolePanel.startedAt"), "");
-		this.addAndPadd(panelStartTest);
-		
-		panelErrorsOnUpdate = new InfoPanel(I18n.get("updateConsolePanel.errorsOnUpdate"), "");
-		this.addAndPadd(panelErrorsOnUpdate);
-		
-		panelErrorsOnCommit = new InfoPanel(I18n.get("updateConsolePanel.errorsOnCommit"), "");
-		this.addAndPadd(panelErrorsOnCommit);
-		
-		this.addAndPadd(getCurrentUpdatesSpinner());
+		panelErrorsOnUpdate = new InfoPanel(I18n.get("updateConsolePanel.errorsOnUpdate"), "0");
+		this.add(panelErrorsOnUpdate);
+
+		this.add(getConcurrentUpdatesSpinner());
 		
 		panelUpdateRate = new InfoPanel(I18n.get("updateConsolePanel.actualUpdateRate"), "-");
-		this.addAndPadd(panelUpdateRate);
+		this.add(panelUpdateRate);
+		
+		this.add(Box.createVerticalGlue());
 		
 		jButtonStart = new SolrConnectedButton(I18n.get("updateConsolePanel.start"), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
 		jButtonStart.addActionListener(new ActionListener() {
@@ -140,47 +115,20 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 			}
 			
 		});
+		
 		JPanel auxiliarJPanel = new JPanel();
 		auxiliarJPanel.setLayout(new BoxLayout(auxiliarJPanel, BoxLayout.X_AXIS));
 		auxiliarJPanel.add(jButtonStart);
 		auxiliarJPanel.add(jButtonStop);
-		this.addAndPadd(auxiliarJPanel);
+		this.add(auxiliarJPanel);
 	}
 
 	private PingOperation createPingOperation() {
 		return new PingOperation(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL)));
 	}
 
-	private Component getMaxTimeBeforeCommit() {
-		maxTimeBeforeCommitSpinnerPanel = new SpinnerPanel(updateExecutor.getMaxTimeBeforeCommit(), 1, Integer.MAX_VALUE, TIME_SPINNER_STEP, I18n.get("updateConsolePanel.timeBeforeCommit"));
-		maxTimeBeforeCommitSpinnerPanel.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				controller.onTimeBeforeCommitValueChange(maxTimeBeforeCommitSpinnerPanel.getValue());
-			}
-		});
-		return maxTimeBeforeCommitSpinnerPanel;
-	}
-
-	private Component getNumberOfDocsBeforeCommit() {
-		docsBeforeCommitSpinnerPanel = new SpinnerPanel(updateExecutor.getNumberOfDocumentsBeforeCommit(), I18n.get("updateConsolePanel.commitsBeforeCommit"));
-		docsBeforeCommitSpinnerPanel.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				controller.onDocsBeforeCommitValueChange(docsBeforeCommitSpinnerPanel.getValue());
-			}
-		});
-		return docsBeforeCommitSpinnerPanel;
-	}
-
 	public void refreshView() {
-		panelNotCommitedDocuments.setValue(String.valueOf(updateExecutor.getNotCommitedDocuments()));
-		if(commitHistoryStatistic.getLastCommitDate() != null) {
-			panelLastCommit.setValue(SimpleDateFormat.getInstance().format(commitHistoryStatistic.getLastCommitDate()));
-		}
-		panelNumberOfCommits.setValue(String.valueOf(commitHistoryStatistic.getTotalCommits()));
 		panelAddedDocuments.setValue(String.valueOf(commitHistoryStatistic.getTotalAddedDocuments()));
-		panelErrorsOnCommit.setValue(String.valueOf(commitHistoryStatistic.getCommitErrorCount()));
 		panelErrorsOnUpdate.setValue(String.valueOf(commitHistoryStatistic.getUpdateErrorCount()));
 		panelUpdateRate.setValue(String.valueOf(operationRateStatistic.getUpdateRate()));
 	}
@@ -198,7 +146,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		
 	}
 	
-	private Component getCurrentUpdatesSpinner() {
+	private Component getConcurrentUpdatesSpinner() {
 		concurrentUpdatesSpinnerPanel = new SpinnerPanel(updateExecutor.getUpdatesPerMinute(), 1, MAX_CONCURRENT_UPDATES, 1, I18n.get("updateConsolePanel.updatesPerMinute"));
 		concurrentUpdatesSpinnerPanel.addChangeListener(new ChangeListener() {
 			@Override
@@ -207,11 +155,6 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 			}
 		});
 		return concurrentUpdatesSpinnerPanel;
-	}
-	
-	private void addAndPadd(Component component) {
-		this.add(component);
-		this.add(Box.createRigidArea(new Dimension(paddingSize, paddingSize)));
 	}
 
 }

@@ -25,14 +25,10 @@ public abstract class StatisticPanel extends JPanel implements Refreshable {
 	
 	private static final long serialVersionUID = 390299207939738920L;
 	
-	protected static final int GRAPH_DEFAULT_WIDTH = 800;
-	
-	protected static final int GRAPH_DEFAULT_HEIGHT = 300;
-	
 	protected static final Border CHART_BORDER = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 	
 	public StatisticPanel() {
-		setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout());
 	}
 
 	public abstract String getStatisticName();

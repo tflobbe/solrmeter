@@ -15,31 +15,36 @@
  */
 package com.linebee.solrmeter.controller;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.view.ConsolePanel;
 import com.linebee.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class UpdateExecutorController {
-
-	private ConsolePanel panel;
+	
+	private Collection<ConsolePanel> observers;
 	
 	private UpdateExecutor executor;
 	
 	private Timer timer = null;
 
 	@Inject
-	public UpdateExecutorController(@Named("updateConsolePanel")ConsolePanel panel, UpdateExecutor executor) {
-		this.panel = panel;
-		this.executor = executor; 
+	public UpdateExecutorController(UpdateExecutor executor) {
+		this.executor = executor;
+		this.observers = new LinkedList<ConsolePanel>();
+	}
+	
+	public void addObserver(ConsolePanel obs) {
+		this.observers.add(obs);
 	}
 
 	public void onStart() {
@@ -47,18 +52,24 @@ public class UpdateExecutorController {
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				panel.refreshView();
+				for(ConsolePanel obs: observers) {
+					obs.refreshView();
+				}
 			}
 		};
 		timer.schedule(task, new Date(), 1000);
 		executor.start();
-		panel.started();
+		for(ConsolePanel obs: observers) {
+			obs.started();
+		}
 	}
 
 	public void onStop() {
 		timer.cancel();
 		executor.stop();
-		panel.stopped();
+		for(ConsolePanel obs: observers) {
+			obs.stopped();
+		}
 	}
 
 	public void onConcurrentQueriesValueChange(Integer value) {
