@@ -35,7 +35,7 @@ public class AbstractExecutorTestCase extends BaseTestCase {
 		assertEquals(0, mockExcecutor.getDestroyedThreads());
 		mockExcecutor.stop();
 		Thread.sleep(100);//until all threads are stopped
-		assertEquals(10, mockExcecutor.getThreadCount());
+		assertEquals(0, mockExcecutor.getThreadCount());
 		assertEquals(10, mockExcecutor.getDestroyedThreads());
 	}
 	
@@ -56,7 +56,7 @@ public class AbstractExecutorTestCase extends BaseTestCase {
 		assertEquals(11, mockExcecutor.getThreadCount());
 		mockExcecutor.stop();
 		Thread.sleep(100);//until all threads are stopped
-		assertEquals(11, mockExcecutor.getThreadCount());
+		assertEquals(0, mockExcecutor.getThreadCount());
 		assertEquals(11, mockExcecutor.getDestroyedThreads());
 	}
 	
@@ -77,7 +77,7 @@ public class AbstractExecutorTestCase extends BaseTestCase {
 		assertEquals(11, mockExcecutor.getThreadCount());
 		mockExcecutor.stop();
 		Thread.sleep(100);//until all threads are stopped
-		assertEquals(11, mockExcecutor.getThreadCount());
+		assertEquals(0, mockExcecutor.getThreadCount());
 		assertEquals(11, mockExcecutor.getDestroyedThreads());
 	}
 	
@@ -98,7 +98,7 @@ public class AbstractExecutorTestCase extends BaseTestCase {
 		assertEquals(9, mockExcecutor.getThreadCount());
 		mockExcecutor.stop();
 		Thread.sleep(100);//until all threads are stopped
-		assertEquals(9, mockExcecutor.getThreadCount());
+		assertEquals(0, mockExcecutor.getThreadCount());
 		assertEquals(10, mockExcecutor.getDestroyedThreads());
 	}
 	
@@ -119,7 +119,7 @@ public class AbstractExecutorTestCase extends BaseTestCase {
 		assertEquals(1, mockExcecutor.getDestroyedThreads());
 		mockExcecutor.stop();
 		Thread.sleep(100);//until all threads are stopped
-		assertEquals(9, mockExcecutor.getThreadCount());
+		assertEquals(0, mockExcecutor.getThreadCount());
 		assertEquals(10, mockExcecutor.getDestroyedThreads());
 	}
 }
