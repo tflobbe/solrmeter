@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -28,11 +29,20 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class SpinnerPanel extends JPanel {
+import org.apache.log4j.Logger;
+
+public class SpinnerPanel extends JPanel implements TwoColumns, Row {
+	
+	private static final Logger log = Logger.getLogger(SpinnerPanel.class);
 	
 	private static final long serialVersionUID = 8355604724298546390L;
+	
+	private static final int VERTICAL_MARGIN = 3;
+	private static final int HORIZONTAL_MARGIN = 2;
 
 	private JSpinner spinner;
+	
+	private JLabel jLabelTitle;
 	
 	private int initNumber = 1;
 	
@@ -70,17 +80,33 @@ public class SpinnerPanel extends JPanel {
 
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		this.setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		
+		jLabelTitle = new JLabel(title + ":");
+		
 		spinner = new JSpinner(new SpinnerNumberModel(initNumber, minNumber, maxNumber, stepSize));
-		((JSpinner.DefaultEditor)spinner.getEditor()).getTextField().setEditable(false);
-		spinner.setSize(new Dimension(20, 20));
-		spinner.setMaximumSize(new Dimension(40, 20));
 		spinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				notifyChangeListeners(e);
 			}
 		});
-		this.add(new JLabel(title));
+		
+		try {
+			JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor)spinner.getEditor();
+			editor.getTextField().setEditable(false);
+			editor.getTextField().setColumns(5);
+		} catch(ClassCastException ex) {
+			log.warn("Unexpected JSpinner editor class: " + spinner.getEditor().getClass().getName());
+		}
+		
+		// limit the height of the spinner to the minimum
+		spinner.setMaximumSize(new Dimension(spinner.getMaximumSize().width, spinner.getMinimumSize().height));
+		// let the spinner shrink
+		spinner.setMinimumSize(new Dimension(10, spinner.getMinimumSize().height));
+		
+		this.add(jLabelTitle);
+		this.add(Box.createHorizontalStrut(TwoColumns.GAP));
 		this.add(Box.createHorizontalGlue());
 		this.add(spinner);
 	}
@@ -98,5 +124,31 @@ public class SpinnerPanel extends JPanel {
 
 	public Integer getValue() {
 		return (Integer)spinner.getValue();
+	}
+	
+	public void setValue(Integer value) {
+		spinner.setValue(value);
+	}
+	
+	@Override
+	public int getFirstColumnWidth() {
+		return jLabelTitle.getMinimumSize().width;
+	}
+	
+	@Override
+	public void setFirstColumnWidth(int width) {
+		Dimension d = (Dimension)jLabelTitle.getMinimumSize().clone();
+		d.width = width;
+		jLabelTitle.setMinimumSize(d);
+		jLabelTitle.setPreferredSize(d);
+		jLabelTitle.setMaximumSize(d);
+	}
+	
+	@Override
+	public Dimension getMaximumSize() {
+		Dimension d = new Dimension();
+		d.width = super.getMaximumSize().width;
+		d.height = Math.max(jLabelTitle.getMinimumSize().height, spinner.getMinimumSize().height) + 2*VERTICAL_MARGIN;
+		return d;
 	}
 }

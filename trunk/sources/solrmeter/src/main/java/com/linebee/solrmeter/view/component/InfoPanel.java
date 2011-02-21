@@ -17,18 +17,23 @@ package com.linebee.solrmeter.view.component;
 
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 /**
  * JPanel that shows a label and a value.
  * @author tflobbe
  *
  */
-public class InfoPanel extends JPanel {
+public class InfoPanel extends JPanel implements TwoColumns, Row {
 	
 	private static final long serialVersionUID = 1153426315441180772L;
+	
+	private static final int VERTICAL_MARGIN = 3;
+	private static final int HORIZONTAL_MARGIN = 2;
 
 	private String label;
 	
@@ -51,20 +56,45 @@ public class InfoPanel extends JPanel {
 	
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.setSize(new Dimension(50, 20));
+		this.setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		
 		jLabelLabel = new JLabel(label + ":");
-		this.add(jLabelLabel);
-		this.add(Box.createHorizontalGlue());
+		
 		jLabelValue = new JLabel(value);
+		
+		this.add(jLabelLabel);
+		this.add(Box.createHorizontalStrut(TwoColumns.GAP));
+		this.add(Box.createHorizontalGlue());
 		jLabelValue.setToolTipText(value);
 		this.add(jLabelValue);
-		
 	}
 
 	public void setValue(String value) {
 		this.value = value;
 		jLabelValue.setText(value);
 		jLabelValue.setToolTipText(value);
+	}
+	
+	@Override
+	public int getFirstColumnWidth() {
+		return jLabelLabel.getMinimumSize().width;
+	}
+	
+	@Override
+	public void setFirstColumnWidth(int width) {
+		Dimension d = (Dimension)jLabelLabel.getMinimumSize().clone();
+		d.width = width;
+		jLabelLabel.setMinimumSize(d);
+		jLabelLabel.setPreferredSize(d);
+		jLabelLabel.setMaximumSize(d);
+	}
+	
+	@Override
+	public Dimension getMaximumSize() {
+		Dimension d = new Dimension();
+		d.width = super.getMaximumSize().width;		
+		d.height = Math.max(jLabelLabel.getMinimumSize().height, jLabelValue.getMinimumSize().height) + 2*VERTICAL_MARGIN;
+		return d;
 	}
 
 }

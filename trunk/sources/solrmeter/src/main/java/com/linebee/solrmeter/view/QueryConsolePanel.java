@@ -16,7 +16,6 @@
 package com.linebee.solrmeter.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -25,10 +24,7 @@ import java.util.Date;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -43,6 +39,7 @@ import com.linebee.solrmeter.model.statistic.SimpleQueryStatistic;
 import com.linebee.solrmeter.view.component.InfoPanel;
 import com.linebee.solrmeter.view.component.RoundedBorderJPanel;
 import com.linebee.solrmeter.view.component.SolrConnectedButton;
+import com.linebee.solrmeter.view.component.SpinnerPanel;
 import com.linebee.stressTestScope.StressTestScope;
 
 /**
@@ -54,8 +51,7 @@ import com.linebee.stressTestScope.StressTestScope;
 public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePanel {
 
 	private static final long serialVersionUID = 1376883703280500293L;
-	private static final double MAX_CONCURRENT_QUERIES = 999999999;
-	private static final int paddingSize = 1;
+	private static final int MAX_CONCURRENT_QUERIES = Integer.MAX_VALUE;
 	
 	private SimpleQueryStatistic simpleQueryStatistic;
 	private OperationRateStatistic operationRateStatistic;
@@ -72,7 +68,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	private InfoPanel startedAt;
 	private InfoPanel actualQueryRate;
 	
-	private JSpinner concurrentQueries;
+	private SpinnerPanel concurrentQueries;
 	
 	private SolrConnectedButton startButton;
 	
@@ -94,22 +90,25 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	private void initGUI() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		totalQueries = new InfoPanel(I18n.get("queryConsolePanel.totalQueries"), "0");
-		this.addAndPadd(totalQueries);
+		this.add(totalQueries);
 		totalQueryTime = new InfoPanel(I18n.get("queryConsolePanel.totalQueryTime"), "0"); 
-		this.addAndPadd(totalQueryTime);
+		this.add(totalQueryTime);
 		averageQueryTime = new InfoPanel(I18n.get("queryConsolePanel.averageQueryTime"), "0"); 
-		this.addAndPadd(averageQueryTime);
+		this.add(averageQueryTime);
 		totalClientTime = new InfoPanel(I18n.get("queryConsolePanel.totalClientTime"), "0");
-		this.addAndPadd(totalClientTime);
+		this.add(totalClientTime);
 		averageClientTime = new InfoPanel(I18n.get("queryConsolePanel.averageClientTime"), "0"); 
-		this.addAndPadd(averageClientTime);
-		startedAt = new InfoPanel(I18n.get("queryConsolePanel.startedAt"));
-		this.addAndPadd(startedAt);
+		this.add(averageClientTime);
+		startedAt = new InfoPanel(I18n.get("queryConsolePanel.startedAt"), "-");
+		this.add(startedAt);
 		totalErrors = new InfoPanel(I18n.get("queryConsolePanel.totalErrors"), "0");
-		this.addAndPadd(totalErrors);
-		this.addAndPadd(this.getCurrentQueriesSpinner());
+		this.add(totalErrors);
+		this.add(this.getCurrentQueriesSpinner());
 		actualQueryRate = new InfoPanel(I18n.get("queryConsolePanel.actualQueriesPerMinute"), "-");
-		this.addAndPadd(actualQueryRate);
+		this.add(actualQueryRate);
+		
+		this.add(Box.createVerticalGlue());
+		
 		startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
 		startButton.addActionListener(new ActionListener() {
 			@Override
@@ -129,7 +128,8 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		auxiliarPanel.setLayout(new BoxLayout(auxiliarPanel, BoxLayout.X_AXIS));
 		auxiliarPanel.add(startButton);
 		auxiliarPanel.add(stopButton);
-		this.addAndPadd(auxiliarPanel);
+		this.add(auxiliarPanel);
+		
 		stopped();
 	}
 
@@ -137,35 +137,21 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		PingOperation operation = new PingOperation(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL)));
 		return operation;
 	}
-
-	private void addAndPadd(Component component) {
-		this.add(component);
-		this.add(Box.createRigidArea(new Dimension(paddingSize, paddingSize)));
-	}
 	
 	private Component getCurrentQueriesSpinner() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		concurrentQueries = new JSpinner(new SpinnerNumberModel(1, 1, MAX_CONCURRENT_QUERIES, 1));
-		((JSpinner.DefaultEditor)concurrentQueries.getEditor()).getTextField().setEditable(false);
-		concurrentQueries.setSize(new Dimension(20, 20));
-		concurrentQueries.setMaximumSize(new Dimension(40, 20));
+		concurrentQueries = new SpinnerPanel(1, 1, MAX_CONCURRENT_QUERIES, 1, I18n.get("queryConsolePanel.queriesPerMinute"));
 		concurrentQueries.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				controller.onConcurrentQueriesValueChange(((Double)concurrentQueries.getValue()).intValue());
+				controller.onConcurrentQueriesValueChange(concurrentQueries.getValue());
 			}
 		});
-		
-		panel.add(new JLabel(I18n.get("queryConsolePanel.queriesPerMinute")));
-		panel.add(Box.createHorizontalGlue());
-		panel.add(concurrentQueries);
-		concurrentQueries.setValue(new Double(queryExecutor.getQueriesPerMinute()));
-		return panel;
+		concurrentQueries.setValue(queryExecutor.getQueriesPerMinute());
+		return concurrentQueries;
 	}
 
 	public void refreshView() {
-		concurrentQueries.setValue(new Double(queryExecutor.getQueriesPerMinute()));
+		concurrentQueries.setValue(queryExecutor.getQueriesPerMinute());
 		totalQueries.setValue(String.valueOf(simpleQueryStatistic.getTotalQueries()));
 		totalQueryTime.setValue(String.valueOf(simpleQueryStatistic.getTotalQTime()));
 		totalClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime()));

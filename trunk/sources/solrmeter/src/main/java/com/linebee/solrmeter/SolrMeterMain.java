@@ -38,6 +38,7 @@ import com.linebee.solrmeter.model.QueryStatistic;
 import com.linebee.solrmeter.model.SolrMeterConfiguration;
 import com.linebee.solrmeter.model.UpdateExecutor;
 import com.linebee.solrmeter.model.UpdateStatistic;
+import com.linebee.solrmeter.view.CommitConsolePanel;
 import com.linebee.solrmeter.view.ConsoleFrame;
 import com.linebee.solrmeter.view.I18n;
 import com.linebee.solrmeter.view.OptimizeConsolePanel;
@@ -45,6 +46,7 @@ import com.linebee.solrmeter.view.QueryConsolePanel;
 import com.linebee.solrmeter.view.QueryPanel;
 import com.linebee.solrmeter.view.StatisticPanel;
 import com.linebee.solrmeter.view.StatisticsContainer;
+import com.linebee.solrmeter.view.SwingUtils;
 import com.linebee.solrmeter.view.UpdateConsolePanel;
 import com.linebee.stressTestScope.StressTestRegistry;
 import com.linebee.stressTestScope.StressTestScopeModule;
@@ -68,6 +70,7 @@ public class SolrMeterMain {
 		initView(injector);
 		addStatistics(injector);
 		addQueryPanel(injector);
+		showView();
 	}
 	
 	private static void addPlugins(String statisticsPath) {
@@ -126,6 +129,7 @@ public class SolrMeterMain {
 		mainFrame.setQueryPanel(injector.getInstance(QueryConsolePanel.class));
 		mainFrame.setUpdatePanel(injector.getInstance(UpdateConsolePanel.class));
 		mainFrame.setOptimizePanel(injector.getInstance(OptimizeConsolePanel.class));
+		mainFrame.setCommitPanel(injector.getInstance(CommitConsolePanel.class));
 		mainFrame.setJMenuBar(injector.getInstance(JMenuBar.class));
 		mainFrame.onConfigurationChanged();
 		addStatistics(injector);
@@ -139,8 +143,13 @@ public class SolrMeterMain {
 
 	private static void initView(Injector injector) {
 		mainFrame = injector.getInstance(ConsoleFrame.class);
-		mainFrame.setVisible(true);
 		mainFrame.setTitle(I18n.get("mainFrame.title"));
+	}
+	
+	private static void showView() {
+		mainFrame.pack();
+		SwingUtils.centerWindow(mainFrame);
+		mainFrame.setVisible(true);
 	}
 
 	private static void loadLookAndFeel() {

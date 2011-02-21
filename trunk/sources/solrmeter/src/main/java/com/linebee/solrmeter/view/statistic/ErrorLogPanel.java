@@ -91,7 +91,7 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 	
 	private JPanel createJPanelCheckBox() {
 		JPanel panel = new JPanel();
-		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, panel.getMinimumSize().height));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		showAdds = new JCheckBox(I18n.get("statistic.errorLogPanel.showAddErros"));
 		showCommits = new JCheckBox(I18n.get("statistic.errorLogPanel.showCommitErrors"));
