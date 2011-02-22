@@ -5,9 +5,9 @@
 		<description>Histogram of Queries</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.HistogramQueryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.HistogramQueryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -15,9 +15,9 @@
 		<description>Shows Query Times as a pie chart</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.PieChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.PieChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.TimeRangeStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.TimeRangeStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -25,9 +25,9 @@
 		<description>Shows a chart with the past query times</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.QueryTimeHistoryPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.QueryTimeHistoryPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.QueryTimeHistoryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.QueryTimeHistoryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -36,9 +36,9 @@
 		</description>
 		<types>query, update, optimize</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.OperationTimeLineChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.OperationTimeLineChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.OperationTimeHistory
+		<model-class>com.plugtree.solrmeter.model.statistic.OperationTimeHistory
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -47,9 +47,9 @@
 			executed queries</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.FullQueryStatisticPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.FullQueryStatisticPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.FullQueryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.FullQueryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -57,9 +57,9 @@
 		<description>Shows the log of all produced errors</description>
 		<types>query, update, optimize</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.ErrorLogPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.ErrorLogPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.ErrorLogStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.ErrorLogStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -67,37 +67,37 @@
 		<description>Shows the history of each cache</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.CacheHistoryPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.CacheHistoryPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.CacheHistoryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.CacheHistoryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
 		<name>QueryLogStatistic</name>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.solrmeter.model.statistic.QueryLogStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.QueryLogStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
 		<name>CommitHistoryStatistic</name>
 		<types>update</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.solrmeter.model.statistic.CommitHistoryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.CommitHistoryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
 		<name>SimpleOptimizeStatistic</name>
 		<types>optimize</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.SimpleOptimizeStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
 		<name>SimpleQueryStatistic</name>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.solrmeter.model.statistic.SimpleQueryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.SimpleQueryStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
@@ -105,6 +105,6 @@
 		<description>A statistic to </description>
 		<types>query,update</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.solrmeter.model.statistic.OperationRateStatistic</model-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.OperationRateStatistic</model-class>
 	</statistic>
 </statistics>

@@ -5,9 +5,9 @@
 		<description>Descriptor for test 1</description>
 		<types>query, update</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -15,9 +15,9 @@
 		<description>Descriptor for test 1</description>
 		<types>query, update, optimize</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.ErrorLogStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.ErrorLogStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="true">
@@ -25,9 +25,9 @@
 		<description>Descriptor for test 1</description>
 		<types>update</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.CommitHistoryStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.CommitHistoryStatistic
 		</model-class>
 	</statistic>
 	
@@ -36,9 +36,9 @@
 		<description>Descriptor for test 1</description>
 		<types>optimize</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.model.statistic.SimpleOptimizeStatistic
+		<model-class>com.plugtree.solrmeter.model.statistic.SimpleOptimizeStatistic
 		</model-class>
 	</statistic>
 	
