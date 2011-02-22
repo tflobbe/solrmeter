@@ -5,9 +5,9 @@
 		<description>No Has View Attribute</description>
 		<types>query, update</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
 	</statistic>
 	<statistic hasView="false">
@@ -15,7 +15,7 @@
 		<description>No view Class element</description>
 		<types>query, optimize</types>
 		<scope>prototype</scope>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
 	</statistic>
 	
@@ -23,9 +23,9 @@
 		<name>descriptor3</name>
 		<description>No Scope element</description>
 		<types>query, optimize</types>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
 	</statistic>
 	
@@ -33,9 +33,9 @@
 		<name>descriptor4</name>
 		<types>query, optimize</types>
 		<scope>prototype</scope>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
-		<view-class>com.linebee.solrmeter.view.statistic.HistogramChartPanel
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
 	</statistic>
 </statistics>

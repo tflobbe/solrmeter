@@ -4,17 +4,17 @@
 	</description>
 
 	<field-handler name="classHandlerView"
-		class="com.linebee.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
+		class="com.plugtree.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
 		<param name="attribute" value="viewClass" />
 	</field-handler>
 
 	<field-handler name="classHandlerModel"
-		class="com.linebee.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
+		class="com.plugtree.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
 		<param name="attribute" value="modelClass" />
 	</field-handler>
 
 
-	<class name="com.linebee.solrmeter.controller.StatisticDescriptor">
+	<class name="com.plugtree.solrmeter.controller.StatisticDescriptor">
 		<map-to xml="statistic" />
 		<field name="name" type="string" required="true">
 			<bind-xml name="name" node="element" />
@@ -23,11 +23,11 @@
 			<bind-xml name="description" node="element" />
 		</field>
 		<field name="types" type="string" required="true"
-			handler="com.linebee.solrmeter.controller.statisticsParser.castor.TypesCastorFieldHandler">
+			handler="com.plugtree.solrmeter.controller.statisticsParser.castor.TypesCastorFieldHandler">
 			<bind-xml name="types" node="element" />
 		</field>
 		<field name="scope" type="string" 
-			handler="com.linebee.solrmeter.controller.statisticsParser.castor.ScopeCastorFieldHandler">
+			handler="com.plugtree.solrmeter.controller.statisticsParser.castor.ScopeCastorFieldHandler">
 			<bind-xml name="scope" node="element" />
 		</field>
 		
@@ -47,11 +47,11 @@
 
 	</class>
 	
-	<class name="com.linebee.solrmeter.controller.statisticsParser.castor.StatisticList">
+	<class name="com.plugtree.solrmeter.controller.statisticsParser.castor.StatisticList">
 		<map-to xml="statistics" />
 		<field name="descriptors" 
 			collection="arraylist" 
-			type="com.linebee.solrmeter.controller.StatisticDescriptor" >
+			type="com.plugtree.solrmeter.controller.StatisticDescriptor" >
 			<bind-xml name="statistic" node="element" />
 		</field>
 	</class>

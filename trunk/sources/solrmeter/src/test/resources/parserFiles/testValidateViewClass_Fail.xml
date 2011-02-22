@@ -4,9 +4,9 @@
 		<description>Descriptor for test 1</description>
 		<types>query, update</types>
 		<scope>stress_test</scope>
-		<view-class>com.linebee.solrmeter.mock.MockStatistic
+		<view-class>com.plugtree.solrmeter.mock.MockStatistic
 		</view-class>
-		<model-class>com.linebee.solrmeter.mock.MockStatistic
+		<model-class>com.plugtree.solrmeter.mock.MockStatistic
 		</model-class>
 	</statistic>
 </statistics>

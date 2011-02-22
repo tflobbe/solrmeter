@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.linebee</groupId>
+	<groupId>com.plugtree</groupId>
 	<artifactId>solrmeter</artifactId>
 	<version>0.1.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -31,8 +31,8 @@
 		<url>http://code.google.com/p/solrmeter/issues/list</url>
 	</issueManagement>
 	<organization>
-		<name>Linebee LLC</name>
-		<url>www.linebee.com</url>
+		<name>Plugtree LLC</name>
+		<url>www.plugtree.com</url>
 	</organization>
 
 	<url>http://groups.google.com/group/solrmeter</url>
@@ -76,7 +76,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.linebee.solrmeter.SolrMeterMain</mainClass>
+							<mainClass>com.plugtree.solrmeter.SolrMeterMain</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -116,7 +116,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.linebee</groupId>
+			<groupId>com.plugtree</groupId>
 			<artifactId>stressTestScope</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
