@@ -1,5 +1,5 @@
 /**
- * Copyright Linebee LLC
+ * Copyright Plugtree LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.stressTestScope;
+package com.plugtree.stressTestScope;
 
-import com.google.inject.AbstractModule;
 /**
  * 
  * @author tflobbe
  *
  */
-public class TestModule extends AbstractModule {
+public class StressTestRegistry {
+	
+	private static long numberOfTests = 0;
+	
+	private static String stressTestId;
 
-	@Override
-	protected void configure() {
-		bind(TestObject.class);
-		bind(TestObject2.class);
-
+	/**
+	 * Start a test scope
+	 */
+	public static void start() {
+		restart();
 	}
-
+	
+	/**
+	 * Restart a test scope. Everything depending on StressTestScope will be reinstantiated.
+	 */
+	public static void restart(){
+		stressTestId = String.valueOf(numberOfTests);
+		numberOfTests++;
+	}
+	
+	static String getStressTestId() {
+		return stressTestId;
+	}
 }

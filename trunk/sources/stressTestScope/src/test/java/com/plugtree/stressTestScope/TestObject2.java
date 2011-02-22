@@ -1,5 +1,5 @@
 /**
- * Copyright Linebee LLC
+ * Copyright Plugtree LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.linebee.stressTestScope;
+package com.plugtree.stressTestScope;
 
+import com.google.inject.Inject;
+import com.plugtree.stressTestScope.StressTestScope;
 /**
  * 
  * @author tflobbe
  *
  */
-public class StressTestRegistry {
-	
-	private static long numberOfTests = 0;
-	
-	private static String stressTestId;
+@StressTestScope
+public class TestObject2 {
 
-	public static void start() {
-		restart();
+	public static int createdObjects = 0;
+	
+	private TestObject testObject;
+	
+	@Inject
+	public TestObject2(TestObject testObject) {
+		this.testObject = testObject;
+		createdObjects++;
 	}
 	
-	public static void restart(){
-		stressTestId = String.valueOf(numberOfTests);
-		numberOfTests++;
+	public static void restartCounter() {
+		createdObjects = 0;
 	}
-	
-	static String getStressTestId() {
-		return stressTestId;
+
+	public TestObject getTestObject() {
+		return testObject;
 	}
 }
