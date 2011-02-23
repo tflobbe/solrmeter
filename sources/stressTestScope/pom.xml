@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.plugtree</groupId>
 	<artifactId>stressTestScope</artifactId>
 	<name>StressTestScope</name>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<description>Guice Scope to be used on SolrMeter. The objective of this project is to provide a custom scope for SolrMeter.</description>
 	<licenses>
 		<license>
