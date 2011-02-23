@@ -3,7 +3,7 @@
 	<groupId>com.plugtree</groupId>
 	<artifactId>stressTestScope</artifactId>
 	<name>StressTestScope</name>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>Guice Scope to be used on SolrMeter. The objective of this project is to provide a custom scope for SolrMeter.</description>
 	<licenses>
 		<license>
@@ -12,9 +12,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>scm:svn:https://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</connection>
+		<url>http://code.google.com/p/solrmeter/source/browse/</url>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
 	</scm>
 	<mailingLists>
 		<mailingList>
