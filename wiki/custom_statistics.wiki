@@ -4,7 +4,7 @@
 Statistics in SolrMeter (from version 0.2.0) are pluggable. This means you can build your own statistic and see it from the SolrMeter UI.
 To build your statistic, follow this steps:
 ==Build the *model class*==
-This class is going to observe at the operation executors (Query Executor, Update Executor or Optimize Executor). The statistic must implement the interfaces [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/QueryStatistic.java QueryStatistic], [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/UpdateStatistic.java UpdateStatistic] and/or [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/OptimizeStatistic.java OptimizeStatistic]. You have to implement all the necessary interfaces for your purpose. It can be one, tow or the three interfaces.
+This class is going to observe at the operation executors (Query Executor, Update Executor or Optimize Executor). The statistic must implement the interfaces [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/QueryStatistic.java QueryStatistic], [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/UpdateStatistic.java UpdateStatistic] and/or [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/OptimizeStatistic.java OptimizeStatistic]. You have to implement all the necessary interfaces for your purpose. It can be one, two or the three interfaces.
 For Example:
 {{{
 /**
@@ -107,7 +107,7 @@ public class TestPluginStatisticPanel extends StatisticPanel {
 }}}
 
 ==Add the classes to SolrMeter==
-You have tow ways of adding the statistic to SolrMeter. The easiest way is to build the statistic code (the classes explained above) directly on SolrMeter’s project. If you do this, after creating the classes you need modify the file “statistics-config.xml” under “resources” directory adding the code:
+You have two ways of adding the statistic to SolrMeter. The easiest way is to build the statistic code (the classes explained above) directly on SolrMeter’s project. If you do this, after creating the classes you need modify the file “statistics-config.xml” under “resources” directory adding the code:
 
 {{{
 	<statistic hasView="true">
