@@ -3,7 +3,7 @@
 !SolrMeter allows simple and fast configuration to run stress tests to Solr implementations. 
 It measures time of  queries, updates, commits and optimizes and show them on simple charts.
 
-Actual version of !SolrMeter (0.1.0) allows you to:
+Current version of !SolrMeter (0.2.0) allows you to:
   * Execute Queries to a solr server.
   * Execute Update/Inserts to a solr server (not necessary the same as queries).
   * Obtain queries and documents to update from a text file.
@@ -17,9 +17,9 @@ Actual version of !SolrMeter (0.1.0) allows you to:
 See [Overview] for more details and some screenshots.
 
 =What's next and what's new?=
-Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see the issues that are going to be added for the next version (0.2.0) of !SolrMeter.
-There are some of them are already implemented (click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see them) and available [Usage#Compile_from_trunk downloading the project from trunk].
+*New released version 0.2.0. See [http://code.google.com/p/solrmeter/downloads/list Downloads]*
+Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see the new stuff.
 
-Two of the most important new functionalities are:
+Two of the most important new features are:
  * [custom_statistics Build your own custom statistics]
  * [Executors Change executors or build your own custom ones]
