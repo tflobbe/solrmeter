@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.plugtree</groupId>
 	<artifactId>stressTestScope</artifactId>
 	<name>StressTestScope</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>Guice Scope to be used on SolrMeter. The objective of this project is to provide a custom scope for SolrMeter.</description>
 	<licenses>
 		<license>
@@ -13,9 +12,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
+		<url>scm:svn:https://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</url>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/tags/stressTestScope-1.0.0</connection>
 	</scm>
 	<mailingLists>
 		<mailingList>
