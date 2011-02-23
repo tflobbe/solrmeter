@@ -1,1 +1,0 @@
-fieldName1:value1;fieldName2:value2;fieldName3:value3

@@ -1,6 +1,0 @@
-weight
-price
-popularity
-inStock
-content_type
-manu_exact
