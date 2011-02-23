@@ -1,0 +1,31 @@
+Optimized
+for
+High
+Volume
+Web
+Traffic
+Standards
+Based
+Open
+Interfaces
+XML
+and
+HTTP
+Comprehensive
+HTML
+Administration
+Interfaces
+Scalability
+Efficient
+Replication 
+to other
+Solr
+Search Servers
+Flexible and Adaptable
+with XML configuration and
+Schema
+Good unicode support
+Apache Software Foundation
+Apache Foundation
+"Apache Software Foundation"
+id:SOLR1000

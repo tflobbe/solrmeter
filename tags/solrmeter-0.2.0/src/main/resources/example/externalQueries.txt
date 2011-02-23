@@ -1,0 +1,2 @@
+q="Maxtor Corp"+OR+Belkin&rows=5&fq=inStock:true&facet=true&facet.field=price
+q=Apple AND price:[0 TO 100] OR popularity:[0 TO 3]&sort=popularity desc&fq=weight:[10 TO *]&rows=100
