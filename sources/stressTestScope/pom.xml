@@ -4,7 +4,7 @@
 	<groupId>com.plugtree</groupId>
 	<artifactId>stressTestScope</artifactId>
 	<name>StressTestScope</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>Guice Scope to be used on SolrMeter. The objective of this project is to provide a custom scope for SolrMeter.</description>
 	<licenses>
 		<license>
