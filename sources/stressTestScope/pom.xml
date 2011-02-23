@@ -14,8 +14,8 @@
 	</licenses>
 	<scm>
 		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
 	</scm>
 	<mailingLists>
 		<mailingList>
@@ -96,7 +96,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-
+					<tagBase>https://solrmeter.googlecode.com/svn/tags</tagBase>
 				</configuration>
 			</plugin>
 		</plugins>
