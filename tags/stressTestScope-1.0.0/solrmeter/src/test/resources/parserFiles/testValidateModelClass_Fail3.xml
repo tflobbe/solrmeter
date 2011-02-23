@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statistics>
+	<statistic hasView="true">
+		<name>descriptor1</name>
+		<description>Descriptor for test 1</description>
+		<types>optimize</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.CommitHistoryStatistic
+		</model-class>
+	</statistic>
+</statistics>

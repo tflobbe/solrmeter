@@ -1,0 +1,7 @@
+this
+are
+the queries
+that
+are going to be
+added
+to the "q" parameter
