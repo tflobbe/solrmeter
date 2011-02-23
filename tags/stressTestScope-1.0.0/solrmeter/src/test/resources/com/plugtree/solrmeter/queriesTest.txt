@@ -1,5 +1,0 @@
-
-some
-query
-some query
-field:value
