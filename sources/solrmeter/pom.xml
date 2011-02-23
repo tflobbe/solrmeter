@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.plugtree</groupId>
 	<artifactId>solrmeter</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 	<name>SolrMeter</name>
 	<licenses>
@@ -14,8 +14,8 @@
 	</licenses>
 	<scm>
 		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
 	</scm>
 	<mailingLists>
 		<mailingList>
@@ -118,7 +118,7 @@
 		<dependency>
 			<groupId>com.plugtree</groupId>
 			<artifactId>stressTestScope</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
