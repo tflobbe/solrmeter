@@ -106,7 +106,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 		this.filterQueryExtractor = filterQueryExtractor;
 		this.facetFieldExtractor = facetFieldExtractor;
 		this.queryExtractor = queryExtractor;
-		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
+		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 		this.extraParamExtractor = extraParamExtractor;
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
