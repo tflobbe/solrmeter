@@ -99,7 +99,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 		this.facetFieldExtractor = facetFieldExtractor;
 		this.extraParamExtractor= extraParamExtractor;
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
-		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE, "standard");
+		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 		super.prepare();
 	}
