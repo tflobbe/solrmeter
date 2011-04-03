@@ -42,6 +42,18 @@
 			<id>tflobbe</id>
 			<timezone>GMT-3</timezone>
 		</developer>
+		<developer>
+			<name>Juan Grande</name>
+			<email>juan.grande@plugtree.com</email>
+			<id>jgrande</id>
+			<timezone>GMT-3</timezone>
+		</developer>
+		<developer>
+			<name>Emmanuel Espina</name>
+			<email>emmanuel.espina@plugtree.com</email>
+			<id>eespina</id>
+			<timezone>GMT-3</timezone>
+		</developer>
 	</developers>
 	<properties>
 		<encoding>UTF-8</encoding>
