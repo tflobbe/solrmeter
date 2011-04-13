@@ -6,59 +6,12 @@
 	<version>0.2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SolrMeter</name>
-	<licenses>
-		<license>
-			<name>ASF</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-		</license>
-	</licenses>
-	<scm>
-		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
-	</scm>
-	<mailingLists>
-		<mailingList>
-			<name>Google Group</name>
-			<archive>http://groups.google.com/group/solrmeter/topics</archive>
-			<post>solrmeter@googlegroups.com</post>
-			<subscribe>http://groups.google.com/group/solrmeter/subscribe</subscribe>
-			<unsubscribe>http://groups.google.com/group/solrmeter/subscribe</unsubscribe>
-		</mailingList>
-	</mailingLists>
-	<issueManagement>
-		<system>Google Issues</system>
-		<url>http://code.google.com/p/solrmeter/issues/list</url>
-	</issueManagement>
-	<organization>
-		<name>Plugtree LLC</name>
-		<url>www.plugtree.com</url>
-	</organization>
-	<url>http://groups.google.com/group/solrmeter</url>
-	<developers>
-		<developer>
-			<name>Tomás Fernández Löbbe</name>
-			<email>tflobbe@gmail.com</email>
-			<id>tflobbe</id>
-			<timezone>GMT-3</timezone>
-		</developer>
-		<developer>
-			<name>Juan Grande</name>
-			<email>juan.grande@plugtree.com</email>
-			<id>jgrande</id>
-			<timezone>GMT-3</timezone>
-		</developer>
-		<developer>
-			<name>Emmanuel Espina</name>
-			<email>emmanuel.espina@plugtree.com</email>
-			<id>eespina</id>
-			<timezone>GMT-3</timezone>
-		</developer>
-	</developers>
-	<properties>
-		<encoding>UTF-8</encoding>
-	</properties>
-	<reporting></reporting>
+  <description>Standalone java tool for stress testing over Solr. </description>
+  <parent>
+    <groupId>com.plugtree</groupId>
+    <artifactId>solrmeter-parent</artifactId>
+    <version>0.2.1-SNAPSHOT</version>
+  </parent>
 	<build>
 		<plugins>
 			<plugin>
@@ -77,118 +30,12 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
 				<configuration></configuration>
 			</plugin>
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>do-all</id>
-			<activation>
-				<property>
-					<name>do.all</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>2.1.2</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.7</version>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-site-plugin</artifactId>
-						<version>3.0-beta-3</version>
-						<configuration>
-							<outputEncoding>UTF-8</outputEncoding>
-							<reportPlugins>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-changes-plugin</artifactId>
-									<version>2.3</version>
-									<reportSets>
-										<reportSet>
-											<reports>
-												<report>changes-report</report>
-											</reports>
-										</reportSet>
-									</reportSets>
-								</plugin>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-pmd-plugin</artifactId>
-									<version>2.5</version>
-									<configuration>
-										<targetJdk>1.6</targetJdk>
-										<sourceEncoding>UTF-8</sourceEncoding>
-									</configuration>
-								</plugin>
-								<plugin>
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>versions-maven-plugin</artifactId>
-									<version>1.2</version>
-								</plugin>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-project-info-reports-plugin</artifactId>
-									<version>2.3.1</version>
-								</plugin>
-								<plugin>
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>cobertura-maven-plugin</artifactId>
-									<version>2.4</version>
-								</plugin>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-report-plugin</artifactId>
-									<version>2.5</version>
-								</plugin>
-								<plugin>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-javadoc-plugin</artifactId>
-									<version>2.7</version>
-								</plugin>
-							</reportPlugins>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject</groupId>
