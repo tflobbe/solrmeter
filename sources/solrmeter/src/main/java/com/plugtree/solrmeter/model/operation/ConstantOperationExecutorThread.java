@@ -49,7 +49,7 @@ public class ConstantOperationExecutorThread extends Thread {
 	public synchronized void run() {
 		while(running) {
 			try {
-				this.wait(new Long(getTimeToWait()));
+				this.wait(getTimeToWait());
 				if(running) {
 					executeOperation();
 				}
