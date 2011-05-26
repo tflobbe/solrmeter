@@ -8,18 +8,18 @@ The responsibility of _executors_ is to organize the execution of operations aga
 Since version 0.2.0, there are two built in executors for queries and two for updates. Only one for optimize.
 
 === Random Executor ===
-This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/QueryExecutorRandomImpl.java QueryExecutorRandomImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/UpdateExecutorRandomImpl.java UpdateExecutorRandomImpl]). These were the only available executors on version 0.1.x. 
+This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/QueryExecutorRandomImpl.java QueryExecutorRandomImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/UpdateExecutorRandomImpl.java UpdateExecutorRandomImpl]). These were the only available executors on version 0.1.x. 
 For random executors, the user specify the number of operations per minute, and that number of operation is going to be executed, but with no order or constant interval. For example, if the number of operations per minute is 3, then 2 operations could be executed in the first 5 seconds of the minute (even in the same instant) and the other one on the second 58 of that same minute. 
 This executor tries to simulate real use where users don't execute queries on an exact interval.
 To select this executor, write "random" the Executor field in the settings panel (for queries or updates)
 
 === Constant Executor ===
-This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/QueryExecutorConstantImpl.java QueryExecutorConstantImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/UpdateExecutorConstantImpl.java UpdateExecutorConstantImpl]).
+This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/QueryExecutorConstantImpl.java QueryExecutorConstantImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/UpdateExecutorConstantImpl.java UpdateExecutorConstantImpl]).
 For Constant executors, the user specifies the number of operations to be executed in a minute, and an interval between operations is calculated to be equal and to complete the specified number of operation in a minute.
 For example, if the user specifies 60 operations per minute, then, one operation is going to be executed every second. If the user specify 30 operations, then one operation every 2 seconds, and so on.
 To select this executor, write "constant" the Executor field in the settings panel (for queries or updates)
 === On Demand Executor ===
-This is the only executor available for optimize operations, and it's only available for this operation (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/executor/OnDemandOptimizeExecutor.java OnDemandOptimizeExecutor]).
+This is the only executor available for optimize operations, and it's only available for this operation (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/OnDemandOptimizeExecutor.java OnDemandOptimizeExecutor]).
 With On Demand Executor the operation will only be executed when the user specifies so, just once (for example, hitting the "Optimize Now" button from the UI).
 
 == Custom Executors ==
@@ -60,7 +60,7 @@ public class ExampleExecutor extends QueryExecutorConstantImpl {
 }}}
 
 === Create the new Guice Module ===
-Then, create a class that extends com.linebee.solrmeter.ModelModule and override the methods getQueryExecutorsMap(),getUpdateExecutorsMap() or getOptimizeExecutorsMap(). This methods returns a map with all the existing query executors, update executors and optimize executors. Add your new executor to that map, for example:
+Then, create a class that extends com.plugtree.solrmeter.ModelModule and override the methods getQueryExecutorsMap(),getUpdateExecutorsMap() or getOptimizeExecutorsMap(). This methods returns a map with all the existing query executors, update executors and optimize executors. Add your new executor to that map, for example:
 
 {{{
 public class ExtendedModelModule extends ModelModule {
@@ -79,14 +79,14 @@ public class ExtendedModelModule extends ModelModule {
 To do this, generate de jar file, and add it to a “plugins” directory located on the same place as the SolrMeter executable jar file.
 
 === Tell SolrMeter to use your module ===
-To do this, edit the “solrmeter.properties” file inside the executable jar file of  solrmeter and replace the line guice.modelModule=com.linebee.example.ExtendedModelModule with guice.modelModule=yourPackage.YourNewModule.
+To do this, edit the “solrmeter.properties” file inside the executable jar file of  solrmeter and replace the line guice.modelModule=com.plugtree.example.ExtendedModelModule with guice.modelModule=yourPackage.YourNewModule.
 For Example:
 {{{
 ...
 #Guice Modules
-guice.statisticsModule=com.linebee.solrmeter.StatisticsModule
-guice.modelModule=com.linebee.example.ExtendedModelModule
-guice.standalonePresentationModule=com.linebee.solrmeter.StandalonePresentationModule
+guice.statisticsModule=com.plugtree.solrmeter.StatisticsModule
+guice.modelModule=com.plugtree.example.ExtendedModelModule
+guice.standalonePresentationModule=com.plugtree.solrmeter.StandalonePresentationModule
 ...
 }}}
 
