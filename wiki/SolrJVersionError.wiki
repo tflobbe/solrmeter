@@ -33,7 +33,7 @@ If you are using the *SolrMeter version 0.2.0*, you have probably seen that here
 
 If you are using the *SolrMeter trunk* follow this steps:
   # download Solr sources if you haven’t do it yet.
-  # go to the solr folder of your console and run the command ant generate-maven-artifacts
+  # go to the solr folder of your console and run the command ant generate-maven-artifacts and then *mvn install*
   # on the pom.xml file of SolrMeter change the version of SolrJ from:
 
 {{{
