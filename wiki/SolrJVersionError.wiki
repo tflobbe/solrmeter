@@ -29,7 +29,7 @@ http://lucene.472066.n3.nabble.com/SolrJ-new-javabin-format-td1715912.html
 
 = How to fix this problem =
 
-If you are using the *SolrMeter version 0.1.1*, then download [http://code.google.com/p/solrmeter/downloads/detail?name=solrmeter-0.1.1-jar-with-dependencies_3_1_4_0.jar this] other jar.
+If you are using the *SolrMeter version 0.2.0*, you have probably seen that here are two different versions available to download. If you are using 1.4.x or previous, download the one called [http://code.google.com/p/solrmeter/downloads/detail?name=solrmeter-0.2.0-jar-with-dependencies.jar&can=2&q= solrmeter-0.2.0-jar-with-dependencies.jar], if you are using Solr 3.1, Solr from the 3_x branch or Solr from trunk, download the one called [http://code.google.com/p/solrmeter/downloads/detail?name=solrmeter-0.2.0-jar-with-dependencies_3_1_4_0.jar&can=2&q= solrmeter-0.2.0-jar-with-dependencies_3_1_4_0.jar]. 
 
 If you are using the *SolrMeter trunk* follow this steps:
   # download Solr sources if you haven’t do it yet.
