@@ -115,8 +115,8 @@ You have two ways of adding the statistic to SolrMeter. The easiest way is to bu
 		<description>Statistic Added just to test the plugin architecture</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.pluginStatistic.TestPluginStatistic</model-class>
-		<view-class>com.linebee.pluginStatistic.TestPluginStatisticPanel</view-class>
+		<model-class>com.plugtree.pluginStatistic.TestPluginStatistic</model-class>
+		<view-class>com.plugtree.pluginStatistic.TestPluginStatisticPanel</view-class>
 	</statistic>
 }}}
 
@@ -130,8 +130,8 @@ The other way to add the statistic is with the statistic code on a different jar
 		<description>Statistic Added just to test the plugin architecture</description>
 		<types>query</types>
 		<scope>stress_test</scope>
-		<model-class>com.linebee.pluginStatistic.TestPluginStatistic</model-class>
-		<view-class>com.linebee.pluginStatistic.TestPluginStatisticPanel</view-class>
+		<model-class>com.plugtree.pluginStatistic.TestPluginStatistic</model-class>
+		<view-class>com.plugtree.pluginStatistic.TestPluginStatisticPanel</view-class>
 	</statistic>
 </statistics>
 }}}
