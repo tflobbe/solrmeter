@@ -1,5 +1,5 @@
 #labels Featured
-This is a Screenshot overview of !SolrMeter.
+This is a Screenshot overview of !SolrMeter. This needs to be updated, !SolrMeter's UI changed a little bit.
 
 While you run the test, watch the updated data on the charts, like the Pie chart:
 
