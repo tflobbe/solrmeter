@@ -3,7 +3,7 @@
 <wiki:toc max_depth="2" />
 
 =Compile and Run=
-First thing you need to do is download SolrMeter, either the compiled jar from the “Downloads” section or the source code from the “Source” section. This wiki page explains how to compile and run the source code.
+First thing you need to do is download SolrMeter, either the compiled jar from the [http://code.google.com/p/solrmeter/downloads/list Downloads] section or the source code from the [http://code.google.com/p/solrmeter/source/checkout Source] section. This wiki page explains how to compile and run the source code.
 Once you start SolrMeter you'll see the initial screen, probably with the “Start” buttons and the “Optimize Now” button in red. This means that SolrMeter can't find a valid Solr instance on the specified URL (default URL for Solr is http://localhost:8983/solr, which is Solr default, so if you see this buttons in red then you are good to go). 
 <a href="http://solrmeter.googlecode.com/svn/wiki/imgs/redButtonsScreen.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/redButtonsScreen.png" height="250" width="450"/></a>
 =Execute Queries to a Solr instance=
