@@ -1,0 +1,54 @@
+#summary How to use SolrMeter
+
+<wiki:toc max_depth="1" />
+
+=Compile and Run=
+First thing you need to do is download SolrMeter, either the compiled jar from the “Downloads” section or the source code from the “Source” section. This wiki page explains how to compile and run the source code.
+Once you start SolrMeter you'll see the initial screen, probably with the “Start” buttons and the “Optimize Now” button in red. This means that SolrMeter can't find a valid Solr instance on the specified URL (default URL for Solr is http://localhost:8983/solr, which is Solr default, so if you see this buttons in red then you are good to go). 
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/redButtonsScreen.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/redButtonsScreen.png" height="250" width="450"/></a>
+=Execute Queries to a Solr instance=
+It's easy to tell SolrMeter to execute queries to your Solr instance. First thing you have to do is to create a text file on your PC with possible queries. Each line of this text file will be included as the “q” parameter of the request to Solr, so it will depend on how you need to test Solr. For example, if your application will use LuceneQueryParser, then a queries file could be something like:
+{{{
+text:(ipod OR ipad) AND cat:technology
+text:(lucene) AND cat:books AND title:(action)
+text:display AND cat:technology
+….
+}}}
+on the other hand, if you are using a DismaxQueryParser in Solr, probably your text file will look like:
+{{{
+ipod ipad
+lucene in action
+display
+technology
+…
+}}}
+It's important to note that these are the queries that will be executed to Solr. [http://code.google.com/p/solrmeter/wiki/queries Here] you can see another example of a queries file. When you are doing a real test, these should be the queries you'll be expecting from your real application (you could extract queries from the logs to create this file). It's also important to have as many different queries as possible, you don't want Solr to keep all the queries on cache because this wouldn't be a good test.
+Once you created the queries file with a good number of different queries, you have to tell SolrMeter to use it. Go to the menu “Edit->Settings” and modify the “Queries File Path” property under the “Query Settings” tab. Browse to your file and select it.
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png" height="250" width="450"/></a>
+If you don't have Solr on http://localhost:8983/solr and your “Start” button was red, change the “URL Solr” property under the same tab, set the value to your URL.
+Press OK (I'll come back to explain what the other properties mean later)
+you should now see the “Start” button in black.<br>
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/startBlack.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/startBlack.png"/></a><br>
+Select the number of queries you want SolrMeter to execute every minute on the “Intended queries per minute” property of the query panel (on the main window). 
+Finally, press the “Start” Button.
+You'll start seeing the numbers of the Query Console and the statistics changing. I'll explain the query console numbers and later the statistics.
+==What does the Query Console numbers mean?==
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/queryConsole.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/queryConsole.png"/></a><br>
+*Total Queries:* The total number of queries executed on this test.<br>
+*Total Query Time:* The sum of the Query time of all the executed queries in ms. This time is taken from Solr's response (QTime)<br>
+*Average Query Time:* The average of ms the queries take.<br>
+*Total Client Time:* The sum of the Query time of all the executed queries in ms, but measured from SolrMeter instead of Solr's QTime.<br>
+*Average Client Time*: The average of ms the queries take, considering the client time instead of Solr's QTime.<br>
+*Test Started At:* Indicates the moment when the test started.<br>
+*Total Errors:* The total number of queries that resulted in some kind of error in Solr.<br>
+*Intended Queries per minute:* The number of queries you want SolrMeter to execute.<br>
+*Actual Queries per minute:* The number of queries SolrMeter is actually executing.<br>
+===Why is there a difference between “Intended” QPM and “Actual” QPM?===
+==What are all the other parameters of the “Query Settings” and what are they for?==
+==How to add Facets to my queries?==
+==How to add Filter Queries?==
+==How to add Extra parameters, like highlighting or spellchecking?==
+=What does the statistics mean?=
+=How to execute Updates?=
+=What does the Commit parameters mean?=
+=How can I save / load the settings for my test? How can I change the default?=
