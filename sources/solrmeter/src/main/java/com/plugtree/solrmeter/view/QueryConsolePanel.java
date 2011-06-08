@@ -18,6 +18,7 @@ package com.plugtree.solrmeter.view;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -157,8 +158,8 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		totalClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime()));
 		totalErrors.setValue(String.valueOf(simpleQueryStatistic.getTotalErrors()));
 		if(simpleQueryStatistic.getTotalQueries() != 0) {
-			averageQueryTime.setValue(String.valueOf(simpleQueryStatistic.getTotalQTime() / simpleQueryStatistic.getTotalQueries()));
-			averageClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime() / simpleQueryStatistic.getTotalQueries()));
+			averageQueryTime.setValue(BigDecimal.valueOf(simpleQueryStatistic.getTotalQTime()).divide(BigDecimal.valueOf(simpleQueryStatistic.getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).toString());
+			averageClientTime.setValue(BigDecimal.valueOf(simpleQueryStatistic.getTotalClientTime()).divide(BigDecimal.valueOf(simpleQueryStatistic.getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).toString());
 		}
 		actualQueryRate.setValue(String.valueOf(operationRateStatistic.getQueryRate()));
 	}
