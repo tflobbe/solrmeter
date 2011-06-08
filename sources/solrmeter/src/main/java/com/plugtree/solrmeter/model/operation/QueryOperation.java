@@ -88,7 +88,7 @@ public class QueryOperation implements Operation {
 		
 		if(isExternalQueryMode()){
 			String randomQuery = queryExtractor.getRandomQuery();
-			query = new SolrQueryGenerator().fromString(randomQuery);
+			query = SolrQueryGenerator.fromString(randomQuery);
 		}else{
 			query = new SolrQuery();
 			query.setQuery(queryExtractor.getRandomQuery());
