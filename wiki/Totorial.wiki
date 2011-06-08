@@ -48,6 +48,7 @@ You'll start seeing the numbers of the Query Console and the statistics changing
 ==How to add Facets to my queries?==
 ==How to add Filter Queries?==
 ==How to add Extra parameters, like highlighting or spellchecking?==
+==How can I run the exact same queries that were executed to my production Solr Instance?==
 =What does the statistics mean?=
 =How to execute Updates?=
 =What does the Commit parameters mean?=
