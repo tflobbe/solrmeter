@@ -1,6 +1,6 @@
 #summary How to use SolrMeter
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 
 =Compile and Run=
 First thing you need to do is download SolrMeter, either the compiled jar from the “Downloads” section or the source code from the “Source” section. This wiki page explains how to compile and run the source code.
@@ -24,7 +24,7 @@ technology
 }}}
 It's important to note that these are the queries that will be executed to Solr. [http://code.google.com/p/solrmeter/wiki/queries Here] you can see another example of a queries file. When you are doing a real test, these should be the queries you'll be expecting from your real application (you could extract queries from the logs to create this file). It's also important to have as many different queries as possible, you don't want Solr to keep all the queries on cache because this wouldn't be a good test.
 Once you created the queries file with a good number of different queries, you have to tell SolrMeter to use it. Go to the menu “Edit->Settings” and modify the “Queries File Path” property under the “Query Settings” tab. Browse to your file and select it.
-<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png" height="250" width="450"/></a>
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png" height="250" width="450"/></a><br>
 If you don't have Solr on http://localhost:8983/solr and your “Start” button was red, change the “URL Solr” property under the same tab, set the value to your URL.
 Press OK (I'll come back to explain what the other properties mean later)
 you should now see the “Start” button in black.<br>
