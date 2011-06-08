@@ -10,7 +10,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 
 public class SolrQueryGenerator {
 
-	public List<String> getParamsFrom(String queryString) throws UnsupportedEncodingException{
+	public static List<String> getParamsFrom(String queryString) throws UnsupportedEncodingException{
 		List<String> values = new ArrayList<String>();
 		for (String element : split(queryString, "&")) {
 			if( ! element.isEmpty() && element.contains("=")){
@@ -20,18 +20,18 @@ public class SolrQueryGenerator {
 		return values;
 	}
 
-	public List<String> getKeyValuePair(String queryString) throws UnsupportedEncodingException{
+	public static List<String> getKeyValuePair(String queryString) throws UnsupportedEncodingException{
 		return split(queryString, "=");
 	}
 	
-	public List<String> split(String queryString, String separator) throws UnsupportedEncodingException {
+	public static List<String> split(String queryString, String separator) throws UnsupportedEncodingException {
 		queryString = URLDecoder.decode(queryString, "UTF-8");
 		String[] strings = queryString.split(separator);
 		List<String> params = Arrays.asList(strings);
 		return params;
 	}
 
-	public SolrQuery fromString(String queryString) {
+	public static SolrQuery fromString(String queryString) {
 		SolrQuery query =new SolrQuery();
 		try {
 			List<String> paramsFrom = getParamsFrom(queryString);
