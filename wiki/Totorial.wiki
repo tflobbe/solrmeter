@@ -45,6 +45,33 @@ You'll start seeing the numbers of the Query Console and the statistics changing
 *Actual Queries per minute:* The number of queries SolrMeter is actually executing.<br>
 ===Why is there a difference between “Intended” QPM and “Actual” QPM?===
 ==What are all the other parameters of the “Query Settings” and what are they for?==
+*Query Mode (standard / external)*: This setting specify at a high level how you are going to execute your test. With the “external” mode, you have to basically give SolrMeter the exact parameters of the whole search request, including the query itself, filter queries, facets, facet mode, etc. If you select this mode, then you only have to add a text file like:
+{{{
+q=Apple AND price:[0 TO 100] OR popularity:[0 TO 3]&sort=popularity desc&fq=weight:[10 TO *]&rows=100
+}}}
+This is an excellent choice if you have a real sample of queries as they are going to be executed on your search application.
+The “standard” query mode, lets you execute more “random” requests, you’ll have to specify the queries, the fields for faceting, the filter queries separated, and then SolrMeter will mix it all to generate the search requests. This option is better for start, when you don’t have real logs.<br>
+*Solr URL:* The url where the “Query Solr” (in case you have master and slave) is located. It has to include the core if you are using multicore.
+<br>*Use Facets (true / false)*: Tell SolrMeter if you want to set the attribute “facet=true” and add facet fields.
+<br>*Fields File:* The location of the file that contains the fields on which you want to facet on. You don’t need to specify this file if you are not going to facet. see the example file.
+<br>*Use Filter Queries (true / false):* Tell SolrMeter if you want to add filter queries to the search request.
+*Filter Query File Path:* Path to a text file with filter queries on it.see the example file.
+<br>*Queries File Path:* Path to a text file with queries on it. See the example file.
+<br>*Query Type:* Solr’s query type to use. This is the [http://wiki.apache.org/solr/CoreQueryParameters#qt qt] parameter of a regular request.
+<br>*Extra Parameter:* Here you can add static extra parameter to be used  on the query. For example: "hl=true,hl.fl=text,hl.fragsize=150"
+These parameters are going to be added in every search request. Parameters have to be separated by commas.
+<br>*Query Executor:* The query executor to use. See this page for more details on Query Executors.
+<br>*Add Random Extra Parameter (true / false):* Tell SolrMeter if you want to add (random) extra parameters from an external text file. This is useful when you want to test for example using spatial search. You could have a text file with different locations and distances like:
+{{{
+&fq={!bbox}&sfield=store&pt=32.15,-93.85&d=5
+&fq={!bbox}&sfield=store&pt=17.43,-18.26&d=5
+&fq={!bbox}&sfield=store&pt=43.15,-92.53&d=5
+&fq={!bbox}&sfield=store&pt=12.45,-23.56&d=5
+&fq={!bbox}&sfield=store&pt=29.39,-73.65&d=5
+}}}
+All those lines are going to be randomly added to the search request. Parameters must be separated by “&”.
+<br>*Extra Params file path:* Path to a text file with the extra parameters to be added to the search request.
+
 ==How to add Facets to my queries?==
 ==How to add Filter Queries?==
 ==How to add Extra parameters, like highlighting or spellchecking?==
