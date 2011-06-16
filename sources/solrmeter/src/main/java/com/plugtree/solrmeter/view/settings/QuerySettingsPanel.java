@@ -28,6 +28,7 @@ import com.plugtree.solrmeter.view.component.ComboPropertyPanel;
 import com.plugtree.solrmeter.view.component.FilePropertyPanel;
 import com.plugtree.solrmeter.view.component.PropertyPanel;
 import com.plugtree.solrmeter.view.component.QueryModeComboBoxPropertyPanel;
+import com.plugtree.solrmeter.view.component.TablePropertyPanel;
 import com.plugtree.solrmeter.view.component.TextPropertyPanel;
 import com.plugtree.solrmeter.view.exception.InvalidPropertyException;
 import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
@@ -56,7 +57,8 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 		final PropertyPanel filterQueryFilePath = new FilePropertyPanel(I18n.get("settings.query.filterQueryFile"), "solr.query.filterQueriesFile", editable, this);
 		final PropertyPanel queryFilePath = new FilePropertyPanel(I18n.get("settings.query.queryFile"), "solr.queriesFiles", editable, this);
 		final PropertyPanel queryType = new TextPropertyPanel(I18n.get("settings.query.queryType"), "solr.search.queryType", editable, this);
-		final PropertyPanel useExtraParameters = new TextPropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
+	//	final PropertyPanel useExtraParameters = new TextPropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
+		final PropertyPanel useExtraParameters = new TablePropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
 		final PropertyPanel queryExecutor = new ComboPropertyPanel(I18n.get("settings.query.queryExecutor"), "executor.queryExecutor", editable, this, new String[]{"random", "constant"}, true);
 		final PropertyPanel addExternalRandomParameters = new BooleanPropertyPanel(I18n.get("settings.query.addRandomExtraParams"), "solr.query.addRandomExtraParams", editable, this);
 		final PropertyPanel extraParameters = new FilePropertyPanel(I18n.get("settings.query.extraParams"), "solr.query.extraParams", editable, this);

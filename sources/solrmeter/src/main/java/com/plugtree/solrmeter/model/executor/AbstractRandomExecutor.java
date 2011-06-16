@@ -32,7 +32,7 @@ import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
  * @author tflobbe
  *
  */
-public abstract class AbstractRandomExecutor {
+public abstract class AbstractRandomExecutor extends AbstractExecutor{
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 	

@@ -211,5 +211,4 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 	protected String getOperationsPerMinuteConfigurationKey() {
 		return "solr.load.updatesperminute";
 	}
-
 }
