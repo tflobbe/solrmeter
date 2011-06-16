@@ -19,10 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -31,8 +27,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -43,14 +37,14 @@ import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
-import com.plugtree.solrmeter.SolrMeterMain;
+import com.plugtree.solrmeter.controller.FullQueryStatisticController;
 import com.plugtree.solrmeter.model.statistic.FullQueryStatistic;
 import com.plugtree.solrmeter.model.statistic.QueryLogStatistic;
 import com.plugtree.solrmeter.model.statistic.QueryLogStatistic.QueryLogValue;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.StatisticPanel;
 import com.plugtree.solrmeter.view.component.InfoPanel;
+import com.plugtree.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class FullQueryStatisticPanel extends StatisticPanel {
@@ -61,8 +55,8 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 
 	private static final int doubleScale = 2;
 	
-	private FullQueryStatistic fullQueryStatictic;
-	private QueryLogStatistic queryLogStatictic;
+	private FullQueryStatistic fullQueryStatistic;
+	private QueryLogStatistic queryLogStatistic;
 	
 	private InfoPanel medianInfoPanel;
 	private InfoPanel modeInfoPanel;
@@ -76,12 +70,14 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 //	private JButton clearButton;
 	private JToggleButton scrollLockButton;
 	private JButton exportButton;
+	private FullQueryStatisticController controller;
 		
 	@Inject
-	public FullQueryStatisticPanel(FullQueryStatistic statictic, QueryLogStatistic queryLogStatictic) {
+	public FullQueryStatisticPanel(FullQueryStatistic statictic, QueryLogStatistic queryLogStatictic, FullQueryStatisticController controller) {
 		super();
-		this.fullQueryStatictic = statictic;
-		this.queryLogStatictic = queryLogStatictic;
+		this.fullQueryStatistic = statictic;
+		this.queryLogStatistic = queryLogStatictic;
+		this.controller = controller;
 		this.initGUI();
 	}
 
@@ -145,36 +141,9 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 		exportButton = new JButton(I18n.get("statistic.fullQueryStatistic.exportButton"));
 		
 		exportButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				JFileChooser fc = new JFileChooser();
-				int returnVal = fc.showSaveDialog(SolrMeterMain.mainFrame);
-				
-		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fc.getSelectedFile();
-
-					PrintWriter fileWritter;
-					try {
-						fileWritter = new PrintWriter(
-								new FileOutputStream(file));
-
-						for (QueryLogValue query : queryLogStatictic
-								.getLastQueries()) {
-							fileWritter.println(query.getCSV());
-						}
-						fileWritter.close();
-					} catch (FileNotFoundException e1) {
-						JOptionPane
-								.showMessageDialog(
-										SolrMeterMain.mainFrame,
-										I18n.get("statistic.fullQueryStatistic.exportExceptionMessage"),
-										I18n.get("statistic.fullQueryStatistic.exportExceptionTitle"),
-										JOptionPane.ERROR_MESSAGE);
-					}
-
-		        }				
+				controller.onExportButtonClick();
 			}
 		});
 		
@@ -185,7 +154,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	}
 
 	private TableModel createTableModel() {
-		return new QueryLogTableModel(queryLogStatictic.getLastQueries());
+		return new QueryLogTableModel(queryLogStatistic.getLastQueries());
 	}
 
 	@Override
@@ -196,20 +165,20 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 	@Override
 	public void refreshView() {
 		Logger.getLogger(this.getClass()).debug("refreshing Full Query Statistics");
-		medianInfoPanel.setValue(getString(fullQueryStatictic.getMedian()));
-		modeInfoPanel.setValue(fullQueryStatictic.getMode().toString());
-		varianceInfoPanel.setValue(getString(fullQueryStatictic.getVariance()));
-		standardDeviationInfoPanel.setValue(getString(fullQueryStatictic.getStandardDeviation()));
-		totalAverageInfoPanel.setValue(fullQueryStatictic.getTotaAverage().toString());
-		lastMinuteAverageInfoPanel.setValue(fullQueryStatictic.getLastMinuteAverage().toString());
-		lastTenMinutesAverageInfoPanel.setValue(fullQueryStatictic.getLastTenMinutesAverage().toString());
-		if(fullQueryStatictic.getLastErrorTime() != null) {
-			lastErrorInfoPanel.setValue(SimpleDateFormat.getInstance().format(fullQueryStatictic.getLastErrorTime()));
+		medianInfoPanel.setValue(getString(fullQueryStatistic.getMedian()));
+		modeInfoPanel.setValue(fullQueryStatistic.getMode().toString());
+		varianceInfoPanel.setValue(getString(fullQueryStatistic.getVariance()));
+		standardDeviationInfoPanel.setValue(getString(fullQueryStatistic.getStandardDeviation()));
+		totalAverageInfoPanel.setValue(fullQueryStatistic.getTotaAverage().toString());
+		lastMinuteAverageInfoPanel.setValue(fullQueryStatistic.getLastMinuteAverage().toString());
+		lastTenMinutesAverageInfoPanel.setValue(fullQueryStatistic.getLastTenMinutesAverage().toString());
+		if(fullQueryStatistic.getLastErrorTime() != null) {
+			lastErrorInfoPanel.setValue(SimpleDateFormat.getInstance().format(fullQueryStatistic.getLastErrorTime()));
 		} else {
 			lastErrorInfoPanel.setValue("-");
 		}
 		if(!scrollLockButton.isSelected()) {
-			((QueryLogTableModel)logTable.getModel()).refreshData(queryLogStatictic.getLastQueries());
+			((QueryLogTableModel)logTable.getModel()).refreshData(queryLogStatistic.getLastQueries());
 		}
 	}
 	
