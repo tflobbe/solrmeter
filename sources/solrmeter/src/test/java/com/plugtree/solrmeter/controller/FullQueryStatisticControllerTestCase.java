@@ -4,11 +4,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import au.com.bytecode.opencsv.CSVReader;
 
 import com.plugtree.solrmeter.BaseTestCase;
 import com.plugtree.solrmeter.model.statistic.QueryLogStatistic;
@@ -21,9 +22,6 @@ public class FullQueryStatisticControllerTestCase extends BaseTestCase {
 	
 	private static final String TMP_FILE_SUFFIX = 
 		".tmp";
-	
-	private static final String LINE_TEMPLATE =
-		"\"%b\",\"%s\",\"%s\",\"%s\",\"%d\",\"%d\"";
 	
 	private File temp;
 	
@@ -52,10 +50,9 @@ public class FullQueryStatisticControllerTestCase extends BaseTestCase {
 		FullQueryStatisticController controller = new FullQueryStatisticController(stat);
 		controller.writeCSV(temp);
 		
-		String csv = FileUtils.readFileToString(temp);
-		csv = StringUtils.chop(csv);
-		
-		assertEquals(getLineFor(value), csv);
+		CSVReader reader = new CSVReader(new FileReader(temp));
+		assertEquals(getStringsArrayFor(value), reader.readNext());
+		assertNull(reader.readNext());
 	}
 	
 	public void testExportManyQueries() throws IOException {
@@ -79,31 +76,32 @@ public class FullQueryStatisticControllerTestCase extends BaseTestCase {
 		FullQueryStatisticController controller = new FullQueryStatisticController(stat);
 		controller.writeCSV(temp);
 		
-		String csv = FileUtils.readFileToString(temp);
-		String[] records = csv.split("\r|\n");
+		CSVReader reader = new CSVReader(new FileReader(temp));
+		List<String[]> records = reader.readAll();
+		
+		assertEquals(10, records.size());
 		
 		int i=0;
-		for(String record: records) {
-			assertEquals(getLineFor(values.get(i++)), record);
+		for(String[] record: records) {
+			assertEquals(getStringsArrayFor(values.get(i++)), record);
 		}
 	}
 	
 	public void testExportWithQuotes() throws IOException {
 		QueryLogStatistic stat = mock(QueryLogStatistic.class);
 		LinkedList<QueryLogValue> values = new LinkedList<QueryLogValue>();
-		QueryLogValue value = newMockQueryLogValue(false, "queryString", 
-				"facetQueryString", "filterQueryString", 123, 456l);
+		QueryLogValue value = newMockQueryLogValue(false, "text\"with\"quotes", 
+				"text,with,commas", "filterQueryString", 123, 456l);
 		
 		values.add(value);
 		when(stat.getLastQueries()).thenReturn(values);
 		
 		FullQueryStatisticController controller = new FullQueryStatisticController(stat);
 		controller.writeCSV(temp);
-		
-		String csv = FileUtils.readFileToString(temp);
-		csv = StringUtils.chop(csv);
-		
-		assertEquals(getLineFor(value), csv);
+
+		CSVReader reader = new CSVReader(new FileReader(temp));
+		assertEquals(getStringsArrayFor(value), reader.readNext());
+		assertNull(reader.readNext());
 	}
 	
 	private QueryLogValue newMockQueryLogValue(boolean isError, String queryString,
@@ -119,10 +117,15 @@ public class FullQueryStatisticControllerTestCase extends BaseTestCase {
 		return value;
 	}
 	
-	private String getLineFor(QueryLogValue value) {
-		return String.format(LINE_TEMPLATE, value.isError(), value.getQueryString(),
-				value.getFacetQueryString(), value.getFilterQueryString(),
-				value.getQTime(), value.getResults());
+	private String[] getStringsArrayFor(QueryLogValue value) {
+		return new String[] {
+				String.valueOf(value.isError()),
+				value.getQueryString(),
+				value.getFacetQueryString(),
+				value.getFilterQueryString(),
+				value.getQTime().toString(),
+				value.getResults().toString()
+		};
 	}
 
 }
