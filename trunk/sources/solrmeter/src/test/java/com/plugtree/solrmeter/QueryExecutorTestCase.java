@@ -42,5 +42,14 @@ public class QueryExecutorTestCase extends BaseTestCase {
 		assertEquals("value", executor.getExtraParameters().get("param"));
 		assertNotNull(executor.getExtraParameters().get("param2"));
 		assertEquals("value2", executor.getExtraParameters().get("param2"));
+		
+		executor.loadExtraParameters("param=value, param2=value2, \"param3=uno, dos, tres\"");
+		assertFalse(executor.getExtraParameters().isEmpty());
+		assertNotNull(executor.getExtraParameters().get("param"));
+		assertEquals("value", executor.getExtraParameters().get("param"));
+		assertNotNull(executor.getExtraParameters().get("param2"));
+		assertEquals("value2", executor.getExtraParameters().get("param2"));
+		assertNotNull(executor.getExtraParameters().get("param3"));
+		assertEquals("uno, dos, tres", executor.getExtraParameters().get("param3"));
 	}
 }

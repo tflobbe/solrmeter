@@ -53,10 +53,24 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 	
 	private boolean canAdd;
 	
-	public PropertiesTable(PropertyChangeListener l, boolean canAdd){
+	public boolean isSorted() {
+		return this.model.sorted;
+	}
+
+	public void setSorted(boolean sorted) {
+		this.model.sorted = sorted;
+	}
+
+	public PropertiesTable(PropertyChangeListener l, boolean canAdd, Map<String, String> values){
 		super();
 		this.canAdd = canAdd;
-		model = new PropertiesTableModel(this.canAdd);
+		
+		if(values != null){
+			model = new PropertiesTableModel(this.canAdd, values);
+		} else {
+			model = new PropertiesTableModel(this.canAdd);
+		}
+		
 		model.addPropertyChangeListener(l);
 		this.setModel(model);
 	
@@ -104,7 +118,11 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 	}
 	
 	public PropertiesTable(PropertyChangeListener l){
-		this(l, true);
+		this(l, true, null);
+	}
+	
+	public PropertiesTable(PropertyChangeListener l, Map<String, String> values){
+		this(l, true, values);
 	}
 	
 	protected class PropertiesTableModel extends AbstractTableModel implements TableModelListener{
@@ -116,7 +134,32 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 		
 		private boolean canAdd;
 		
+		private boolean sorted = true;
+		
 		private String newText;
+		
+		public PropertiesTableModel(boolean canAdd, Map<String, String> v){
+			this.canAdd = canAdd;
+			
+			newText = I18n.get("propertiesTable.newText");
+			
+			keys = new ArrayList<String>(v.size());
+			
+			for(String key:v.keySet()){
+				keys.add(key);
+			}
+			
+			sortKeys();
+			
+			values= new HashMap<String, String>(keys.size());
+			
+			for(String key: keys){
+				values.put(key, v.get(key));
+			}
+			
+			this.addTableModelListener(this);
+		}
+
 		
 		public PropertiesTableModel(boolean canAdd){
 			this.canAdd = canAdd;
@@ -136,7 +179,9 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 		}
 		
 		private void sortKeys(){
-			Collections.sort(keys);
+			if(this.sorted){
+				Collections.sort(keys);
+			}
 		}
 
 		@Override
@@ -242,18 +287,45 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 
 	@Override
 	public void solrPropertyChanged(String prop, String value) {
-		if(model.values.get(prop)!=null){
-			model.values.put(prop, value);
-			
-			int row=0;
-			for(String property: model.keys){
-				if(property.equals(prop))
-					break;
-					row++;
-			}
-			TableModelEvent e = new TableModelEvent(model, row, row, 1);
-			this.tableChanged(e);
+		this.setProperty(prop, value);
+	}
+	
+	public void removeAll(){
+		model.values.clear();
+		model.keys.clear();
+		this.tableChanged(new TableModelEvent(model));		
+	}
+	
+	public void setProperty(String prop, String value) {
+		if (model.values.get(prop) == null) {
+			model.keys.add(prop);
 		}
+		model.values.put(prop, value);
+
+		int row = 0;
+		for (String property : model.keys) {
+			if (property.equals(prop))
+				break;
+			row++;
+		}
+		TableModelEvent e = new TableModelEvent(model, row, row, 1);
+		this.tableChanged(e);
+	}
+	
+	public Map<String, String> getProperties(){
+		Map<String, String> propMap = new HashMap<String, String>();
+		for(String key: model.keys){
+			propMap.put(key, model.values.get(key));
+		}
+		return propMap;
+	}
+	
+	public List<String> getPropertiesNames(){
+		List<String> l = new ArrayList<String>(model.keys.size());
+		for(String s: model.keys){
+			l.add(s);
+		}
+		return l;
 	}
 	
 	@Override

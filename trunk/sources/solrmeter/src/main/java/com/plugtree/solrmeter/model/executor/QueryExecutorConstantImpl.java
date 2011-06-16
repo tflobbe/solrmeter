@@ -15,10 +15,8 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -45,7 +43,7 @@ import com.plugtree.solrmeter.model.operation.QueryOperation;
  *
  */
 @StressTestScope
-public class QueryExecutorConstantImpl implements QueryExecutor {
+public class QueryExecutorConstantImpl extends AbstractExecutor implements QueryExecutor{
 	
 	/**
 	 * Solr Server for strings
@@ -62,10 +60,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 	 */
 	private String queryType;
 	
-	/**
-	 * Extra parameters specified to the query
-	 */
-	private Map<String, String> extraParameters;
+
 	
 	/**
 	 * The facet fields extractor
@@ -112,29 +107,12 @@ public class QueryExecutorConstantImpl implements QueryExecutor {
 		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 	}
 	
-	protected void loadExtraParameters(String property) {
-		extraParameters = new HashMap<String, String>();
-		if(property == null || "".equals(property.trim())) {
-			return;
-		}
-		for(String param:property.split(",")) {
-			int equalSignIndex = param.indexOf("=");
-			if(equalSignIndex > 0) {
-				extraParameters.put(param.substring(0, equalSignIndex).trim(), param.substring(equalSignIndex + 1).trim());
-			}
-		}
-		
-	}
+
 
 	@Override
 	public void decrementOperationsPerMinute() {
 		operationsPerMinute--;
 		updateThreadWaitTime();
-	}
-
-	@Override
-	public Map<String, String> getExtraParameters() {
-		return extraParameters;
 	}
 
 	@Override

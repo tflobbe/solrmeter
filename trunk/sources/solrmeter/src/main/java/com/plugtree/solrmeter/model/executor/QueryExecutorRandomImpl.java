@@ -15,10 +15,8 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -81,11 +79,6 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	 */
 	private FieldExtractor facetFieldExtractor;
 	
-	/**
-	 * Extra parameters specified to the query
-	 */
-	private Map<String, String> extraParameters;
-	
 	@Inject
 	public QueryExecutorRandomImpl(
 			@Named("queryExtractor") QueryExtractor queryExtractor,
@@ -110,18 +103,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 //		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 	}
 	
-	protected void loadExtraParameters(String property) {
-		extraParameters = new HashMap<String, String>();
-		if(property == null || "".equals(property.trim())) {
-			return;
-		}
-		for(String param:property.split(",")) {
-			int equalSignIndex = param.indexOf("=");
-			if(equalSignIndex > 0) {
-				extraParameters.put(param.substring(0, equalSignIndex).trim(), param.substring(equalSignIndex + 1).trim());
-			}
-		}
-	}
+	
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
@@ -178,11 +160,6 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	@Override
 	public int getQueriesPerMinute() {
 		return operationsPerMinute;
-	}
-
-	@Override
-	public Map<String, String> getExtraParameters() {
-		return extraParameters;
 	}
 
 }
