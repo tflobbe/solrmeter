@@ -78,6 +78,7 @@ Solr’s query type to use. This is the [http://wiki.apache.org/solr/CoreQueryPa
 ===Extra Parameter:===
 Here you can add static extra parameter to be used  on the query. For example: "hl=true,hl.fl=text,hl.fragsize=150"
 These parameters are going to be added in every search request. Parameters have to be separated by commas.
+NOTE: This has changed on trunk, now this has a better and more user-friendly interface.
 ===Query Executor:===
 The query executor to use. See [http://code.google.com/p/solrmeter/wiki/Executors this] page for more details on Query Executors.
 ===Add Random Extra Parameter (true / false):===
