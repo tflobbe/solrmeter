@@ -31,36 +31,13 @@ http://lucene.472066.n3.nabble.com/SolrJ-new-javabin-format-td1715912.html
 
 If you are using the *SolrMeter version 0.2.0*, you have probably seen that here are two different versions available to download. If you are using 1.4.x or previous, download the one called [http://code.google.com/p/solrmeter/downloads/detail?name=solrmeter-0.2.0-jar-with-dependencies.jar&can=2&q= solrmeter-0.2.0-jar-with-dependencies.jar], if you are using Solr 3.1, Solr from the 3_x branch or Solr from trunk, download the one called [http://code.google.com/p/solrmeter/downloads/detail?name=solrmeter-0.2.0-jar-with-dependencies_3_1_4_0.jar&can=2&q= solrmeter-0.2.0-jar-with-dependencies_3_1_4_0.jar]. 
 
-If you are using the *SolrMeter trunk* follow this steps:
-  # download Solr sources if you haven’t do it yet.
-  # go to the solr folder of your console and run the command ant generate-maven-artifacts and then *mvn install*
-  # on the pom.xml file of SolrMeter change the version of SolrJ from:
+If you are using the *SolrMeter trunk* make sure you are using the right version of SolrJ dependency:
 
 {{{
 <dependency>
 	<artifactId>solr-solrj</artifactId>
 	<groupId>org.apache.solr</groupId>
-	<version>1.4.0</version>
+	<version>3.1.0</version>
 </dependency>
 }}}
-to
-{{{
-<dependency>
-	<artifactId>solr-solrj</artifactId>
-	<groupId>org.apache.solr</groupId>
-	<version>4.0-SNAPSHOT</version>
-</dependency>
-}}}
-If you are using the trunk of Solr or
-{{{
-<dependency>
-	<artifactId>solr-solrj</artifactId>
-	<groupId>org.apache.solr</groupId>
-	<version>3.1-dev</version>
-</dependency>
-}}}
-If you are using the 3_x branch.
-
-4. generate the executable jar like it says [http://code.google.com/p/solrmeter/wiki/Usage#Compile_from_trunk here]
-
-After the release of SolrJ 4.0 and SolrJ 3.1 we will update SolrMeter code to use it.
+... or higher.
