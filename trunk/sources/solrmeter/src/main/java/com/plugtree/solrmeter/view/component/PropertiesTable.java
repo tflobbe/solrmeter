@@ -18,6 +18,8 @@ package com.plugtree.solrmeter.view.component;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,6 +72,8 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 		} else {
 			model = new PropertiesTableModel(this.canAdd);
 		}
+		
+		this.addKeyListener(new ProperitesTableKeyListener(this));
 		
 		model.addPropertyChangeListener(l);
 		this.setModel(model);
@@ -283,13 +287,64 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 				l.onPropertyChanged(propertyChanged, value);
 			}
 		}
+		
+		protected void deleteRow(int row){
+			if(row >= this.keys.size()){
+				return;
+			}
+			
+			String key = this.keys.get(row);
+			this.values.remove(key);
+			this.keys.remove(row);
+			
+			fireTableRowsDeleted(row, row);			
+			
+		}
+
 	}
 
+	private class ProperitesTableKeyListener implements KeyListener {
+
+		private PropertiesTable parent;
+		
+		public ProperitesTableKeyListener(PropertiesTable parent){
+			this.parent = parent;
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_DELETE){
+				parent.deleteSelected();
+			}			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	
 	@Override
 	public void solrPropertyChanged(String prop, String value) {
 		this.setProperty(prop, value);
 	}
 	
+	protected void deleteSelected() {
+		int row = this.getSelectedRow();
+		if (row >= 0) {
+			this.model.deleteRow(row);		
+		}
+	}
+
 	public void removeAll(){
 		model.values.clear();
 		model.keys.clear();
