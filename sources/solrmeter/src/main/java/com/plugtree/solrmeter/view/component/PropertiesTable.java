@@ -271,7 +271,24 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 	        	}
 	        	
 	        	notifyListeners(propName, propValue);
+	        	return;
 	        }
+	        
+	      //Columna eliminada
+	        if(e.getType() == TableModelEvent.DELETE && e.getColumn() == TableModelEvent.ALL_COLUMNS){
+	        	TableModel model = (TableModel)e.getSource();
+	        	String propName = (String) model.getValueAt(row, 0);
+	        	
+	    		if(row >= this.keys.size()){
+					return;
+				}
+				
+				String key = this.keys.get(row);
+				this.values.remove(key);
+				this.keys.remove(row);
+				
+				notifyListeners(propName, null);
+	        }	        
 		}
 		
 		public void addPropertyChangeListener(PropertyChangeListener l){
@@ -288,18 +305,9 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 			}
 		}
 		
-		protected void deleteRow(int row){
-			if(row >= this.keys.size()){
-				return;
-			}
+/*		protected void deleteRow(int row){
 			
-			String key = this.keys.get(row);
-			this.values.remove(key);
-			this.keys.remove(row);
-			
-			fireTableRowsDeleted(row, row);			
-			
-		}
+		}*/
 
 	}
 
@@ -341,7 +349,8 @@ public class PropertiesTable extends JTable implements SolrPropertyObserver, Ite
 	protected void deleteSelected() {
 		int row = this.getSelectedRow();
 		if (row >= 0) {
-			this.model.deleteRow(row);		
+			this.model.fireTableRowsDeleted(row, row);
+			//this.model.deleteRow(row);		
 		}
 	}
 
