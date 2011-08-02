@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.plugtree.solrmeter.BaseTestCase;
+import com.plugtree.solrmeter.model.FileUtils;
 
 public class FileStringExtractorTestCase extends BaseTestCase {
 	
@@ -27,7 +28,7 @@ public class FileStringExtractorTestCase extends BaseTestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		queriesFile = new File(FileStringExtractorTestCase.class.getClassLoader().getResource("./com/plugtree/solrmeter/queriesTest.txt").getFile());
+		queriesFile = new File(FileUtils.findFileAsString("./com/plugtree/solrmeter/queriesTest.txt"));
 	}
 
 	public void testExtraxt() {

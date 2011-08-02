@@ -22,8 +22,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -146,5 +148,15 @@ public class FileUtils {
 			return findFileAsResource(filePath.substring(2));
 		}
 		throw new FileNotFoundException("File could not be found on standard locations " + filePath);
+	}
+	
+	public static String findFileAsString(String filePath) throws FileNotFoundException {
+		URL fileUrl = findFileAsResource(filePath);
+		try {
+			return URLDecoder.decode(fileUrl.getPath(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error("UTF-8 encoding not supported");
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -32,6 +32,7 @@ public class TimeRangeStatisticTestCase extends BaseTestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
+		SolrMeterConfiguration.loadDefaultConfiguration();
 		range0_500 = new TimeRange(0, 500);
 		range501_1000 = new TimeRange(501, 1000);
 		range1001_2000 = new TimeRange(1001, 2000);

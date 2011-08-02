@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.plugtree.solrmeter.model.FileUtils;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 
 public class SolrMeterConfigurationTestCase extends BaseTestCase {
@@ -34,6 +35,7 @@ public class SolrMeterConfigurationTestCase extends BaseTestCase {
 	}
 
 	public void testBasics() {
+		SolrMeterConfiguration.loadDefaultConfiguration();
 		assertEquals("test", SolrMeterConfiguration.getProperty("test.testProperty"));
 		SolrMeterConfiguration.setProperty("test.testProperty", "test2");
 		assertEquals("test2", SolrMeterConfiguration.getProperty("test.testProperty"));
@@ -46,6 +48,8 @@ public class SolrMeterConfigurationTestCase extends BaseTestCase {
 		if(exportFile.exists()) {
 			exportFile.delete();
 		}
+		
+		SolrMeterConfiguration.loadDefaultConfiguration();
 		assertEquals("test", SolrMeterConfiguration.getProperty("test.testProperty"));
 		SolrMeterConfiguration.setProperty("test.testProperty", "changedPropertyValue");
 		assertFalse(exportFile.exists());
@@ -77,7 +81,7 @@ public class SolrMeterConfigurationTestCase extends BaseTestCase {
 	}
 	
 	public void testImport() throws FileNotFoundException {
-		File importFile = new File(ClassLoader.getSystemClassLoader().getResource("testImport.smc.xml").getFile());
+		File importFile = new File(FileUtils.findFileAsString("testImport.smc.xml"));
 		if(!importFile.exists()) {
 			throw new FileNotFoundException("Can't find file for import test");
 		}

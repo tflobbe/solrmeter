@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -181,6 +183,14 @@ public class SolrMeterConfiguration {
 	}
 	
 	/**
+	 * Forces the loading of the default configuration. Used by tests.
+	 * 
+	 */
+	public static void loadDefaultConfiguration(){
+		loadConfiguration(FILE_CONFIG_NAME);		
+	}
+	
+	/**
 	 * Loads the configuration from the available files. If a file name is specified as a VM parameter, that file will be used, 
 	 * otherwise, the default configuration file will be used. 
 	 * @see SolrMeterConfiguration.getDefaultFile()
@@ -193,7 +203,7 @@ public class SolrMeterConfiguration {
 		}
 		if(isXML(fileName)) {
 			try {
-				importConfiguration(new File(FileUtils.findFileAsResource(fileName).getFile()));
+				importConfiguration(new File(FileUtils.findFileAsString(fileName)));
 			} catch (FileNotFoundException e) {
 				logger.error("File '" + fileName + "' was not found. Will load default configuration.", e);
 				loadConfiguration(getDefaultFile());
