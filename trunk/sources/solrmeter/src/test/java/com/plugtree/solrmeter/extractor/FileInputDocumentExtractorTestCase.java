@@ -15,6 +15,8 @@
  */
 package com.plugtree.solrmeter.extractor;
 
+import java.io.FileNotFoundException;
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,13 +24,15 @@ import java.util.Set;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.plugtree.solrmeter.BaseTestCase;
+import com.plugtree.solrmeter.model.FileUtils;
 
 public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 
-	public void testSingleDoc() {
+	public void testSingleDoc() throws FileNotFoundException {
 		
-		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase1.txt").getPath());
+		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(FileUtils.findFileAsString("FileInputDocumentExtractorTestCase1.txt"));
 		assertEquals(1, extractor.getParsedDocuments().size());
+		
 		for(int i = 0; i < 10; i++) {
 			SolrInputDocument document = extractor.getRandomDocument();
 	//		fieldName1=value1;fieldName2=value2;fieldName3=value3
@@ -38,9 +42,9 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 		}
 	}
 	
-	public void testManyDocs() {
+	public void testManyDocs() throws FileNotFoundException {
 		
-		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase2.txt").getPath());
+		FileInputDocumentExtractorSpy extractor = new FileInputDocumentExtractorSpy(FileUtils.findFileAsString("FileInputDocumentExtractorTestCase2.txt"));
 		assertEquals(21, extractor.getParsedDocuments().size());
 		Set<Integer> set = new HashSet<Integer>();
 		for(int i = 0; i < 100; i++) {
@@ -55,8 +59,8 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 		assertTrue(set.size() > 1 && set.size() <=21);
 	}
 	
-	public void testLoadDocuments() {
-		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase3.txt").getPath());
+	public void testLoadDocuments() throws FileNotFoundException {
+		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(FileUtils.findFileAsString("FileInputDocumentExtractorTestCase3.txt"));
 		List<SolrInputDocument> documents = executor.getParsedDocuments();
 		assertEquals(5, documents.size());
 		SolrInputDocument document = documents.get(0);
@@ -68,8 +72,8 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 		assertEquals("Mon Mar 06 00:00:00 ART 2006", document.getFieldValue("date"));
 	}
 	
-	public void testScapedChars() {
-		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(ClassLoader.getSystemClassLoader().getResource("FileInputDocumentExtractorTestCase4.txt").getPath());
+	public void testScapedChars() throws FileNotFoundException {
+		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(FileUtils.findFileAsString("FileInputDocumentExtractorTestCase4.txt"));
 		List<SolrInputDocument> documents = executor.getParsedDocuments();
 		assertEquals(5, documents.size());
 		SolrInputDocument document = documents.get(0);
