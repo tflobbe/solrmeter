@@ -82,11 +82,6 @@ public abstract class BaseTestCase extends TestCase {
 		NamedList<Object> responseNamedList = new NamedList<Object>();
 		responseNamedList.add("responseHeader", headerNamedList);
 		
-		NamedList<Object> paramsNamedList = new NamedList<Object>();
-		paramsNamedList.add("q", "query");
-		paramsNamedList.add("fq", "field:value");
-		headerNamedList.add("params", paramsNamedList);
-		
 		SolrDocumentList resultsNamedList = new SolrDocumentList();
 		resultsNamedList.add(new SolrDocument());
 		resultsNamedList.add(new SolrDocument());
