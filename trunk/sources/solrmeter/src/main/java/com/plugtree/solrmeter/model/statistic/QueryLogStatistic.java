@@ -100,15 +100,20 @@ public class QueryLogStatistic implements QueryStatistic {
     public QueryLogValue(QueryResponse response) {
       Object parameter;
       error = false;
-      parameter = (String) ((NamedList<Object>)response.getResponseHeader().get("params")).get("q");
-      if (parameter != null) {
-        queryString = parameter.toString();
+
+      NamedList<Object> params = (NamedList<Object>)response.getResponseHeader().get("params");
+      if(params!=null) {
+	      parameter = params.get("q");
+	      if (parameter != null) {
+	        queryString = parameter.toString();
+	      }
+	      parameter = params.get("fq");
+	      if (parameter != null) {
+	        filterQueryString = parameter.toString();
+	      }
       }
+      
       facetQueryString = createFacetQuery(response.getFacetFields());
-      parameter = ((NamedList<Object>)response.getResponseHeader().get("params")).get("fq");
-      if (parameter != null) {
-        filterQueryString = parameter.toString();
-      }
       qTime = response.getQTime();
       results = response.getResults().getNumFound();
     }
