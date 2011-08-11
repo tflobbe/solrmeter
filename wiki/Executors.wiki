@@ -11,13 +11,20 @@ Since version 0.2.0, there are two built in executors for queries and two for up
 This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/QueryExecutorRandomImpl.java QueryExecutorRandomImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/UpdateExecutorRandomImpl.java UpdateExecutorRandomImpl]). These were the only available executors on version 0.1.x. 
 For random executors, the user specify the number of operations per minute, and that number of operation is going to be executed, but with no order or constant interval. For example, if the number of operations per minute is 3, then 2 operations could be executed in the first 5 seconds of the minute (even in the same instant) and the other one on the second 58 of that same minute. 
 This executor tries to simulate real use where users don't execute queries on an exact interval.
-To select this executor, write "random" the Executor field in the settings panel (for queries or updates)
+To select this executor, write "random" the Executor field in the settings panel (for queries or updates)<br/>
+This is an example of how the random executor could behave with 3 QPM:<br/>
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/RandomExecutor.jpg"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/RandomExecutor.jpg"/></a><br/>
+Each horizontal line represents a thread during one minute, and the red rows represent queries or updates.
 
 === Constant Executor ===
 This executor is available for both, queries and updates (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/QueryExecutorConstantImpl.java QueryExecutorConstantImpl] and [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/UpdateExecutorConstantImpl.java UpdateExecutorConstantImpl]).
 For Constant executors, the user specifies the number of operations to be executed in a minute, and an interval between operations is calculated to be equal and to complete the specified number of operation in a minute.
 For example, if the user specifies 60 operations per minute, then, one operation is going to be executed every second. If the user specify 30 operations, then one operation every 2 seconds, and so on.
-To select this executor, write "constant" the Executor field in the settings panel (for queries or updates)
+To select this executor, write "constant" the Executor field in the settings panel (for queries or updates)<br/>
+This is an example of how the constant executor will behave with 3 QPM:<br/>
+<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/ConstantExecutor.jpg"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/ConstantExecutor.jpg"/></a><br/>
+The horizontal line represents a thread during a minute, and the red rows represent queries or updates
+
 === On Demand Executor ===
 This is the only executor available for optimize operations, and it's only available for this operation (See [http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/plugtree/solrmeter/model/executor/OnDemandOptimizeExecutor.java OnDemandOptimizeExecutor]).
 With On Demand Executor the operation will only be executed when the user specifies so, just once (for example, hitting the "Optimize Now" button from the UI).
