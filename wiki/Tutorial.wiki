@@ -51,8 +51,10 @@ The total number of queries that resulted in some kind of error in Solr.<br>
 ===Intended Queries per minute:===
 The number of queries you want SolrMeter to execute.<br>
 ===Actual Queries per minute:===
-The number of queries SolrMeter is actually executing.<br>
+The number of queries SolrMeter is actually executing (considering the last 10 seconds activity).<br>
 ===Why is there a difference between “Intended” QPM and “Actual” QPM?===
+There are two main reasons why the Actual QPM might be different than the “Intended” QPM value. The “Random” Query executor executes queries without a defined frequency (see [http://code.google.com/p/solrmeter/wiki/Executors this] page to understand why). The “Actual” QPM is calculated with the queries executed on the last 10 seconds; this is why this number will variate, sometimes it will be higher than the Intended QPM, and some times lower.
+The other reason why these two numbers can be different (the only reason if you are using the ConstantQueryExecutor) is that SolrMeter simply can't achieve from this machine the number of queries that you intend to. In [http://code.google.com/p/solrmeter/wiki/Benchmarks this] page you'll find some benchmarks on what SolrMeter can or can't do. Of course, if you need more QPM, you could execute two SolrMeter in two different machines, the drawback here is that the statistics are not going to be complete. It might be helpful for some cases thought.
 ==What are all the other parameters of the “Query Settings” and what are they for?==
 ===Query Mode (standard / external):===
 This setting specify at a high level how you are going to execute your test. With the “external” mode, you have to basically give SolrMeter the exact parameters of the whole search request, including the query itself, filter queries, facets, facet mode, etc. If you select this mode, then you only have to add a text file like:
