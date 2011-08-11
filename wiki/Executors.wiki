@@ -13,7 +13,7 @@ For random executors, the user specify the number of operations per minute, and 
 This executor tries to simulate real use where users don't execute queries on an exact interval.
 To select this executor, write "random" the Executor field in the settings panel (for queries or updates)<br/>
 This is an example of how the random executor could behave with 3 QPM:<br/>
-<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/RandomExecutor.jpg"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/RandomExecutor.jpg"/></a><br/>
+<img src="http://solrmeter.googlecode.com/svn/wiki/imgs/RandomExecutor.jpg"/><br/>
 Each horizontal line represents a thread during one minute, and the red rows represent queries or updates.
 
 === Constant Executor ===
@@ -22,7 +22,7 @@ For Constant executors, the user specifies the number of operations to be execut
 For example, if the user specifies 60 operations per minute, then, one operation is going to be executed every second. If the user specify 30 operations, then one operation every 2 seconds, and so on.
 To select this executor, write "constant" the Executor field in the settings panel (for queries or updates)<br/>
 This is an example of how the constant executor will behave with 3 QPM:<br/>
-<a href="http://solrmeter.googlecode.com/svn/wiki/imgs/ConstantExecutor.jpg"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/ConstantExecutor.jpg"/></a><br/>
+<img src="http://solrmeter.googlecode.com/svn/wiki/imgs/ConstantExecutor.jpg"/><br/>
 The horizontal line represents a thread during a minute, and the red rows represent queries or updates
 
 === On Demand Executor ===
