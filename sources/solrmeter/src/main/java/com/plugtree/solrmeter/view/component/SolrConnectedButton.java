@@ -2,6 +2,7 @@ package com.plugtree.solrmeter.view.component;
 
 import java.awt.Color;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,15 @@ public class SolrConnectedButton extends JButton {
 	
 	public SolrConnectedButton(String text, String tooltip, PingOperation operation, long timeInterval) {
 		super(text);
+		init(tooltip, operation, timeInterval);
+	}
+	
+	public SolrConnectedButton(Icon text, String tooltip, PingOperation operation, long timeInterval) {
+		super(text);
+		init(tooltip, operation, timeInterval);
+	}
+	
+	private void init(String tooltip, PingOperation operation, long timeInterval){
 		this.notConnectedToolTip = tooltip;
 		this.timeInterval = timeInterval;
 		this.operation = operation;
@@ -39,6 +49,10 @@ public class SolrConnectedButton extends JButton {
 			pinger = new Pinger();
 			new Thread(pinger).start();
 		}
+	}
+	
+	public SolrConnectedButton(Icon image, String tooltip, PingOperation operation) {
+		this(image, tooltip, operation, Integer.valueOf(SolrMeterConfiguration.getProperty("solrConnectedButton.pingInterval", DEFAULT_PING_INTERVAL)));
 	}
 	
 	public SolrConnectedButton(String text, String tooltip, PingOperation operation) {

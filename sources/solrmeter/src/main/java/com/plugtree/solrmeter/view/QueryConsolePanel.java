@@ -18,20 +18,25 @@ package com.plugtree.solrmeter.view;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.controller.QueryExecutorController;
+import com.plugtree.solrmeter.model.FileUtils;
 import com.plugtree.solrmeter.model.QueryExecutor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.SolrServerRegistry;
@@ -109,8 +114,14 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		this.add(actualQueryRate);
 		
 		this.add(Box.createVerticalGlue());
+			
+		try {
+			startButton = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/play.png")), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
+		} catch (FileNotFoundException e1) {
+			Logger.getLogger(this.getClass()).error("play.png not found, using text button");
+			startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
+		}
 		
-		startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -118,7 +129,13 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 			}
 		});
 		
-		stopButton = new JButton(I18n.get("queryConsolePanel.stop"));
+		try {
+			stopButton = new JButton(new ImageIcon(FileUtils.findFileAsResource("./images/stop.png")));
+		} catch (FileNotFoundException e1) {
+			Logger.getLogger(this.getClass()).error("stop.png not found, using text button");
+			stopButton = new JButton(I18n.get("queryConsolePanel.stop"));
+		}
+		
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
