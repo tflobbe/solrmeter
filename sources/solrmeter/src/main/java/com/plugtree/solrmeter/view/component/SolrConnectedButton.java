@@ -31,13 +31,18 @@ public class SolrConnectedButton extends JButton {
 	
 	private Pinger pinger;
 	
+	private Icon connectedIcon;
+	private Icon notConnectedIcon;
+	
 	public SolrConnectedButton(String text, String tooltip, PingOperation operation, long timeInterval) {
 		super(text);
 		init(tooltip, operation, timeInterval);
 	}
 	
-	public SolrConnectedButton(Icon text, String tooltip, PingOperation operation, long timeInterval) {
-		super(text);
+	public SolrConnectedButton(Icon conected, Icon notConected, String tooltip, PingOperation operation, long timeInterval) {
+		super(conected);
+		this.connectedIcon = conected;
+		this.notConnectedIcon = notConected;
 		init(tooltip, operation, timeInterval);
 	}
 	
@@ -51,8 +56,8 @@ public class SolrConnectedButton extends JButton {
 		}
 	}
 	
-	public SolrConnectedButton(Icon image, String tooltip, PingOperation operation) {
-		this(image, tooltip, operation, Integer.valueOf(SolrMeterConfiguration.getProperty("solrConnectedButton.pingInterval", DEFAULT_PING_INTERVAL)));
+	public SolrConnectedButton(Icon conected, Icon notConected, String tooltip, PingOperation operation) {
+		this(conected, notConected, tooltip, operation, Integer.valueOf(SolrMeterConfiguration.getProperty("solrConnectedButton.pingInterval", DEFAULT_PING_INTERVAL)));
 	}
 	
 	public SolrConnectedButton(String text, String tooltip, PingOperation operation) {
@@ -63,6 +68,9 @@ public class SolrConnectedButton extends JButton {
 		this.setOpaque(false);
 		this.setForeground(Color.black);
 		this.setToolTipText(null);
+		if(this.notConnectedIcon != null && this.connectedIcon != null){
+			this.setIcon(this.connectedIcon);
+		}
 		repaint();
 	}
 	
@@ -70,6 +78,9 @@ public class SolrConnectedButton extends JButton {
 		this.setOpaque(true);
 		this.setForeground(Color.red);
 		this.setToolTipText(notConnectedToolTip);
+		if(this.notConnectedIcon != null && this.connectedIcon != null){
+			this.setIcon(this.notConnectedIcon);
+		}
 		repaint();
 	}
 	
