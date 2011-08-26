@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
   spec="1.5+"
-  codebase="https://plugtree-org.ci.cloudbees.com/job/solrmeter/ws/releases/"
+  codebase="http://plugtree-org.ci.cloudbees.com/job/solrmeter/ws/releases"
   href="http://solrmeter.googlecode.com/svn/JWS/solrmeter.jnlp">
   <information>
     <title>SolrMeter WebStart</title>
