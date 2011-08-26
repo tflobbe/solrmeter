@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
   spec="1.5+"
-  codebase="http://plugtree-org.ci.cloudbees.com/job/solrmeter/ws/releases"
+  codebase="https://plugtree-org.ci.cloudbees.com/job/solrmeter/ws/releases/"
   href="solrmeter.jnlp">
   <information>
     <title>SolrMeter WebStart</title>
-    <vendor>Linebee LLC.</vendor>
+    <vendor>Plugtree LLC.</vendor>
     <homepage href="http://groups.google.com/goroup/solrmeter"/>
     <description>Stress test tool for Apache Solr</description>
     <!-- offline-allowed/ --> 
     <!-- shortcut online="false">
       <desktop/>
-      <menu submenu="Linebee LLC"/>
+      <menu submenu="Plugtree LLC"/>
     </shortcut-->
   </information>
   <security>
@@ -22,5 +22,5 @@
     <j2se version="1.4.2+" java-vm-args="-esa -Xnoclassgc"/>
     <jar href="solrmeter.jar"/>
   </resources>
-  <application-desc main-class="com.linebee.solrmeter.SolrMeterMain"/>
+  <application-desc main-class="com.plugtree.solrmeter.SolrMeterMain"/>
 </jnlp>
