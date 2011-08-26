@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
   spec="1.5+"
-  codebase="http://solrmeter.googlecode.com/svn/JWS"
-  href="solrmeter.jnlp">
+  codebase="https://plugtree-org.ci.cloudbees.com/job/solrmeter/ws/releases/"
+  href="http://solrmeter.googlecode.com/svn/JWS/solrmeter.jnlp">
   <information>
     <title>SolrMeter WebStart</title>
     <vendor>Linebee LLC.</vendor>
@@ -20,7 +20,7 @@
   </security>
   <resources>
     <j2se version="1.4.2+" java-vm-args="-esa -Xnoclassgc"/>
-    <jar href="solrmeter-0.1.2-SNAPSHOT-jws.jar"/>
+    <jar href="solrmeter.jar"/>
   </resources>
   <application-desc main-class="com.linebee.solrmeter.SolrMeterMain"/>
 </jnlp>
