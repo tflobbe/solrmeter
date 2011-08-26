@@ -116,7 +116,7 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		this.add(Box.createVerticalGlue());
 			
 		try {
-			startButton = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/play.png")), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
+			startButton = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/play.png")), new ImageIcon(FileUtils.findFileAsResource("./images/play-nc.png")), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());
 		} catch (FileNotFoundException e1) {
 			Logger.getLogger(this.getClass()).error("play.png not found, using text button");
 			startButton = new SolrConnectedButton(I18n.get("queryConsolePanel.start"), I18n.get("queryConsolePanel.pingFailing"), this.createPingOperation());

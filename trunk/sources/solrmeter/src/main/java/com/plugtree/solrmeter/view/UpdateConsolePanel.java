@@ -104,7 +104,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		this.add(Box.createVerticalGlue());
 		
 		try {
-			jButtonStart = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/play.png")), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
+			jButtonStart = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/play.png")),new ImageIcon(FileUtils.findFileAsResource("./images/play-nc.png")), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
 		} catch (FileNotFoundException e1) {
 			Logger.getLogger(this.getClass()).error("play.png not found, using text button");
 			jButtonStart = new SolrConnectedButton(I18n.get("updateConsolePanel.start"), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
@@ -120,7 +120,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 		});
 		
 		try {
-			jButtonStop = new SolrConnectedButton(new ImageIcon(FileUtils.findFileAsResource("./images/stop.png")), I18n.get("updateConsolePanel.pingFailing"), this.createPingOperation());
+			jButtonStop = new JButton(new ImageIcon(FileUtils.findFileAsResource("./images/stop.png")));
 		} catch (FileNotFoundException e1) {
 			Logger.getLogger(this.getClass()).error("stop.png not found, using text button");
 			jButtonStop = new JButton(I18n.get("updateConsolePanel.stop"));
