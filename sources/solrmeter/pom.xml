@@ -51,7 +51,7 @@
 				<configuration>
 					<verbose>true</verbose>
 					<certs>true</certs>
-					<keystore>/private/solrmeter-keystore</keystore>
+					<keystore>/private/plugtree-org/solrmeter-keystore</keystore>
 					<alias>solrmeterKey</alias>
 					<storepass>123456</storepass>
 					<keypass>123456</keypass>
