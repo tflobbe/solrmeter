@@ -28,6 +28,15 @@
 						</manifest>
 					</archive>
 				</configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
 			</plugin>
 
 			<plugin>
@@ -37,14 +46,9 @@
 				<executions>
 					<execution>
 						<id>sign</id>
+            <phase>package</phase>
 						<goals>
 							<goal>sign</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>verify</id>
-						<goals>
-							<goal>verify</goal>
 						</goals>
 					</execution>
 				</executions>
