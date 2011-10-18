@@ -44,7 +44,7 @@ public class I18n {
 		}
 		Logger.getLogger(this.getClass()).info("Using Locale " + locale);
 		this.locale = locale;
-//		this.resources = ResourceBundle.getBundle("messages", locale); This is not working??
+//		this.resources = ResourceBundle.getBundle("messages", locale); Is this not working??
 //		http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=d7adaa31e312a97d6d0854a3fc241?bug_id=4303146
 		this.resources = this.getResources(locale);
 	}
