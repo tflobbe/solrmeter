@@ -15,12 +15,11 @@
  */
 package com.plugtree.solrmeter.view.component;
 
-import java.awt.Component;
-
-import javax.swing.JTextField;
-
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TextPropertyPanel extends PropertyPanel {
 	
@@ -45,6 +44,7 @@ public class TextPropertyPanel extends PropertyPanel {
 	}
 	
 	protected String getSelectedValue() {
+        
 		return textField.getText();
 	}
 	

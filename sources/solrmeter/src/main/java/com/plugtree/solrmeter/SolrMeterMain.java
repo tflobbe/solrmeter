@@ -15,41 +15,23 @@
  */
 package com.plugtree.solrmeter;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JMenuBar;
-import javax.swing.UIManager;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.plugtree.stressTestScope.StressTestRegistry;
-import com.plugtree.stressTestScope.StressTestScopeModule;
 import com.plugtree.solrmeter.controller.StatisticDescriptor;
 import com.plugtree.solrmeter.controller.StatisticType;
 import com.plugtree.solrmeter.controller.StatisticsRepository;
-import com.plugtree.solrmeter.model.OptimizeExecutor;
-import com.plugtree.solrmeter.model.OptimizeStatistic;
-import com.plugtree.solrmeter.model.QueryExecutor;
-import com.plugtree.solrmeter.model.QueryStatistic;
-import com.plugtree.solrmeter.model.SolrMeterConfiguration;
-import com.plugtree.solrmeter.model.UpdateExecutor;
-import com.plugtree.solrmeter.model.UpdateStatistic;
-import com.plugtree.solrmeter.view.CommitConsolePanel;
-import com.plugtree.solrmeter.view.ConsoleFrame;
-import com.plugtree.solrmeter.view.I18n;
-import com.plugtree.solrmeter.view.OptimizeConsolePanel;
-import com.plugtree.solrmeter.view.QueryConsolePanel;
-import com.plugtree.solrmeter.view.QueryPanel;
-import com.plugtree.solrmeter.view.StatisticPanel;
-import com.plugtree.solrmeter.view.StatisticsContainer;
-import com.plugtree.solrmeter.view.SwingUtils;
-import com.plugtree.solrmeter.view.UpdateConsolePanel;
+import com.plugtree.solrmeter.model.*;
+import com.plugtree.solrmeter.view.*;
+import com.plugtree.stressTestScope.StressTestRegistry;
+import com.plugtree.stressTestScope.StressTestScopeModule;
+import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * 

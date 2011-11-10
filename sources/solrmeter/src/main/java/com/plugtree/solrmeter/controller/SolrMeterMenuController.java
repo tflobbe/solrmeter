@@ -15,28 +15,25 @@
  */
 package com.plugtree.solrmeter.controller;
 
-import java.awt.Dimension;
-import java.awt.Dialog.ModalityType;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.SolrMeterMain;
 import com.plugtree.solrmeter.model.OptimizeExecutor;
 import com.plugtree.solrmeter.model.QueryExecutor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.UpdateExecutor;
+import com.plugtree.solrmeter.view.ExtractFromLogFilePanelContainer;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.SettingsPanelContainer;
 import com.plugtree.solrmeter.view.SwingUtils;
+import com.plugtree.stressTestScope.StressTestScope;
+import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.Dialog.ModalityType;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 @StressTestScope
 public class SolrMeterMenuController {
@@ -182,6 +179,15 @@ public class SolrMeterMenuController {
 			updateExecutor.stop();
 			SolrMeterMain.restartApplication();
 		}
+	}
+
+    public void onExtractMenu() {
+		JDialog dialog = new JDialog(SolrMeterMain.mainFrame, I18n.get("menu.tools.extract"), ModalityType.APPLICATION_MODAL);
+		dialog.setSize(new Dimension(400, 220));
+		dialog.setContentPane(new ExtractFromLogFilePanelContainer(dialog));
+		SwingUtils.centerWindow(dialog);
+		dialog.setVisible(true);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
 }
