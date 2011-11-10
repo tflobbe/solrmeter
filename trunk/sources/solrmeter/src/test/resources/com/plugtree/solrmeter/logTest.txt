@@ -1,0 +1,3 @@
+INFO: [] webapp=/solr path=/select params={fl=*,score&debugQuery=true&indent=true&q=HTTP&wt=javabin&fq=price:[100+TO+200]&version=2} hits=0 status=0 QTime=17
+INFO: [] webapp=/solr path=/select params={fl=*,score&debugQuery=true&indent=true&q=Comprehensive&wt=javabin&fq=price:[200+TO+300]&version=2} hits=0 status=0 QTime=2
+INFO: [] webapp=/solr path=/select params={fl=*,score&debugQuery=true&indent=true&q=Apache+Software+Foundation&wt=javabin&fq=cat:electronics&version=2} hits=0 status=0 QTime=7
