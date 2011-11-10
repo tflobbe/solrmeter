@@ -1,14 +1,13 @@
 package com.plugtree.solrmeter.view.component;
 
-import static com.plugtree.solrmeter.QueryModeParam.EXTERNAL;
-import static com.plugtree.solrmeter.QueryModeParam.STANDARD;
+import com.plugtree.solrmeter.model.SolrMeterConfiguration;
+import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import com.plugtree.solrmeter.model.SolrMeterConfiguration;
-import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
+import static com.plugtree.solrmeter.QueryModeParam.*;
 
 public class QueryModeComboBoxPropertyPanel extends ComboPropertyPanel {
 

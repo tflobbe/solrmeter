@@ -15,31 +15,24 @@
  */
 package com.plugtree.solrmeter.view.component;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.apache.log4j.Logger;
-
 import com.plugtree.solrmeter.SolrMeterMain;
 import com.plugtree.solrmeter.model.FileUtils;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
+import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 public class FilePropertyPanel extends PropertyPanel {
 
 	private static final long serialVersionUID = 6121674014586012807L;
 	
-	private JTextField textField;
+	protected JTextField textField;
 	
 	private JButton button;
 
@@ -87,7 +80,11 @@ public class FilePropertyPanel extends PropertyPanel {
 					try {
 						File file = new File(FileUtils.findFileAsResource(SolrMeterConfiguration.getProperty(property)).toURI());
 						if(file.exists()) {
-							fileChooser = new JFileChooser(file.getParentFile());
+						  if(file.isDirectory()) {
+						    fileChooser = new JFileChooser(file);
+						  } else {
+						    fileChooser = new JFileChooser(file.getParentFile());
+						  }
 						}
 					} catch (Exception e) {
 						
@@ -97,21 +94,11 @@ public class FilePropertyPanel extends PropertyPanel {
 						}
 					}
 				}
-				fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+				fileChooser.setDialogType(FilePropertyPanel.this.getDialogType());
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				int returnValue = fileChooser.showOpenDialog(SolrMeterMain.mainFrame);
-				if(returnValue == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fileChooser.getSelectedFile();
-					if(!selectedFile.exists()) {
-						Logger.getLogger(this.getClass()).error("Can't find file with name " + selectedFile.getName());
-						//TODO show error
-					}else {
-						textField.setText(selectedFile.getAbsolutePath());
-						notifyObservers();
-					}
-				}
-				
+				handleReturnValue(fileChooser.showOpenDialog(SolrMeterMain.mainFrame), fileChooser);
 			}
+
 		});
 		return button;
 	}
@@ -128,5 +115,22 @@ public class FilePropertyPanel extends PropertyPanel {
 	protected void setSelectedValue(String value) {
 		textField.setText(value);		
 	}
+	
+  protected int getDialogType() {
+    return JFileChooser.OPEN_DIALOG;
+  }
+  
+  protected void handleReturnValue(int returnValue, JFileChooser fileChooser) {
+    if(returnValue == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileChooser.getSelectedFile();
+      if(!selectedFile.exists()) {
+        Logger.getLogger(this.getClass()).error("Can't find file with name " + selectedFile.getName());
+        //TODO show error
+      }else {
+        textField.setText(selectedFile.getAbsolutePath());
+        notifyObservers();
+      }
+    }
+  }
 
 }

@@ -15,16 +15,13 @@
  */
 package com.plugtree.solrmeter.view;
 
+import com.google.inject.Inject;
+import com.plugtree.solrmeter.controller.SolrMeterMenuController;
+import com.plugtree.stressTestScope.StressTestScope;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-
-import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
-import com.plugtree.solrmeter.controller.SolrMeterMenuController;
 
 @StressTestScope
 public class SolrMeterMenuBar extends JMenuBar {
@@ -41,8 +38,29 @@ public class SolrMeterMenuBar extends JMenuBar {
 
 	private void initGUI() {
 		this.add(this.createFileMenu());
-		this.add(this.createEditMenu());
-		
+        this.add(this.createEditMenu());
+        this.add(this.createToolsMenu());
+
+    }
+
+    private JMenu createToolsMenu() {
+		JMenu menu = new JMenu(I18n.get("menu.tools"));
+		menu.setName("toolsMenu");
+		menu.add(this.createExtractFromLogMenuItem());
+		return menu;
+	}
+
+	private JMenuItem createExtractFromLogMenuItem() {
+		JMenuItem item = new JMenuItem(I18n.get("menu.tools.extract"));
+		item.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.onExtractMenu();
+
+			}
+		});
+		return item;
 	}
 
 	private JMenu createEditMenu() {

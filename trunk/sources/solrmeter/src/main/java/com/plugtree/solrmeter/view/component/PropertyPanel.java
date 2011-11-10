@@ -15,25 +15,18 @@
  */
 package com.plugtree.solrmeter.view.component;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.SolrPropertyObserver;
 import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.LinkedList;
+import java.util.List;
 /**
  * 
  * TODO add validators
@@ -145,6 +138,8 @@ public abstract class PropertyPanel extends JPanel implements FocusListener, Sol
 	public String getPropertyName(){
 		return this.property;
 	}
+
+    
 	
 	protected abstract String getSelectedValue();
 	
