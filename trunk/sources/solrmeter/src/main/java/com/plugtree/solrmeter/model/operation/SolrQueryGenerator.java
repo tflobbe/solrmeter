@@ -21,7 +21,16 @@ public class SolrQueryGenerator {
 	}
 
 	public static List<String> getKeyValuePair(String queryString) throws UnsupportedEncodingException{
-		return split(queryString, "=");
+	  queryString = URLDecoder.decode(queryString, "UTF-8");
+    List<String> params = new ArrayList<String>(2);
+    int index= queryString.indexOf("=");
+    if(index < 1) {
+      params.add(queryString);
+    } else {
+      params.add(queryString.substring(0, index));
+      params.add(queryString.substring(index + 1 , queryString.length()));
+    }
+    return params;
 	}
 	
 	public static List<String> split(String queryString, String separator) throws UnsupportedEncodingException {

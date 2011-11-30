@@ -49,5 +49,16 @@ public class SolrQueryGeneratorTest extends TestCase{
 		
 	}
 	
+	public void testWithLocalParams() {
+	  String q = "facet.field={!ex=source}source&facet.field={!ex=source}type&facet.field={!ex=source}status&facet.field={!ex=display}author&qt=/browse&fq={!tag=source}source:1&fq={!tag=display}display:true";
+	  SolrQuery query = SolrQueryGenerator.fromString(q);
+	  assertEquals("{!ex=source}source", query.getFacetFields()[0]);
+	  assertEquals("{!ex=source}type", query.getFacetFields()[1]);
+	  assertEquals("{!ex=source}status", query.getFacetFields()[2]);
+	  assertEquals("{!ex=display}author", query.getFacetFields()[3]);
+	  assertEquals("{!tag=source}source:1", query.getFilterQueries()[0]);
+	  assertEquals("{!tag=display}display:true", query.getFilterQueries()[1]);
+	 }
+	
 	
 }
