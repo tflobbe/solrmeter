@@ -15,6 +15,8 @@
  */
 package com.plugtree.solrmeter;
 
+import com.plugtree.solrmeter.model.generator.ComplexQueryGeneratorTestCase;
+import com.plugtree.solrmeter.model.generator.ExternalFileQueryGeneratorTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -22,7 +24,6 @@ import com.plugtree.solrmeter.controller.FullQueryStatisticControllerTestCase;
 import com.plugtree.solrmeter.controller.StatisticsRepositoryTestCase;
 import com.plugtree.solrmeter.extractor.FileInputDocumentExtractorTestCase;
 import com.plugtree.solrmeter.extractor.FileStringExtractorTestCase;
-import com.plugtree.solrmeter.model.operations.SolrQueryGeneratorTest;
 import com.plugtree.solrmeter.statistic.ErrorLogStatisticTestCase;
 import com.plugtree.solrmeter.statistic.FullQueryStatisticTestCase;
 import com.plugtree.solrmeter.statistic.HistogramQueryStatisticTestCase;
@@ -37,7 +38,6 @@ import com.plugtree.solrmeter.statistic.TimeRangeTestCase;
 import com.plugtree.solrmeter.statistic.parser.StatisticsParserCastorImplTestCase;
 import com.plugtree.solrmeter.task.AbstractOperationThreadTestCase;
 import com.plugtree.solrmeter.task.ConstantOperationExecutorThreadTestCase;
-import com.plugtree.solrmeter.utils.QueryTimeHistoryStatisticTest;
 
 public class SolrMeterTestSuite {
 
@@ -49,8 +49,6 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(ExpectedParameterTestCase.class);
 		suite.addTestSuite(FileUtilsTest.class);
 		suite.addTestSuite(OptimizeExecutorTestCase.class);
-		suite.addTestSuite(QueryExecutorConstantImplTestCase.class);
-		suite.addTestSuite(QueryExecutorTestCase.class);
 		suite.addTestSuite(QueryServiceSolrJImplTestCase.class);
 		suite.addTestSuite(SolrMeterConfigurationTestCase.class);
 		suite.addTestSuite(UpdateExecutorTestCase.class);
@@ -77,9 +75,10 @@ public class SolrMeterTestSuite {
 		suite.addTestSuite(FileInputDocumentExtractorTestCase.class);
 		suite.addTestSuite(FileStringExtractorTestCase.class);
 		
-		// com.plugtree.solrmeter.model.operations.*
-		suite.addTestSuite(SolrQueryGeneratorTest.class);
-		
+		// com.plugtree.solrmeter.model.generator.*
+		suite.addTestSuite(ExternalFileQueryGeneratorTestCase.class);
+		suite.addTestSuite(ComplexQueryGeneratorTestCase.class);
+
 		// com.plugtree.solrmeter.task.*
 		suite.addTestSuite(AbstractOperationThreadTestCase.class);
 		suite.addTestSuite(ConstantOperationExecutorThreadTestCase.class);
