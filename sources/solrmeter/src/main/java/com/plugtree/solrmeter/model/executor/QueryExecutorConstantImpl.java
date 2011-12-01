@@ -15,24 +15,22 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
-import com.plugtree.solrmeter.model.FieldExtractor;
 import com.plugtree.solrmeter.model.QueryExecutor;
-import com.plugtree.solrmeter.model.QueryExtractor;
 import com.plugtree.solrmeter.model.QueryStatistic;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.SolrServerRegistry;
 import com.plugtree.solrmeter.model.exception.QueryException;
+import com.plugtree.solrmeter.model.generator.QueryGenerator;
 import com.plugtree.solrmeter.model.operation.ConstantOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.QueryOperation;
+import com.plugtree.stressTestScope.StressTestScope;
+import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This query executor calculates the interval between queries to achieve
@@ -43,7 +41,7 @@ import com.plugtree.solrmeter.model.operation.QueryOperation;
  *
  */
 @StressTestScope
-public class QueryExecutorConstantImpl extends AbstractExecutor implements QueryExecutor{
+public class QueryExecutorConstantImpl implements QueryExecutor{
 	
 	/**
 	 * Solr Server for strings
@@ -56,30 +54,6 @@ public class QueryExecutorConstantImpl extends AbstractExecutor implements Query
 	private List<QueryStatistic> statistics;
 	
 	/**
-	 * Query Type of all executed Queries
-	 */
-	private String queryType;
-	
-
-	
-	/**
-	 * The facet fields extractor
-	 */
-	private FieldExtractor facetFieldExtractor;
-	
-	/**
-	 * The filter query extractor
-	 */
-	private QueryExtractor filterQueryExtractor;
-	
-	/**
-	 * The standard query extractor
-	 */
-	private QueryExtractor queryExtractor;
-	
-	private QueryExtractor extraParamExtractor;
-	
-	/**
 	 * Indicates wether the Executor is running or not
 	 */
 	private boolean running;
@@ -90,23 +64,20 @@ public class QueryExecutorConstantImpl extends AbstractExecutor implements Query
 	 * Thread that execute queries periodically
 	 */
 	private ConstantOperationExecutorThread executerThread;
-	
-	@Inject
-	public QueryExecutorConstantImpl(FieldExtractor facetFieldExtractor,
-			@Named("filterQueryExtractor") QueryExtractor filterQueryExtractor,
-			@Named("queryExtractor") QueryExtractor queryExtractor,
-			@Named("extraParamExtractor")QueryExtractor extraParamExtractor) {
+
+    /**
+     * The generator that creates a query depending on the query mode selected 
+     */
+    private QueryGenerator queryGenerator;
+
+    @Inject
+	public QueryExecutorConstantImpl(@Named("queryGenerator") QueryGenerator queryGenerator) {
 		super();
-		statistics = new LinkedList<QueryStatistic>();
-		this.filterQueryExtractor = filterQueryExtractor;
-		this.facetFieldExtractor = facetFieldExtractor;
-		this.queryExtractor = queryExtractor;
-		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
+        this.queryGenerator = queryGenerator;
+        statistics = new LinkedList<QueryStatistic>();
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
-		this.extraParamExtractor = extraParamExtractor;
-		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 	}
-	
+
 
 
 	@Override
@@ -118,11 +89,6 @@ public class QueryExecutorConstantImpl extends AbstractExecutor implements Query
 	@Override
 	public int getQueriesPerMinute() {
 		return operationsPerMinute;
-	}
-
-	@Override
-	public String getQueryType() {
-		return queryType;
 	}
 
 	@Override
@@ -158,7 +124,7 @@ public class QueryExecutorConstantImpl extends AbstractExecutor implements Query
 	@Override
 	public void start() {
 		running = true;
-		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor, extraParamExtractor));
+		executerThread = new ConstantOperationExecutorThread(new QueryOperation(this, queryGenerator));
 		this.updateThreadWaitTime();
 		executerThread.start();
 	}

@@ -15,23 +15,21 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
-import com.plugtree.solrmeter.model.FieldExtractor;
 import com.plugtree.solrmeter.model.QueryExecutor;
-import com.plugtree.solrmeter.model.QueryExtractor;
 import com.plugtree.solrmeter.model.QueryStatistic;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.exception.QueryException;
+import com.plugtree.solrmeter.model.generator.QueryGenerator;
 import com.plugtree.solrmeter.model.operation.QueryOperation;
 import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
+import com.plugtree.stressTestScope.StressTestScope;
+import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Creates and manages query execution Threads. The queries are executed with 
@@ -50,52 +48,25 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	private CommonsHttpSolrServer server;
 	
 	/**
-	 * Query Type of all executed Queries
-	 */
-	private String queryType;
-	
-	/**
 	 * List of Statistics observing this Executor.
 	 */
 	private List<QueryStatistic> statistics;
 	
-	/**
-	 * The standard query extractor
-	 */
-	private QueryExtractor queryExtractor;
-	
-	/**
-	 * The filter query extractor
-	 */
-	private QueryExtractor filterQueryExtractor;
-	
-	/**
-	 * The extra parameters query extractor
-	 */
-	private QueryExtractor extraParamExtractor;
-	
-	/**
-	 * The facet fields extractor
-	 */
-	private FieldExtractor facetFieldExtractor;
-	
-	@Inject
-	public QueryExecutorRandomImpl(
-			@Named("queryExtractor") QueryExtractor queryExtractor,
-			@Named("filterQueryExtractor") QueryExtractor filterQueryExtractor,
-			FieldExtractor facetFieldExtractor, 
-			@Named("extraParamExtractor")QueryExtractor extraParamExtractor) {
+    /**
+     * The generator that creates a query depending on the query mode selected
+     */
+    private QueryGenerator queryGenerator;
+
+    @Inject
+	public QueryExecutorRandomImpl(@Named("queryGenerator") QueryGenerator queryGenerator) {
 		super();
+        this.queryGenerator = queryGenerator;
 		statistics = new LinkedList<QueryStatistic>();
-		this.queryExtractor = queryExtractor;
-		this.filterQueryExtractor = filterQueryExtractor;
-		this.facetFieldExtractor = facetFieldExtractor;
-		this.extraParamExtractor= extraParamExtractor;
 		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
-		this.queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
-		this.loadExtraParameters(SolrMeterConfiguration.getProperty("solr.query.extraParameters", ""));
 		super.prepare();
 	}
+
+
 
 	public QueryExecutorRandomImpl() {
 		super();
@@ -107,7 +78,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new QueryOperation(this, queryExtractor, filterQueryExtractor, facetFieldExtractor, extraParamExtractor), 60);
+		return new RandomOperationExecutorThread(new QueryOperation(this, queryGenerator), 60);
 	}
 
 	/**
@@ -142,10 +113,6 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 		}
 	}
 	
-	@Override
-	public String getQueryType() {
-		return queryType;
-	}
 	
 	@Override
 	protected String getOperationsPerMinuteConfigurationKey() {

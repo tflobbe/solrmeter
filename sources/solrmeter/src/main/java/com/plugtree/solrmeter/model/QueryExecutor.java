@@ -15,12 +15,9 @@
  */
 package com.plugtree.solrmeter.model;
 
-import java.util.Map;
-
+import com.plugtree.solrmeter.model.exception.QueryException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
-
-import com.plugtree.solrmeter.model.exception.QueryException;
 /**
  * Interface that all query executors must implement.
  * @author tflobbe
@@ -48,11 +45,6 @@ public interface QueryExecutor {
 	void notifyError(QueryException exception);
 
 	/**
-	 * @return Query type
-	 */
-	String getQueryType();
-
-	/**
 	 * Adds a Statistic Observer to the executor
 	 * @param statistic
 	 */
@@ -63,12 +55,6 @@ public interface QueryExecutor {
 	 * @return
 	 */
 	int getQueriesPerMinute();
-
-	/**
-	 * Returns the extra added parameters.
-	 * @return
-	 */
-	Map<String, String> getExtraParameters();
 
 	/**
 	 * Prepares this executor to run
