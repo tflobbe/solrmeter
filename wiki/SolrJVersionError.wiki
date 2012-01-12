@@ -3,7 +3,7 @@
 
 = Invalid version or the data in not in 'javabin' format =
 
-The reason for this error is that Solr has changed the javabin format on 3_x brunch and on trunk and SolrMeter uses SolrJ. 
+The reason for this error is that Solr has changed the javabin format on 3_x branch and on trunk and SolrMeter uses SolrJ. 
 The whole trace would be something like this:
 
 {{{
