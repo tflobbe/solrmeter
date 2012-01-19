@@ -15,6 +15,9 @@
  */
 package com.plugtree.solrmeter.model.operation;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.log4j.Logger;
 
 import com.plugtree.stressTestScope.StressTestScope;
@@ -33,71 +36,73 @@ import com.plugtree.solrmeter.model.exception.OperationException;
  */
 @StressTestScope
 public class ConstantOperationExecutorThread extends Thread {
-	
-	private long timeToWait;
-	
-	private boolean running;
-	
-	private Operation operation;
-	
-	public ConstantOperationExecutorThread(Operation operation) {
-		super();
-		this.operation = operation;
-	}
-	
-	@Override
-	public synchronized void run() {
-		while(running) {
-			try {
-				this.wait(getTimeToWait());
-				if(running) {
-					executeOperation();
-				}
-			} catch (InterruptedException e) {
-				Logger.getLogger(this.getClass()).error("Error on query thread", e);
-				throw new RuntimeException(e);
-			} catch (OperationException e) {
-				Logger.getLogger(this.getClass()).error("Error on query thread", e);
-				throw new RuntimeException(e);
-			}
-		}
-	}
-	
-	@Override
-	public synchronized void start() {
-		this.running = true;
-		super.start();
-	}
-	
-	public synchronized void wake() {
-		this.notify();
-	}
-	
-	@Override
-	public void destroy() {
-		this.running = false;
-	}
-	
-	private void executeOperation() throws OperationException {
-		Thread thread = new Thread() {
-			
-			@Override
-			public void run() {
-				try {
-					operation.execute();
-				} catch (OperationException e) {
-					Logger.getLogger(this.getClass()).error("There was an error executing operation " + operation, e);
-				}
-			}
-		};
-		thread.run();
-	}
-
-	private long getTimeToWait() {
-		return timeToWait;
-	}
-
-	public void setTimeToWait(long timeToWait) {
-		this.timeToWait = timeToWait;
-	}
+  
+  private ExecutorService threadPool = Executors.newCachedThreadPool();
+  
+  private long timeToWait;
+  
+  private boolean running;
+  
+  private Operation operation;
+  
+  public ConstantOperationExecutorThread(Operation operation) {
+    super();
+    this.operation = operation;
+  }
+  
+  @Override
+  public synchronized void run() {
+    while(running) {
+      try {
+        this.wait(getTimeToWait());
+        if(running) {
+          executeOperation();
+        }
+      } catch (InterruptedException e) {
+        Logger.getLogger(this.getClass()).error("Error on query thread", e);
+        throw new RuntimeException(e);
+      } catch (OperationException e) {
+        Logger.getLogger(this.getClass()).error("Error on query thread", e);
+        throw new RuntimeException(e);
+      }
+    }
+  }
+  
+  @Override
+  public synchronized void start() {
+    this.running = true;
+    super.start();
+  }
+  
+  public synchronized void wake() {
+    this.notify();
+  }
+  
+  @Override
+  public void destroy() {
+    this.running = false;
+  }
+  
+  private void executeOperation() throws OperationException {
+    Runnable r = new Runnable() {
+      
+      @Override
+      public void run() {
+        try {
+          operation.execute();
+        } catch (OperationException e) {
+          Logger.getLogger(this.getClass()).error("There was an error executing operation " + operation, e);
+        }
+      }
+    };
+    threadPool.execute(r);
+  }
+  
+  private long getTimeToWait() {
+    return timeToWait;
+  }
+  
+  public void setTimeToWait(long timeToWait) {
+    this.timeToWait = timeToWait;
+  }
 }
