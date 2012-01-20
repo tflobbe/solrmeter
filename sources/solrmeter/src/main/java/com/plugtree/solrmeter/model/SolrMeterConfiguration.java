@@ -21,8 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +55,7 @@ public class SolrMeterConfiguration {
 	public static String DELETES_PER_MINUTE = "solr.load.deletesperminute";
 	public static String INSERTS_PER_MINUTE = "solr.load.deletesperminute";
 	public static String TEST_TIME = "solr.testTime";
+	public static String QUERY_METHOD = "solr.queryMethod";
 	
 	private static Logger logger = LoggerFactory.getLogger(SolrMeterConfiguration.class);
 	private static String FILE_CONFIG_NAME = "solrmeter.properties";
