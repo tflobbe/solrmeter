@@ -15,11 +15,13 @@
  */
 package com.plugtree.solrmeter.model.operation;
 import com.plugtree.solrmeter.model.QueryExecutor;
+import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.exception.QueryException;
 import com.plugtree.solrmeter.model.generator.QueryGenerator;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import java.util.Date;
@@ -65,7 +67,8 @@ public class QueryOperation implements Operation {
   }
   
   protected QueryResponse executeQuery(SolrQuery query) throws SolrServerException {
-    return executor.getSolrServer().query(query);
+	String requestMethod = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_METHOD, "GET");
+	return executor.getSolrServer().query(query, METHOD.valueOf(requestMethod));
   }
   
 }
