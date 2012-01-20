@@ -45,7 +45,7 @@ public class QueryPanelController {
 			@Override
 			public void run() {
 				try {
-					QueryResponse response = service.exequteQuery(view.getQ(), 
+					QueryResponse response = service.executeQuery(view.getQ(), 
 							view.getFQ(), 
 							view.getQT(), 
 							view.getHighlight(), 

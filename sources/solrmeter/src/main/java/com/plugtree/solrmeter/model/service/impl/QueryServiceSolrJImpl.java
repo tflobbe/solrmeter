@@ -39,7 +39,7 @@ import com.plugtree.solrmeter.model.service.QueryService;
 public class QueryServiceSolrJImpl implements QueryService {
 
 	@Override
-	public QueryResponse exequteQuery(String q, String fq, String qt,
+	public QueryResponse executeQuery(String q, String fq, String qt,
 			boolean highlight, String facetFields, String sort, String sortOrder, Integer rows, Integer start, 
 			String otherParams) throws QueryException {
 		CommonsHttpSolrServer server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));

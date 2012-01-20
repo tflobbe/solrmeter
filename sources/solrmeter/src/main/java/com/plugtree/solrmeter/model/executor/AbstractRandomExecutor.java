@@ -31,7 +31,7 @@ import java.util.List;
  * @author tflobbe
  *
  */
-public abstract class AbstractRandomExecutor{
+public abstract class AbstractRandomExecutor {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 	
