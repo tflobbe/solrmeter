@@ -16,7 +16,6 @@
 package com.plugtree.solrmeter.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;

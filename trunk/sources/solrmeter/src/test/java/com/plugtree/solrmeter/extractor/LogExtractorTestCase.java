@@ -34,7 +34,7 @@ public class LogExtractorTestCase extends BaseTestCase{
         );
 
 
-        List<String> queries = new ArrayList(logExtractor.extract(stringList));
+        List<String> queries = new ArrayList<String>(logExtractor.extract(stringList));
         assertEquals(3, queries.size());
         assertEquals("fl=*,score&debugQuery=true&indent=true&q=HTTP&wt=javabin&fq=price:[100+TO+200]&version=2", queries.get(0));
         assertEquals("fl=*,score&debugQuery=true&indent=true&q=Comprehensive&wt=javabin&fq=price:[200+TO+300]&version=2", queries.get(1));
@@ -45,7 +45,7 @@ public class LogExtractorTestCase extends BaseTestCase{
     public void testExtractQueriesFromFile() throws Exception {
         inputPath = FileUtils.findFileAsString("./com/plugtree/solrmeter/logTest.txt");
         LogExtractor logExtractor = new LogExtractor(regularExpression);
-        List<String> queries  = new ArrayList(logExtractor.extractFromFile(inputPath));
+        List<String> queries  = new ArrayList<String>(logExtractor.extractFromFile(inputPath));
         assertEquals(3, queries.size());
         assertEquals("fl=*,score&debugQuery=true&indent=true&q=HTTP&wt=javabin&fq=price:[100+TO+200]&version=2", queries.get(0));
         assertEquals("fl=*,score&debugQuery=true&indent=true&q=Comprehensive&wt=javabin&fq=price:[200+TO+300]&version=2", queries.get(1));

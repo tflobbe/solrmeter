@@ -26,7 +26,7 @@ import com.plugtree.solrmeter.model.exception.QueryException;
  */
 public interface QueryService {
 	
-	public QueryResponse exequteQuery(String q, 
+	public QueryResponse executeQuery(String q, 
 			String fq, 
 			String qt, 
 			boolean highlight, 
