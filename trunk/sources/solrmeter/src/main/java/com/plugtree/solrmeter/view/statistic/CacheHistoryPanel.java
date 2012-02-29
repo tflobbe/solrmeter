@@ -44,7 +44,6 @@ import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.ui.RectangleEdge;
 
 import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.statistic.CacheData;
 import com.plugtree.solrmeter.model.statistic.CacheHistoryStatistic;
 import com.plugtree.solrmeter.util.ReflectionUtils;
@@ -52,6 +51,7 @@ import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.StatisticPanel;
 import com.plugtree.solrmeter.view.component.InfoPanel;
 import com.plugtree.solrmeter.view.component.RoundedBorderJPanel;
+import com.plugtree.stressTestScope.StressTestScope;
 
 /**
  * This class will show the Cache history Statistic. This statistic will show a chart with the hit ratio
@@ -289,6 +289,12 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 			cumulativeHitRatioInfoPanel.setValue(String.valueOf(cacheData.getHitratio()));
 			cumulativeInsertsInfoPanel.setValue(String.valueOf(cacheData.getInserts()));
 			cumulativeEvictionsInfoPanel.setValue(String.valueOf(cacheData.getEvictions()));
+		} else {
+		  cumulativeLookupsInfoPanel.setValue("");
+      cumulativeHitsInfoPanel.setValue("");
+      cumulativeHitRatioInfoPanel.setValue("");
+      cumulativeInsertsInfoPanel.setValue("");
+      cumulativeEvictionsInfoPanel.setValue("");
 		}
 		
 	}
@@ -341,8 +347,8 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 			refreshHitRatio();
 		}
 	}
-	
-	/**
+
+  /**
 	 * If showing the hit ratio, this method will be invoked to refresh the chart
 	 */
 	private void refreshHitRatio() {
