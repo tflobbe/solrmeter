@@ -65,30 +65,32 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 	}
 	
 	private SolrServer createMockSolrServer() throws MalformedURLException {
-		SolrServerMock mock = new SolrServerMock();
-		mock.setResponseToRequest("/admin/mbeans", this.createMBeansNamedList());
-		return mock;
+		return this.createMockSolrServer("queryResultCache", "fieldCache", "documentCache", "fieldValueCache", "filterCache");
 	}
+	
+	 private SolrServer createMockSolrServer(String... caches) throws MalformedURLException {
+	    SolrServerMock mock = new SolrServerMock();
+	    mock.setResponseToRequest("/admin/mbeans", this.createMBeansNamedList(caches));
+	    return mock;
+	  }
 
-	private NamedList<Object> createMBeansNamedList() {
+	private NamedList<Object> createMBeansNamedList(String... caches) {
 		NamedList<Object> namedList = new NamedList<Object>();
-		namedList.add("solr-mbeans", this.createMainCacheNamedList());
+		namedList.add("solr-mbeans", this.createMainCacheNamedList(caches));
 		return namedList;
 	}
 
-	private NamedList<Object> createMainCacheNamedList() {
+	private NamedList<Object> createMainCacheNamedList(String... caches) {
 		NamedList<Object> namedList = new NamedList<Object>();
-		namedList.add("CACHE", this.createCachesNamedList());
+		namedList.add("CACHE", this.createCachesNamedList(caches));
 		return namedList;
 	}
 
-	private NamedList<Object> createCachesNamedList() {
+	private NamedList<Object> createCachesNamedList(String... caches) {
 		NamedList<Object> namedList = new NamedList<Object>();
-		namedList.add("queryResultCache", this.createCacheNamedList());
-		namedList.add("fieldCache", this.createCacheNamedList());
-		namedList.add("documentCache", this.createCacheNamedList());
-		namedList.add("fieldValueCache", this.createCacheNamedList());
-		namedList.add("filterCache", this.createCacheNamedList());
+		for(String cache:caches) {
+		  namedList.add(cache, this.createCacheNamedList());
+		}
 		return namedList;
 	}
 
@@ -151,6 +153,21 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 		namedList.add("cumulative_evictions", new Long(0));
 		return namedList;
 	}
+	
+	 public void testMissingCaches() throws MalformedURLException, StatisticConnectionException {
+	    SolrServer solrServer = this.createMockSolrServer("filterCache");
+	    RequestHandlerConnection connection = new RequestHandlerConnection(solrServer);
+	    Map<String, CacheData> data = connection.getData();
+	    assertNotNull(connection.getFilterCacheData(data));
+	    assertNull(connection.getDocumentCacheData(data));
+	    assertNull(connection.getFieldValueCacheData(data));
+	    assertNull(connection.getQueryResultCacheData(data));
+	    
+	    assertNotNull(connection.getCumulativeFilterCacheData(data));
+	    assertNull(connection.getCumulativeDocumentCacheData(data));
+	    assertNull(connection.getCumulativeFieldValueCacheData(data));
+	    assertNull(connection.getCumulativeQueryResultCacheData(data));
+	  }
 
 }
 

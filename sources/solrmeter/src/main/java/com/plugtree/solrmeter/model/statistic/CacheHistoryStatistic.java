@@ -16,7 +16,6 @@
 package com.plugtree.solrmeter.model.statistic;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -25,10 +24,10 @@ import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.QueryStatistic;
 import com.plugtree.solrmeter.model.exception.QueryException;
 import com.plugtree.solrmeter.model.exception.StatisticConnectionException;
+import com.plugtree.stressTestScope.StressTestScope;
 
 /**
  * 
@@ -104,7 +103,7 @@ public class CacheHistoryStatistic implements QueryStatistic {
 		this.queryResultCacheData = Collections.synchronizedSortedMap(new TreeMap<Long, CacheData>());
 		this.documentCacheData = Collections.synchronizedSortedMap(new TreeMap<Long, CacheData>());
 		this.fieldValueCacheData = Collections.synchronizedSortedMap(new TreeMap<Long, CacheData>());
-		this.initTime = new Date().getTime();
+		this.initTime = System.currentTimeMillis();
 	}
 	
 	
@@ -113,10 +112,11 @@ public class CacheHistoryStatistic implements QueryStatistic {
 		Map<String, CacheData> cacheData = null;
 		try {
 			cacheData = connection.getData();
-			filterCacheData.put(time, cacheData.get(RequestHandlerConnection.FILTER_CACHE_NAME));
-			queryResultCacheData.put(time, cacheData.get(RequestHandlerConnection.QUERY_RESULT_CACHE_NAME));
-			documentCacheData.put(time, cacheData.get(RequestHandlerConnection.DOCUMENT_CACHE_NAME));
-			fieldValueCacheData.put(time, cacheData.get(RequestHandlerConnection.FIELD_VALUE_CACHE_NAME));
+//			filterCacheData.put(time, cacheData.get(RequestHandlerConnection.FILTER_CACHE_NAME));
+			put(time, filterCacheData, cacheData, RequestHandlerConnection.FILTER_CACHE_NAME);
+			put(time, queryResultCacheData, cacheData, RequestHandlerConnection.QUERY_RESULT_CACHE_NAME);
+			put(time, documentCacheData, cacheData, RequestHandlerConnection.DOCUMENT_CACHE_NAME);
+			put(time, fieldValueCacheData, cacheData, RequestHandlerConnection.FIELD_VALUE_CACHE_NAME);
 			
 			filterCacheCumulativeData = cacheData.get(RequestHandlerConnection.CUMULATIVE_FILTER_CACHE_NAME);
 			queryResultCacheCumulativeData = cacheData.get(RequestHandlerConnection.CUMULATIVE_QUERY_RESULT_CACHE_NAME);
@@ -129,7 +129,15 @@ public class CacheHistoryStatistic implements QueryStatistic {
 		
 	}
 	
-	public SortedMap<Long, CacheData> getFilterCacheData() {
+	private void put(Long time, SortedMap<Long,CacheData> destDataMap, Map<String, CacheData> connectionData, String cacheName) {
+	  CacheData cacheDataValue = connectionData.get(cacheName);
+	  if(cacheDataValue != null) {
+	    destDataMap.put(time, cacheDataValue);
+	  }
+  }
+
+
+  public SortedMap<Long, CacheData> getFilterCacheData() {
 		return filterCacheData;
 	}
 	

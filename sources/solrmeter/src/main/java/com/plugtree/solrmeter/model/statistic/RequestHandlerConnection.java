@@ -76,13 +76,28 @@ public class RequestHandlerConnection extends AbstractStatisticConnection {
 	
 	@SuppressWarnings("unchecked")
 	private CacheData getCacheData(NamedList<Object> namedList, String cacheName) {
-		NamedList<Object> stats = ((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)namedList.get("solr-mbeans")).get("CACHE")).get(cacheName)).get("stats"));
+	  NamedList<Object> cache = getCacheNamedList(namedList, cacheName);
+	   if(cache == null) {
+	      return null;
+	    }
+		NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
 		return new CacheData((Long)stats.get("lookups"), (Long)stats.get("hits"), Float.valueOf((String)stats.get("hitratio")), (Long)stats.get("inserts"), (Long)stats.get("evictions"), Long.valueOf(stats.get("size").toString()), (Long)stats.get("warmupTime"));
 	}
+
+	@SuppressWarnings("unchecked")
+  private NamedList<Object> getCacheNamedList(NamedList<Object> namedList,
+      String cacheName) {
+    NamedList<Object> cache = ((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)namedList.get("solr-mbeans")).get("CACHE")).get(cacheName));
+    return cache;
+  }
 	
 	@SuppressWarnings("unchecked")
 	private CacheData getCumulativeCacheData(NamedList<Object> namedList, String cacheName) {
-		NamedList<Object> stats = ((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)namedList.get("solr-mbeans")).get("CACHE")).get(cacheName)).get("stats"));
+    NamedList<Object> cache = getCacheNamedList(namedList, cacheName);
+    if(cache == null) {
+       return null;
+     }
+   NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
 		return new CacheData((Long)stats.get("cumulative_lookups"), (Long)stats.get("cumulative_hits"), Float.valueOf((String)stats.get("cumulative_hitratio")), (Long)stats.get("cumulative_inserts"), (Long)stats.get("cumulative_evictions"));
 	}
 	
