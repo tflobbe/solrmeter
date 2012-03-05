@@ -108,6 +108,27 @@ If those are static, they can be added as described in the [http://code.google.c
 ==How can I run the exact same queries that were executed to my production Solr Instance?==
 Since Version 0.3.0 (thanks to [http://code.google.com/p/solrmeter/issues/detail?id=90 this] issue you can extract queries from a Solr log and generate an [http://code.google.com/p/solrmeter/wiki/Tutorial#Query_Mode_(standard_/_external): "external queries file"]. This means that the exact same queries (with all of the parameters) will be executed in your test, however, this DOESN'T mean that they are going to be executed in the same order or frequency!. Queries are extracted from the external file RANDOMLY and the original execution time is not maintained, those queries will be executed in a random instant and in a random order. [http://code.google.com/p/solrmeter/issues/detail?id=54 There is an open issue] to execute queries from the queries file in a sequential order, however, it is still not implemented. It should be very simple to implement. [http://code.google.com/p/solrmeter/issues/detail?id=24 There is also an open issue] to record and load tests in order to be able to execute the exact same query with different versions/configurations/servers/whatever.
 =What does the statistics mean?=
+==Histogram==
+This statistic shows the number of queries during the test that fall into the different buckets of [http://code.google.com/p/solrmeter/issues/detail?id=100 100 milliseconds]. SolrMeter uses Solr's QTime to build this chart.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#Histogram
+==Pie Chart==
+This statistic shows in a pie diagram the percentage of queries that fall into the different time intervals. By default the intervals are: 
+From 0 to 500 ms
+From 501 to 1000 ms
+From 1001 to 2000 ms
+More than 2000 ms
+But those intervals can be changed by pressing the "Customize" button.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#Pie_Chart1
+==Query Time History==
+This statistic shows how the average query time evolved during the test. Every 10 seconds SolrMeter calculates the average (only considering the queries executed in the last 10 seconds) and displays it in another column of the diagram. It will show if during the test, there is something that is causing the average query time to increase (like an optimize could do, or a big segment merge).
+http://code.google.com/p/solrmeter/wiki/Screenshots#Query_History
+==Operations Time Line==
+This Statistic shows together in one chart how long are the different operations taking. Each query is plotted into the chart, as every update, every commit and every optimize (Only those operations executed by SolrMeter are plotted, if you are using Solr's autocommit or committing from another process for example, the commit operation will not be added to the chart).
+This diagram is useful to see if some operations are introducing latency to others.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#Time_Line
+==Query Statistic==
+This statistic shows in a table the last 400 executed queries, their status, QTime and result count. It also shows some statistics information about the current test like Median, Mode, Variance, Standard Deviation, Total Average, Last Minute Average, Last 10 minute average plus the last error date.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics
 =How to execute Updates?=
 =What does the Commit parameters mean?=
 =How can I save / load the settings for my test? How can I change the default?=
