@@ -129,6 +129,14 @@ See http://code.google.com/p/solrmeter/wiki/Screenshots#Time_Line
 ==Query Statistic==
 This statistic shows in a table the last 400 executed queries, their status, QTime and result count. It also shows some statistics information about the current test like Median, Mode, Variance, Standard Deviation, Total Average, Last Minute Average, Last 10 minute average plus the last error date.
 See http://code.google.com/p/solrmeter/wiki/Screenshots#Query_Statistics
+==Error Log==
+This statistic shows displays all those request that returned to SolrMeter as an exception from Solr. It discriminates the operations in which the error occurred and if you double-click on one of them you can see the full stacktrace of the exception.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#Error_Log
+==Cache Statistic==
+This statistic shows the Cache information obtained from Solr's request Handler. It can compare the hit ratios of the different caches all together in one diagram, but you can also select one cache in particular and see how the different attributes of it evolved through the query (lookups, hits, inserts and evictions). You can also see the cumulative value in the bottom table. This diagram extracts the information from Solr so it really doesn't matter if you are performing the operations from SolrMeter, the cache information is the one published by Solr.
+See http://code.google.com/p/solrmeter/wiki/Screenshots#CacheHistoryStatistic
+==Query Panel==
+This is actually not a statistic, it is simply a panel from which you can run regular queries to Solr in a very simple way.
 =How to execute Updates?=
 =What does the Commit parameters mean?=
 =How can I save / load the settings for my test? How can I change the default?=
