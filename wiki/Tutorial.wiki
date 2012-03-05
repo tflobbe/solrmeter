@@ -4,7 +4,7 @@
 
 =Compile and Run=
 First thing you need to do is download SolrMeter, either the compiled jar from the [http://code.google.com/p/solrmeter/downloads/list Downloads] section or the source code from the [http://code.google.com/p/solrmeter/source/checkout Source] section. [http://code.google.com/p/solrmeter/wiki/Usage This] wiki page explains how to compile and run the source code.
-Once you start SolrMeter you'll see the initial screen, probably with the “Run” buttons and the “Optimize Now” button in red. This means that SolrMeter can't find a valid Solr instance on the specified URL (default URL for Solr is http://localhost:8983/solr, which is Solr default, so if you see this buttons in red then you are good to go). 
+Once you start SolrMeter you'll see the initial screen, probably with the “PLay” buttons and the “Optimize Now” button in red. This means that SolrMeter can't find a valid Solr instance on the specified URL (default URL for Solr is http://localhost:8983/solr, which is Solr default, so if you see this buttons in red then you are good to go). 
 <a href="http://solrmeter.googlecode.com/svn/wiki/imgs/greenButtons.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/greenButtons.png" height="250" width="450"/></a>
 =Execute Queries to a Solr instance=
 It's easy to tell SolrMeter to execute queries to your Solr instance. First thing you have to do is to create a text file on your PC with possible queries. Each line of this text file will be included as the “q” parameter of the request to Solr, so it will depend on how you need to test Solr. For example, if your application will use LuceneQueryParser, then a queries file could be something like:
@@ -27,10 +27,10 @@ Once you created the queries file with a good number of different queries, you h
 <a href="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/selectQueriesFile.png" height="250" width="450"/></a><br>
 If you don't have Solr on http://localhost:8983/solr and your “Run” button was red, change the “URL Solr” property under the same tab, set the value to your URL.
 Press OK (I'll come back to explain what the other properties mean later)
-you should now see the “Run” button in green.<br>
+you should now see the “PLay” button in green.<br>
 <a href="http://solrmeter.googlecode.com/svn/wiki/imgs/startBlack.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/startBlack.png"/></a><br>
 Select the number of queries you want SolrMeter to execute every minute on the “Intended queries per minute” property of the query panel (on the main window). 
-Finally, press the “Run” Button.
+Finally, press the “Play” Button.
 You'll start seeing the numbers of the Query Console and the statistics changing. I'll explain the query console numbers and later the statistics.
 ==What does the Query Console numbers mean?==
 <a href="http://solrmeter.googlecode.com/svn/wiki/imgs/queryConsole.png"><img src="http://solrmeter.googlecode.com/svn/wiki/imgs/queryConsole.png"/></a><br>
@@ -97,8 +97,14 @@ All those lines are going to be randomly added to the search request. Parameters
 Path to a text file with the extra parameters to be added to the search request.
 
 ==How to add Facets to my queries?==
+There are many ways of adding facets to your search depending on your needs. If your application will ALWAYS use the same facet fields, then the best thing to do is to add them as extra parameters as described in the [http://code.google.com/p/solrmeter/wiki/Tutorial#Extra_Parameter: "Add extra parameters"] section of this tutorial. 
+If you know that your application will allow facets in some fields, but those will change with each request, you can use the [http://code.google.com/p/solrmeter/wiki/Tutorial#Fields_File: "fields"] file plus set the combo box [http://code.google.com/p/solrmeter/wiki/Tutorial#Use_Facets_(true_/_false): "Use facets" to "true".]
+If your application will have different sets of facets (in some cases will facet in field1, field2 and field3 together, but in some other cases will facet in field1, field4 and field5, then you can use the [http://code.google.com/p/solrmeter/wiki/Tutorial#Add_Random_Extra_Parameter_(true_/_false): "random extra parameters"]. This is very similar than using the [http://code.google.com/p/solrmeter/wiki/Tutorial#Query_Mode_(standard_/_external): "external" mode] but you just need to add the extra parameters, not all.
+Finally, if you are using the [http://code.google.com/p/solrmeter/wiki/Tutorial#Query_Mode_(standard_/_external): "external" query mode], you'll need to add the facet fields to each request.
 ==How to add Filter Queries?==
+Well, the options here are very similar to the section [http://code.google.com/p/solrmeter/wiki/Tutorial#How_to_add_Facets_to_my_queries? "How to add Facets to my queries"], the only difference is that, instead of "Use Facets" you need to set the combo [http://code.google.com/p/solrmeter/wiki/Tutorial#Use_Filter_Queries_(true_/_false): "Use Filter Queries"] to true, and instead of a "fields" file you'll have to provide a [http://code.google.com/p/solrmeter/wiki/Tutorial#Filter_Query_File_Path: "filters" file]. The other options (extra parameters, extra parameters file and external mode) can be used in the same way as with facets.
 ==How to add Extra parameters, like highlighting or spellchecking?==
+If those are static, they can be added as described in the [http://code.google.com/p/solrmeter/wiki/Tutorial#Extra_Parameter: "Add Extra Parameters"] section. If those will change with each request, the best way to do it is by using the [http://code.google.com/p/solrmeter/wiki/Tutorial#Add_Random_Extra_Parameter_(true_/_false): "Random Extra Params"].
 ==How can I run the exact same queries that were executed to my production Solr Instance?==
 =What does the statistics mean?=
 =How to execute Updates?=
