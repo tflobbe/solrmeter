@@ -30,7 +30,9 @@ public class ComplexQueryGenerator implements QueryGenerator {
   private String facetMethod = SolrMeterConfiguration.getProperty("solr.query.facetMethod");
   
   private boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
-  
+
+  private boolean forceEchoParamsAll = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.echoParams", "false"));
+
   private boolean addRandomExtraParams = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.addRandomExtraParams", "true"));
   
   /**
@@ -116,6 +118,10 @@ public class ComplexQueryGenerator implements QueryGenerator {
     if(addRandomExtraParams) {
       this.addRandomExtraParameters(query);
     }
+    if(forceEchoParamsAll){
+        query.add("echoParams", "all");
+    }
+
     return query;
   }
   
