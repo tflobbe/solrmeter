@@ -23,13 +23,7 @@ import javax.swing.BoxLayout;
 import com.plugtree.solrmeter.controller.SettingsController;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.SettingsPanel;
-import com.plugtree.solrmeter.view.component.BooleanPropertyPanel;
-import com.plugtree.solrmeter.view.component.ComboPropertyPanel;
-import com.plugtree.solrmeter.view.component.FilePropertyPanel;
-import com.plugtree.solrmeter.view.component.PropertyPanel;
-import com.plugtree.solrmeter.view.component.QueryModeComboBoxPropertyPanel;
-import com.plugtree.solrmeter.view.component.TablePropertyPanel;
-import com.plugtree.solrmeter.view.component.TextPropertyPanel;
+import com.plugtree.solrmeter.view.component.*;
 import com.plugtree.solrmeter.view.exception.InvalidPropertyException;
 import com.plugtree.solrmeter.view.listener.PropertyChangeListener;
 
@@ -57,12 +51,14 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 		final PropertyPanel filterQueryFilePath = new FilePropertyPanel(I18n.get("settings.query.filterQueryFile"), "solr.query.filterQueriesFile", editable, this);
 		final PropertyPanel queryFilePath = new FilePropertyPanel(I18n.get("settings.query.queryFile"), "solr.queriesFiles", editable, this);
 		final PropertyPanel queryType = new TextPropertyPanel(I18n.get("settings.query.queryType"), "solr.search.queryType", editable, this);
-	//	final PropertyPanel useExtraParameters = new TextPropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
+        final PropertyPanel echoParams = new BooleanPropertyPanel(I18n.get("settings.query.forceEchoParams"), "solr.query.echoParams", editable, this);
+        //	final PropertyPanel useExtraParameters = new TextPropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
 		final PropertyPanel useExtraParameters = new TablePropertyPanel(I18n.get("settings.query.extraParameters"), "solr.query.extraParameters", editable, this);
 		final PropertyPanel queryExecutor = new ComboPropertyPanel(I18n.get("settings.query.queryExecutor"), "executor.queryExecutor", editable, this, new String[]{"random", "constant"}, true);
 		final PropertyPanel addExternalRandomParameters = new BooleanPropertyPanel(I18n.get("settings.query.addRandomExtraParams"), "solr.query.addRandomExtraParams", editable, this);
 		final PropertyPanel extraParameters = new FilePropertyPanel(I18n.get("settings.query.extraParams"), "solr.query.extraParams", editable, this);
-		
+
+
 		this.add(comboBoxPropertyPanel);
 		this.add(solrSearchUrl);
 		this.add(useFacetComponent);
@@ -72,6 +68,7 @@ public class QuerySettingsPanel extends SettingsPanel implements PropertyChangeL
 		this.add(filterQueryFilePath);
 		this.add(queryFilePath);
 		this.add(queryType);
+        this.add(echoParams);
 		this.add(useExtraParameters);
 		this.add(queryExecutor);
 		this.add(addExternalRandomParameters);
