@@ -1,6 +1,6 @@
 #labels Featured
 =What is !SolrMeter? =
-!SolrMeter allows simple and fast configuration to run stress tests (or load tests, however you call them)to Solr installations. 
+!SolrMeter allows simple and fast configuration to run stress tests (or load tests, however you call them) to Solr installations. 
 It measures time of  queries, updates, commits and optimizes and show them on simple charts.
 
 Current version of !SolrMeter (0.2.0) allows you to:
@@ -23,6 +23,3 @@ Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DReleas
 Two of the most important new features are:
  * [custom_statistics Build your own custom statistics]
  * [Executors Change executors or build your own custom ones]
-
-=Why is it called !SolrMeter? =
-Well, this is obvious so I won't answer. Just remember, it is "SolrMeter" and not "Solr Meter"
