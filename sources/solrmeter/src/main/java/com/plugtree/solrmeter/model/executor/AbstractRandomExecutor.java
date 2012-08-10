@@ -153,7 +153,7 @@ public abstract class AbstractRandomExecutor {
 	 * 
 	 * @param url
 	 * @return Return the Solr Server instance for the url. There is only one 
-	 * Solr Server for every diferent url
+	 * Solr Server for every difFerent url
 	 */
 	public CommonsHttpSolrServer getSolrServer(String url) {
 		return SolrServerRegistry.getSolrServer(url);

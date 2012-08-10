@@ -25,7 +25,7 @@ import com.plugtree.solrmeter.model.exception.OperationException;
  * 
  * An Operation that has to be executed every N seconds. The interval of execution
  * is not precise, it is at least queryInterval (parameter passed to the constructor)
- * and at most queryInterval + operation time. This is becouse the instant where the
+ * and at most queryInterval + operation time. This is because the instant where the
  * operation is executed is randomly chosen inside the N seconds interval.
  * @author tflobbe
  *
