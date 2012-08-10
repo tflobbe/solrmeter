@@ -47,22 +47,38 @@ public class FileUtilsTest extends BaseTestCase {
 
 	public void testLoadStringsFromFileInternationalCharactersUtf8() throws UnsupportedEncodingException {
 		List<String> queries = FileUtils.loadStringsFromFile("internationalQueries.txt");
-		int i = 0;
-		for (String s:queries) {
-			assertEquals(byteArrayToHexString(s.getBytes("UTF-8")), utfCodes[i]);
-			i++;
-		}
+		compareAll(queries);
 	}
 	
 	public void testLoadStringsFromFileInternationalCharactersIso88591() throws UnsupportedEncodingException {
 		SolrMeterConfiguration.setProperty("files.charset", "ISO-8859-1");
 		List<String> queries = FileUtils.loadStringsFromFile("internationalQueriesISO_8859_1.txt");
+		compareAll(queries);
+	}
+	
+	/*
+	 * Created after http://code.google.com/p/solrmeter/issues/detail?id=103
+	 */
+	public void testWindowsInitialBOMIssue() throws UnsupportedEncodingException {
+		SolrMeterConfiguration.setProperty("files.charset", "UTF-8");
+		List<String> queries = FileUtils.loadStringsFromFile("windowsBOMProblem.txt");
+		assertEquals("The file only has one query", 1, queries.size());
+		assertEquals("numNights:[7 TO 14] AND numAdults:2 AND tourDate:[2012-08-09T01:00:00.000Z TO 2012-08-31T01:00:00.000Z]", queries.get(0));
+		
+		queries = FileUtils.loadStringsFromFile("regularUTF-8.txt");
+		assertEquals("The file only has one query", 1, queries.size());
+		assertEquals("numNights:[7 TO 14] AND numAdults:2 AND tourDate:[2012-08-09T01:00:00.000Z TO 2012-08-31T01:00:00.000Z]", queries.get(0));
+	}
+
+	private void compareAll(List<String> queries)
+			throws UnsupportedEncodingException {
 		int i = 0;
 		for (String s:queries) {
-			assertEquals(byteArrayToHexString(s.getBytes("UTF-8")), utfCodes[i]);
+			assertEquals("Failed for character " + utfCodes[i],utfCodes[i], byteArrayToHexString(s.getBytes("UTF-8")));
 			i++;
 		}
 	}
+	
 
 	private String byteArrayToHexString(byte in[]) {
 		byte ch = 0x00;
@@ -91,5 +107,8 @@ public class FileUtilsTest extends BaseTestCase {
 
 		return rslt;
 
-	}    
+	}
+	
+	
+	
 }
