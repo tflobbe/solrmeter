@@ -24,7 +24,7 @@ import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.exception.OperationException;
 
 /**
- * Worker that executes an operation every N milisecods, represented by the
+ * Worker that executes an operation every N milliseconds, represented by the
  * 'timeToWait' field.
  * The operation is executed on a different thread, that way the operation time
  * does not affect the interval of this worker. For example, if the worker has a
