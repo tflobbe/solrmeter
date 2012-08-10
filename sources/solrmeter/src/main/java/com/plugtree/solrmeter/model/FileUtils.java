@@ -40,12 +40,14 @@ import com.plugtree.solrmeter.SolrMeterMain;
  */
 public class FileUtils {
 	
+    public static final String UTF8_BOM = "\uFEFF";
+	
 	private static Logger logger = Logger.getLogger(FileUtils.class);
 
 	/**
 	 * Loads from the file with path "filePath" all lines as strings.
 	 * @param filePath Path to file
-	 * @return The list of strings loaded from tthe file.
+	 * @return The list of strings loaded from the file.
 	 */
 	public static List<String> loadStringsFromFile(String filePath) {
 		InputStream stream;
@@ -54,6 +56,12 @@ public class FileUtils {
 			stream = findFileAsStream(filePath);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, SolrMeterConfiguration.getProperty("files.charset", "UTF-8")));
 			String nextLine = reader.readLine();
+			//workaround for these issues: http://bugs.sun.com/view_bug.do?bug_id=4508058 and http://bugs.sun.com/view_bug.do?bug_id=6378911
+			if(nextLine != null && nextLine.length() >= 1) {
+				if(nextLine.startsWith(UTF8_BOM)) {
+					nextLine = nextLine.substring(1);
+				}
+			}
 			while(nextLine != null) {
 				list.add(nextLine);
 				nextLine = reader.readLine();
