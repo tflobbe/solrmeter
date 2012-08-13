@@ -47,8 +47,9 @@ public class SolrServerRegistry {
 				server.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
 				server.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
 				server.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
+				servers.put(url, server);
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				logger.error("Unnable to create Solr Server", e);
 			}
 		}
 		return server;
