@@ -18,6 +18,7 @@ package com.plugtree.solrmeter.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -28,9 +29,9 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
  *
  */
 public class SolrServerRegistry {
-	
+
 	protected static Logger logger = Logger.getLogger(SolrServerRegistry.class);
-	
+
 	private static Map<String, SolrServer> servers = new HashMap<String, SolrServer>();
 
 	public static synchronized SolrServer getSolrServer(String url) {
@@ -45,10 +46,32 @@ public class SolrServerRegistry {
 			httpServer.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
 			httpServer.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
 			httpServer.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
+			setAuthentication(httpServer);
 			servers.put(url, httpServer);
 			return httpServer;
 
 		}
 		return server;
+	}
+
+	private static void setAuthentication(HttpSolrServer httpServer) {
+		String user = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthUser");
+		String pass = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthPass");
+		if(user != null && !user.isEmpty() && pass != null && !pass.isEmpty()) {
+			AbstractHttpClient client = (AbstractHttpClient) httpServer.getHttpClient();
+			client.addRequestInterceptor(new PreEmptiveBasicAuthenticator(user, pass));
+		}
+	}
+
+	/**
+	 * Drops all existing SolrServers
+	 */
+	public static void invalidate() {
+		for(SolrServer server:servers.values()) {
+			if(server instanceof HttpSolrServer) {
+				((HttpSolrServer) server).shutdown();
+			}
+		}
+		servers.clear();
 	}
 }

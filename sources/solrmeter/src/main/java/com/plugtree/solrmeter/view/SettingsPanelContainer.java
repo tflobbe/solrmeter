@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import com.plugtree.solrmeter.controller.SettingsController;
 import com.plugtree.solrmeter.controller.StatisticsRepository;
 import com.plugtree.solrmeter.model.FileUtils;
+import com.plugtree.solrmeter.view.settings.AuthenticationSettingsPanel;
 import com.plugtree.solrmeter.view.settings.OptimizeSettingsPanel;
 import com.plugtree.solrmeter.view.settings.QuerySettingsPanel;
 import com.plugtree.solrmeter.view.settings.StatisticsSettingsPanel;
@@ -92,6 +93,7 @@ public class SettingsPanelContainer extends JPanel {
 		this.addSetting(new UpdateSettingsPanel(settingsController, editable));
 		this.addSetting(new OptimizeSettingsPanel(settingsController, editable));
 		this.addSetting(new StatisticsSettingsPanel(settingsController, editable, repository));
+		this.addSetting(new AuthenticationSettingsPanel(settingsController, editable));
 	}
 
 	private void initGUI() {

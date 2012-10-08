@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Singleton;
 import com.plugtree.solrmeter.SolrMeterMain;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
+import com.plugtree.solrmeter.model.SolrServerRegistry;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.SettingsPanelContainer;
 import com.plugtree.solrmeter.view.SolrPropertyObserver;
@@ -81,6 +82,10 @@ public class SettingsController {
 		notifyObservers(property, value);
 		panel.hasChangedValues(true);
 	}
+	
+	public void invalidateCreatedSolrInstances() {
+		SolrServerRegistry.invalidate();
+	}
 
 	public void okAndSetDefault() {
 		applyChanges();
@@ -119,7 +124,6 @@ public class SettingsController {
 			observers = new HashSet<SolrPropertyObserver>();
 			observerMap.put(property, observers);
 		}
-		
 		observers.add(observer);
 	}
 	

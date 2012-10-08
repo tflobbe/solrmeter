@@ -149,7 +149,7 @@ public class SolrMeterMenuController {
 	public void onSettingsMenu() {
 		JDialog dialog = new JDialog(SolrMeterMain.mainFrame, I18n.get("menu.edit.settings"), ModalityType.APPLICATION_MODAL);
 		dialog.setContentPane(new SettingsPanelContainer(dialog, this.isSettingsEditable(), repository));
-		dialog.setSize(new Dimension(600, 400));
+		dialog.setSize(new Dimension(700, 400));
 		SwingUtils.centerWindow(dialog);
 		dialog.setVisible(true);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
