@@ -15,6 +15,12 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.plugtree.solrmeter.model.QueryExecutor;
@@ -25,11 +31,6 @@ import com.plugtree.solrmeter.model.generator.QueryGenerator;
 import com.plugtree.solrmeter.model.operation.QueryOperation;
 import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
 import com.plugtree.stressTestScope.StressTestScope;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Creates and manages query execution Threads. The queries are executed with 
@@ -45,7 +46,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	 * Solr Server for strings
 	 * TODO implement provider
 	 */
-	private CommonsHttpSolrServer server;
+	private SolrServer server;
 	
 	/**
 	 * List of Statistics observing this Executor.
@@ -92,7 +93,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	}
 
 	@Override
-	public synchronized CommonsHttpSolrServer getSolrServer() {
+	public synchronized SolrServer getSolrServer() {
 		if(server == null) {
 			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}

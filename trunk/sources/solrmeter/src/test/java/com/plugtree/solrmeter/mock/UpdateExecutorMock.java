@@ -15,9 +15,7 @@
  */
 package com.plugtree.solrmeter.mock;
 
-import java.net.MalformedURLException;
-
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -28,13 +26,9 @@ public class UpdateExecutorMock extends UpdateExecutorRandomImpl {
 	
 	private SolrServerMock server;
 	
-	public synchronized CommonsHttpSolrServer getSolrServer() {
+	public synchronized SolrServer getSolrServer() {
 		if(server == null) {
-			try {
-				server = new SolrServerMock();
-			} catch (MalformedURLException e) {
-				throw new RuntimeException(e);
-			}
+			server = new SolrServerMock();
 		}
 		return server;
 	}

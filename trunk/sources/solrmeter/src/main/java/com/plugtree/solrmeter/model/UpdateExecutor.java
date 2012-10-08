@@ -15,7 +15,7 @@
  */
 package com.plugtree.solrmeter.model;
 
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.plugtree.solrmeter.model.exception.CommitException;
@@ -31,7 +31,7 @@ public interface UpdateExecutor {
 	 * 
 	 * @return The current Solr Server. If there is no current Solr Server, then the method returns a new one.
 	 */
-	public CommonsHttpSolrServer getSolrServer();
+	public SolrServer getSolrServer();
 
 	/**
 	 * Starts this executor

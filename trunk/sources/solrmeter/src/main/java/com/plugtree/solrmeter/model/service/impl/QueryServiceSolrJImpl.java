@@ -19,9 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Singleton;
@@ -42,7 +42,7 @@ public class QueryServiceSolrJImpl implements QueryService {
 	public QueryResponse executeQuery(String q, String fq, String qt,
 			boolean highlight, String facetFields, String sort, String sortOrder, Integer rows, Integer start, 
 			String otherParams) throws QueryException {
-		CommonsHttpSolrServer server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
+		SolrServer server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		SolrQuery query = this.createQuery(q, fq, qt, highlight, facetFields, sort, sortOrder, rows, start, otherParams);
 		QueryResponse response = null;
 		try {

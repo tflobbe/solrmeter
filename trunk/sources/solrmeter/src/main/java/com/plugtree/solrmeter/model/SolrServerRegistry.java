@@ -15,12 +15,12 @@
  */
 package com.plugtree.solrmeter.model;
 
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 /**
  * This registry holds all the created solr servers. It will be one for each different url 
  * and it wont change between tests.
@@ -31,26 +31,23 @@ public class SolrServerRegistry {
 	
 	protected static Logger logger = Logger.getLogger(SolrServerRegistry.class);
 	
-	private static Map<String, CommonsHttpSolrServer> servers = new HashMap<String, CommonsHttpSolrServer>();
+	private static Map<String, SolrServer> servers = new HashMap<String, SolrServer>();
 
-	public static synchronized CommonsHttpSolrServer getSolrServer(String url) {
-		CommonsHttpSolrServer server = servers.get(url);
+	public static synchronized SolrServer getSolrServer(String url) {
+		SolrServer server = servers.get(url);
 		if(server == null) {
-			try {
-				//TODO parametrize
-				logger.info("Connecting to Solr: " + url);
-				server = new CommonsHttpSolrServer(url);
-				server.setSoTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.soTimeout", "60000"))); // socket read timeout
-				server.setConnectionTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.connectionTimeout", "60000")));
-				server.setDefaultMaxConnectionsPerHost(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.defaultMaxConnectionsPerHost", "100000")));
-				server.setMaxTotalConnections(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxTotalConnections", "1000000")));
-				server.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
-				server.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
-				server.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
-				servers.put(url, server);
-			} catch (MalformedURLException e) {
-				logger.error("Unnable to create Solr Server", e);
-			}
+			logger.info("Connecting to Solr: " + url);
+			HttpSolrServer httpServer = new HttpSolrServer(url);
+			httpServer.setSoTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.soTimeout", "60000"))); // socket read timeout
+			httpServer.setConnectionTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.connectionTimeout", "60000")));
+			httpServer.setDefaultMaxConnectionsPerHost(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.defaultMaxConnectionsPerHost", "100000")));
+			httpServer.setMaxTotalConnections(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxTotalConnections", "1000000")));
+			httpServer.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
+			httpServer.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
+			httpServer.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
+			servers.put(url, httpServer);
+			return httpServer;
+
 		}
 		return server;
 	}

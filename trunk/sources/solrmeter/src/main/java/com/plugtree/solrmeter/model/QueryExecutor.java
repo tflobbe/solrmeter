@@ -15,9 +15,10 @@
  */
 package com.plugtree.solrmeter.model;
 
-import com.plugtree.solrmeter.model.exception.QueryException;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+
+import com.plugtree.solrmeter.model.exception.QueryException;
 /**
  * Interface that all query executors must implement.
  * @author tflobbe
@@ -29,7 +30,7 @@ public interface QueryExecutor {
 	 * 
 	 * @return The current Solr Server. If there is no current Solr Server, then the method returns a new one.
 	 */
-	CommonsHttpSolrServer getSolrServer();
+	SolrServer getSolrServer();
 
 	/**
 	 * To be executed when a Query succeeds. 

@@ -19,12 +19,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.InputDocumentExtractor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.SolrServerRegistry;
@@ -35,6 +34,7 @@ import com.plugtree.solrmeter.model.exception.UpdateException;
 import com.plugtree.solrmeter.model.operation.CommitOperation;
 import com.plugtree.solrmeter.model.operation.ConstantOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.UpdateOperation;
+import com.plugtree.stressTestScope.StressTestScope;
 /**
  * Executor that executes updates in a constant period of time, determined
  * by the specified number of updates per minute.
@@ -48,7 +48,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	private Logger logger = Logger.getLogger(this.getClass());
 
 	//TODO DI
-	private CommonsHttpSolrServer server;
+	private SolrServer server;
 	
 	private Integer numberOfDocumentsBeforeCommit;
 	
@@ -81,7 +81,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
 	}
 	
-	public synchronized CommonsHttpSolrServer getSolrServer() {
+	public synchronized SolrServer getSolrServer() {
 		if(server == null) {
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
 		}
