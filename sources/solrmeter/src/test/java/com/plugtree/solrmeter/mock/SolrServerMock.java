@@ -16,7 +16,6 @@
 package com.plugtree.solrmeter.mock;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,13 +23,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.util.NamedList;
 
-public class SolrServerMock extends CommonsHttpSolrServer {
+public class SolrServerMock extends SolrServer {
 	
 	private static final long serialVersionUID = 7266180569831920295L;
 
@@ -42,8 +41,8 @@ public class SolrServerMock extends CommonsHttpSolrServer {
 	
 	private Map<String, NamedList<Object>> requestsResponses;
 	
-	public SolrServerMock() throws MalformedURLException {
-		super("http://0.0.0.0:8080/solr");
+	public SolrServerMock() {
+		super();
 		addedDocuments = new LinkedList<SolrInputDocument>();
 		requestsResponses = new HashMap<String, NamedList<Object>>();
 	}

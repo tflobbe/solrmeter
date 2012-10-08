@@ -15,15 +15,16 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServer;
+
 import com.plugtree.solrmeter.model.FileUtils;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.SolrServerRegistry;
 import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
-import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Base class for operation executors that run multiple threads.
@@ -155,7 +156,7 @@ public abstract class AbstractRandomExecutor {
 	 * @return Return the Solr Server instance for the url. There is only one 
 	 * Solr Server for every difFerent url
 	 */
-	public CommonsHttpSolrServer getSolrServer(String url) {
+	public SolrServer getSolrServer(String url) {
 		return SolrServerRegistry.getSolrServer(url);
 	}
 

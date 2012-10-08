@@ -15,6 +15,12 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.plugtree.solrmeter.model.QueryExecutor;
@@ -26,11 +32,6 @@ import com.plugtree.solrmeter.model.generator.QueryGenerator;
 import com.plugtree.solrmeter.model.operation.ConstantOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.QueryOperation;
 import com.plugtree.stressTestScope.StressTestScope;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This query executor calculates the interval between queries to achieve
@@ -46,7 +47,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	/**
 	 * Solr Server for strings
 	 */
-	private CommonsHttpSolrServer server;
+	private SolrServer server;
 	
 	/**
 	 * List of Statistics observing this Executor.
@@ -92,7 +93,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	}
 
 	@Override
-	public synchronized CommonsHttpSolrServer getSolrServer() {
+	public synchronized SolrServer getSolrServer() {
 		if(server == null) {
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}

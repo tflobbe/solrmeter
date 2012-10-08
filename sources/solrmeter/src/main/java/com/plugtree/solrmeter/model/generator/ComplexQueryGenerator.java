@@ -1,17 +1,18 @@
 package com.plugtree.solrmeter.model.generator;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.csv.CSVUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.plugtree.solrmeter.model.FieldExtractor;
 import com.plugtree.solrmeter.model.QueryExtractor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
-import org.apache.commons.csv.CSVUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ComplexQueryGenerator implements QueryGenerator {
   

@@ -18,12 +18,11 @@ package com.plugtree.solrmeter.model.executor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.InputDocumentExtractor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.UpdateExecutor;
@@ -34,6 +33,7 @@ import com.plugtree.solrmeter.model.operation.CommitOperation;
 import com.plugtree.solrmeter.model.operation.ConstantOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.UpdateOperation;
+import com.plugtree.stressTestScope.StressTestScope;
 
 /** 
  * manages update execution Threads. The updates are executed with 
@@ -46,7 +46,7 @@ import com.plugtree.solrmeter.model.operation.UpdateOperation;
 public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements UpdateExecutor {
 	
 	//TODO DI
-	private CommonsHttpSolrServer server;
+	private SolrServer server;
 	
 	private Integer numberOfDocumentsBeforeCommit;
 	
@@ -79,7 +79,7 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		statistics = new LinkedList<UpdateStatistic>();
 	}
 	
-	public synchronized CommonsHttpSolrServer getSolrServer() {
+	public synchronized SolrServer getSolrServer() {
 		if(server == null) {
 			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
 		}
