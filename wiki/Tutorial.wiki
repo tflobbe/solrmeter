@@ -138,5 +138,17 @@ See http://code.google.com/p/solrmeter/wiki/Screenshots#CacheHistoryStatistic
 ==Query Panel==
 This is actually not a statistic, it is simply a panel from which you can run regular queries to Solr in a very simple way.
 =How to execute Updates?=
-=What does the Commit parameters mean?=
+Updates can be run in a very similar way than queries, however the updates file has a special format that has to be respected.  
+First, in the “Update Settings” tab of the Settings type the URL of the “update” Solr. It can be the same Solr instance that you use for queries, but it can also use a different one (for example, if you are planning to use master/slave Solr instances).
+If you want SolrMeter to issue commits you should disable autocommits in Solr and select “false” in SolrMeter’s combo-box “Is Solr using autocommit?” (we should rename this field). If SolrMeter issues the commits, you’ll see information about them in the statistics, otherwise you won’t.
+If SolrMeter will commit, then you can select either max docs added before a commit or max time before a commit. These are similar parameters to the autocommit ones, however “max docs” only makes sense if all the documents are being added from SolrMeter (not external indexers), as we only keep track of the added/updated docs from SolrMeter.
+At this point, there is no way to issue soft commits from SolrMeter (you could set that up in Solr with autoSoftCommit). There is an open [http://code.google.com/p/solrmeter/issues/detail?id=91 issue] for that.
+In the “updates file path” you should select the file with the updates/adds that you want SolrMeter to send to Solr. The format of that file is described [http://code.google.com/p/solrmeter/wiki/updates here].
+Finally, and as with queries, you can select if you want the updates to be executed on a constant time or at a random time. See [http://code.google.com/p/solrmeter/wiki/Executors here] for more details about the executors.
 =How can I save / load the settings for my test? How can I change the default?=
+This is something simple to do. Set all the settings as you want to run your tests. The you can export them from the menu File->Export. This will generate a "yourname.smc.xml", it's simply a xml file with all the properties that you have configured on it. You can later use the File->Import menu to import any configuration.
+If you want to override the default configuration of your SolrMeter, you can open the "settings" page and click on the "OK and override defaults" button. This will export the settings in the same way as "File->Export", call the file solrmeter.smc.xml and place it in the same directory where the solrmeter executable jar file is located. SolrMeter will always try to use this file when loading the configurations.
+
+=How can I use basic HTTP Authentication?=
+Since [http://code.google.com/p/solrmeter/issues/detail?id=83 issue#83] was resolved, you can use basic HTTP authentication, simply open the settings page and enter User and password there. 
+At this point, it's not possible to use different users and passwords for the query Solr server and the Update Solr server, they'll both use the same.
