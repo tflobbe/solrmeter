@@ -71,6 +71,7 @@ public class SettingsController {
 			SolrMeterConfiguration.setProperty(propertyKey, changedProps.getProperty(propertyKey));
 		}
 		if(!changedProps.isEmpty()) {
+			SolrServerRegistry.invalidate();
 			SolrMeterMain.restartApplication();
 		}
 		changedProps = new Properties();
@@ -81,10 +82,6 @@ public class SettingsController {
 		changedProps.put(property, value);
 		notifyObservers(property, value);
 		panel.hasChangedValues(true);
-	}
-	
-	public void invalidateCreatedSolrInstances() {
-		SolrServerRegistry.invalidate();
 	}
 
 	public void okAndSetDefault() {
