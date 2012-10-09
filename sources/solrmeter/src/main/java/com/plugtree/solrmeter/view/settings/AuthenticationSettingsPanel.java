@@ -41,7 +41,6 @@ public class AuthenticationSettingsPanel extends SettingsPanel implements Proper
 	public void onPropertyChanged(String property, String text)
 			throws InvalidPropertyException {
 		controller.setProperty(property, text);
-		controller.invalidateCreatedSolrInstances();
 	}
-
+	
 }
