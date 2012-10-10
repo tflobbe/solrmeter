@@ -3,23 +3,20 @@
 !SolrMeter allows simple and fast configuration to run stress tests (or load tests, however you call them) to Solr installations. 
 It measures time of  queries, updates, commits and optimizes and show them on simple charts.
 
-Current version of !SolrMeter (0.2.0) allows you to:
-  * Execute Queries to a solr server.
-  * Execute Update/Inserts to a solr server (not necessary the same as queries).
+Current version of !SolrMeter (0.3.0) allows you to:
+  * Execute Queries to a Solr server.
+  * Execute Update/Inserts to a Solr server (not necessary the same as queries).
   * Obtain queries and documents to update from a text file.
-  * Execute optimize (to se solr server configured to update/insert documents)
+  * Execute optimize (to see Solr server configured to update/insert documents)
   * Add filter queries to the query
   * Use facets (randomly obtained from a text file with field names)
   * Select facet method.
   * Many charts and statistics (see screenshots)
   * Import/Export test configuration.
+  * Extract queries from Solr's log files
 
 See [Overview] for more details and some screenshots.
 
 =What's next and what's new?=
-*New released version 0.2.0. See [http://code.google.com/p/solrmeter/downloads/list Downloads]*
-Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.2.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see the new stuff.
-
-Two of the most important new features are:
- * [custom_statistics Build your own custom statistics]
- * [Executors Change executors or build your own custom ones]
+*New released version 0.3.0. See [http://code.google.com/p/solrmeter/downloads/list Downloads]*
+Click [http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.3.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here] to see the new stuff.
