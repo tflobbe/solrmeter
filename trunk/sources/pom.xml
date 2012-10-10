@@ -191,7 +191,7 @@
   	            <plugin>
   	                <groupId>org.apache.maven.plugins</groupId>
   	                <artifactId>maven-release-plugin</artifactId>
-  	                <version>2.0</version>
+  	                <version>2.3.2</version>
   	                <configuration>
   	                    <tagBase>https://solrmeter.googlecode.com/svn/tags</tagBase>
   	                </configuration>
