@@ -15,7 +15,7 @@ Current version of !SolrMeter (0.3.0) allows you to:
   * Import/Export test configuration.
   * Extract queries from Solr's log files
 
-See [Overview] for more details and some screenshots.
+See [Overview] for more details and some screenshots or [Tutorial] to dive into docs.
 
 =What's next and what's new?=
 *New released version 0.3.0. See [http://code.google.com/p/solrmeter/downloads/list Downloads]*
