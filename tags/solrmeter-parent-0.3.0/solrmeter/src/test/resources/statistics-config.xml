@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statistics>
+	<statistic hasView="true">
+		<name>histogram</name>
+		<description>Histogram of Queries</description>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.HistogramQueryStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>timeRange</name>
+		<description>Shows Query Times as a pie chart</description>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.PieChartPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.TimeRangeStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>errorLog</name>
+		<description>Shows the log of all produced errors</description>
+		<types>query, update, optimize</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.ErrorLogPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.ErrorLogStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>queryHistort</name>
+		<description>Shows a chart with the past query times</description>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.QueryTimeHistoryPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.QueryTimeHistoryStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>operationHistory</name>
+		<description>Shows the a chart with the executed operations and times
+		</description>
+		<types>query, update, optimize</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.OperationTimeLineChartPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.OperationTimeHistory
+		</model-class>
+	</statistic>
+	<statistic hasView="true">
+		<name>fullQueryStatistic</name>
+		<description>Shows advanced statistics of queries plus the last
+			executed queries</description>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<view-class>com.plugtree.solrmeter.view.statistic.FullQueryStatisticPanel
+		</view-class>
+		<model-class>com.plugtree.solrmeter.model.statistic.FullQueryStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="false">
+		<name>QueryLogStatistic</name>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<model-class>com.plugtree.solrmeter.model.statistic.QueryLogStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="false">
+		<name>CommitHistoryStatistic</name>
+		<types>update</types>
+		<scope>stress_test</scope>
+		<model-class>com.plugtree.solrmeter.model.statistic.CommitHistoryStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="false">
+		<name>SimpleOptimizeStatistic</name>
+		<types>optimize</types>
+		<scope>stress_test</scope>
+		<model-class>com.plugtree.solrmeter.model.statistic.SimpleOptimizeStatistic
+		</model-class>
+	</statistic>
+	<statistic hasView="false">
+		<name>SimpleQueryStatistic</name>
+		<types>query</types>
+		<scope>stress_test</scope>
+		<model-class>com.plugtree.solrmeter.model.statistic.SimpleQueryStatistic
+		</model-class>
+	</statistic>
+</statistics>
