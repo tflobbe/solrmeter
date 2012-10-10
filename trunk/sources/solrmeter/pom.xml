@@ -2,14 +2,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.plugtree</groupId>
 	<artifactId>solrmeter</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SolrMeter</name>
 	<description>Standalone java tool for stress testing over Solr. </description>
 	<parent>
 		<groupId>com.plugtree</groupId>
 		<artifactId>solrmeter-parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 	<build>
     <pluginManagement>
