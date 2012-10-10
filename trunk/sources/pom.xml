@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.plugtree</groupId>
 	<artifactId>solrmeter-parent</artifactId>
 	<name>Solrmeter parent POM</name>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.3.0</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -20,9 +19,9 @@
 	</licenses>
 
 	<scm>
-		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
+		<url>scm:svn:https://solrmeter.googlecode.com/svn/tags/solrmeter-parent-0.3.0</url>
+		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/tags/solrmeter-parent-0.3.0</developerConnection>
+		<connection>scm:svn:http://solrmeter.googlecode.com/svn/tags/solrmeter-parent-0.3.0</connection>
 	</scm>
 
 	<mailingLists>
