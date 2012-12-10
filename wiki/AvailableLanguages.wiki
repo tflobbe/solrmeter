@@ -3,6 +3,7 @@
 = Available Languages =
 
 || *Version* ||	*Language* ||	*Support* || *Issue #* ||	*Contributor* ||
+||0.3.1 || German || Full support || Issue#108 || Vadim Kisselmann ||
 ||0.3.0 || Traditional Chinese || Full support || Issue#69 || Scott Chu (朱炎詹) ||
 || 0.3.0 || French || Full support || Issue#89 || Guillaume Royer ||
 || 0.3.0 || Spanish || Full support || || tflobbe ||
