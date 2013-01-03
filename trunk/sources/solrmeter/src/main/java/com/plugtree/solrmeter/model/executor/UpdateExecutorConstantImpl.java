@@ -88,7 +88,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		return server;
 	}
 	
-	private void prepareCommiter() {
+	private void prepareCommitter() {
 		if(commiterThread != null) {
 			commiterThread.destroy();
 		}
@@ -104,7 +104,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		onOperationsPerMinuteChange();
 		updateExecutorThread.start();
 		if(!isAutocommit()) {
-			prepareCommiter();
+			prepareCommitter();
 			commiterThread.start();
 		}
 		logger.info("Update Executor started");
