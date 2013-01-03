@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 package com.plugtree.solrmeter.model.operation;
+import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest.METHOD;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
 import com.plugtree.solrmeter.model.QueryExecutor;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.exception.QueryException;
 import com.plugtree.solrmeter.model.generator.QueryGenerator;
-import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.SolrRequest.METHOD;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
-import java.util.Date;
 
 /**
  * Operation that executes a single query
@@ -49,9 +48,9 @@ public class QueryOperation implements Operation {
     SolrQuery query = queryGenerator.generate();
     try {
       logger.debug("executing query: " + query);
-      long init = new Date().getTime();
+      long init = System.nanoTime();
       QueryResponse response = this.executeQuery(query);
-      long clientTime = new Date().getTime() - init;
+      long clientTime = (System.nanoTime() - init)/1000000;
       logger.debug(response.getResults().getNumFound() + " results found in " + response.getQTime() + " ms");
       if(response.getQTime() < 0) {
         throw new RuntimeException("The query returned less than 0 as q time: " + response.getResponseHeader().get("q") + response.getQTime());
