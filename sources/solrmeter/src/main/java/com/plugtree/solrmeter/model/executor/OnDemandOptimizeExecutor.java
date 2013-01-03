@@ -15,7 +15,6 @@
  */
 package com.plugtree.solrmeter.model.executor;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,10 +75,10 @@ public class OnDemandOptimizeExecutor implements OptimizeExecutor {
 			public void run() {
 				try {
 					isOptimizing = true;
-					long init = new Date().getTime();
+					long init = System.nanoTime();
 					notifyOptimizeStatred(init);
 					server.optimize();
-					notifyOptimizeFinished(new Date().getTime() - init);
+					notifyOptimizeFinished((System.nanoTime() - init)/1000000);
 					isOptimizing = false;
 				} catch (Exception e) {
 					logger.error(e);
