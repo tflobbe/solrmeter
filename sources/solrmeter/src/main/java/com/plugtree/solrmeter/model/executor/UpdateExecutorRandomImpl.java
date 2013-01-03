@@ -90,7 +90,7 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		return new RandomOperationExecutorThread(new UpdateOperation(this, documentExtractor), 60);
 	}
 
-	private void prepareCommiter() {
+	private void prepareCommitter() {
 		if(commiterThread != null) {
 			commiterThread.destroy();
 		}
@@ -104,7 +104,7 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		}
 		super.start();
 		if(!isAutocommit()) {
-			prepareCommiter();
+			prepareCommitter();
 			commiterThread.start();
 		}
 		logger.info("Update Executor started");
