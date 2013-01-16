@@ -2,7 +2,7 @@
 #labels Featured
 =Run the latest version=
 The following steps should be followed to get !SolrMeter up and running.
-  # Download latest version.
+  # Download latest released version.
   # run it from the command line with "java -jar solrmeter-{version}-jar-with-dependencies.jar"
   # create files with information of [queries], [fields], [updates] and [filterqueries filter queries]
   # specify the URL of Solr for updates and queries.
@@ -11,11 +11,9 @@ The following steps should be followed to get !SolrMeter up and running.
 =Compile from trunk=
 The following steps should be followed to compile and package !SolrMeter ([http://maven.apache.org/index.html Maven] is required)
   # Download sources from trunk from http://solrmeter.googlecode.com/svn/trunk/sources
-  # First and for just one time you will have to install in your local maven repository the component "stressTestScope". This component contains a Custom guice scope that is used by solrmeter.
-     # go to /trunk/stressTestScope
-     # run the command "mvn install"
-  # Now you are ready to compile solrmeter. Go to /trunk/solrmeter and run command "mvn assembly:assembly"
-  # The generated jar file is under "target" directory. The jar is named solrmeter-{version}-jar-with-dependencies.jar
+  # cd to the root of the project.
+  # run 'mvn package'
+  # The generated jar file is under "solrmeter/target" directory. The jar is named solrmeter-{version}-jar-with-dependencies.jar
   # run it like [Usage#Run_the_latest_version Run the lastest version] running the generated jar instead of the downloaded one.
 
 =Just want to see how !SolrMeter works?=
