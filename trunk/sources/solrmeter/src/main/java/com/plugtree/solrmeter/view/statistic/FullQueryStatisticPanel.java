@@ -44,6 +44,7 @@ import com.plugtree.solrmeter.model.statistic.QueryLogStatistic.QueryLogValue;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.StatisticPanel;
 import com.plugtree.solrmeter.view.component.InfoPanel;
+import com.plugtree.solrmeter.view.component.TooltipJTable;
 import com.plugtree.stressTestScope.StressTestScope;
 
 @StressTestScope
@@ -124,10 +125,9 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(BorderFactory.createEmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
-		logTable = new JTable();
+		logTable = new TooltipJTable();
 		logTable.setModel(this.createTableModel());
 		panel.add(new JScrollPane(logTable));
-		logTable.getColumnModel().getColumn(1).setMaxWidth(250);
 		logTable.getColumnModel().getColumn(1).setPreferredWidth(250);
 		panel.add(this.createButtonPanel());
 		return panel;
