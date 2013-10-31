@@ -26,9 +26,9 @@ import com.plugtree.solrmeter.model.InputDocumentExtractor;
 /**
  * Extracts documents from text files. The file must be fieldName:fieldValue;fieldName2:fieldValue2;...
  * and all required fields must be added.
- * if a ";" character is part of some value (and it is not a field separator) it must be scaped with a "\" character.
- * All "\" on a value must be scaped as "\\"
- * @see com.plugtree.solrmeter.extractor.FileInputDocumentExtractorTestCase.testScapedChars()
+ * if a ";" character is part of some value (and it is not a field separator) it must be escaped with a "\" character.
+ * All "\" on a value must be escaped as "\\"
+ * @see com.plugtree.solrmeter.extractor.FileInputDocumentExtractorTestCase.testEscapedChars()
  * @author tflobbe
  *
  */
@@ -69,7 +69,8 @@ public class FileInputDocumentExtractor implements InputDocumentExtractor {
 		try {
 			for(String field:fields) {
 				try {
-					document.addField(field.substring(0, field.indexOf(":")), field.substring(field.indexOf(":") + 1));
+					int idx = field.indexOf(":");
+					document.addField(field.substring(0, idx), field.substring(idx + 1));
 				}catch(RuntimeException e) {
 					logger.error("Error Loading documents, on field " + field);
 					throw e;

@@ -17,6 +17,7 @@ package com.plugtree.solrmeter.extractor;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,9 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 		for(int i = 0; i < 10; i++) {
 			SolrInputDocument document = extractor.getRandomDocument();
 	//		fieldName1=value1;fieldName2=value2;fieldName3=value3
-			assertEquals("value1", document.getFieldValue("fieldName1"));
+			Iterator<Object> values = document.getFieldValues("fieldName1").iterator();
+			assertEquals("value1", values.next());
+			assertEquals("value2", values.next());
 			assertEquals("value2", document.getFieldValue("fieldName2"));
 			assertEquals("value3", document.getFieldValue("fieldName3"));
 		}
@@ -71,7 +74,7 @@ public class FileInputDocumentExtractorTestCase extends BaseTestCase {
 		assertEquals("Mon Mar 06 00:00:00 ART 2006", document.getFieldValue("date"));
 	}
 	
-	public void testScapedChars() throws FileNotFoundException {
+	public void testEscapedChars() throws FileNotFoundException {
 		FileInputDocumentExtractorSpy executor = new FileInputDocumentExtractorSpy(FileUtils.findFileAsString("FileInputDocumentExtractorTestCase4.txt"));
 		List<SolrInputDocument> documents = executor.getParsedDocuments();
 		assertEquals(5, documents.size());
