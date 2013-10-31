@@ -18,6 +18,7 @@ package com.plugtree.solrmeter.controller;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.plugtree.solrmeter.view.HeadlessStatisticPanel;
 import com.plugtree.solrmeter.view.StatisticPanel;
 
 /**
@@ -57,6 +58,8 @@ public class StatisticDescriptor {
 	 * <code>hasView</code> is false.
 	 */
 	private Class<? extends StatisticPanel> viewClass;
+
+    private Class<? extends HeadlessStatisticPanel> headlessViewClass;
 	
 	/**
 	 * This list contains the list of <code>com.plugtree.solrmeter.controller.StatisticType</code>
@@ -86,24 +89,28 @@ public class StatisticDescriptor {
 	
 	public StatisticDescriptor(String name, String description,
 			Class<?> modelClass, Class<? extends StatisticPanel> viewClass,
+            Class<? extends HeadlessStatisticPanel> headlessViewClass,
 			List<StatisticType> types, StatisticScope scope) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.modelClass = modelClass;
 		this.viewClass = viewClass;
+        this.headlessViewClass = headlessViewClass;
 		this.types = types;
 		this.scope = scope;
 	}
 	
 	public StatisticDescriptor(String name, String description,
 			Class<?> modelClass, Class<? extends StatisticPanel> viewClass,
+            Class<? extends HeadlessStatisticPanel> headlessViewClass,
 			StatisticType[] typesArray, StatisticScope scope) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.modelClass = modelClass;
 		this.viewClass = viewClass;
+        this.headlessViewClass = headlessViewClass;
 		this.scope = scope;
 		this.types = new LinkedList<StatisticType>();
 		for(StatisticType type:typesArray) {
@@ -114,7 +121,7 @@ public class StatisticDescriptor {
 	public StatisticDescriptor(String name,
 			Class<?> modelClass,
 			StatisticType[] typesArray, StatisticScope scope) {
-		this(name, null, modelClass, null, typesArray, scope);
+		this(name, null, modelClass, null, null, typesArray, scope);
 		this.hasView = false;
 	}
 
@@ -150,6 +157,10 @@ public class StatisticDescriptor {
 		this.viewClass = viewClass;
 	}
 
+    public void setHeadlessViewClass(Class<? extends HeadlessStatisticPanel> headlessViewClass) {
+        this.headlessViewClass = headlessViewClass;
+    }
+
 	public List<StatisticType> getTypes() {
 		return types;
 	}
@@ -174,6 +185,10 @@ public class StatisticDescriptor {
 		return "View_" + getName();
 	}
 
+    public String getHeadlessViewName() {
+        return "HeadlessView_" + getName();
+    }
+
 	public boolean isHasView() {
 		return hasView;
 	}
@@ -181,5 +196,8 @@ public class StatisticDescriptor {
 	public void setHasView(boolean hasView) {
 		this.hasView = hasView;
 	}
-	
+
+    public Class<? extends HeadlessStatisticPanel> getHeadlessViewClass() {
+        return headlessViewClass;
+    }
 }

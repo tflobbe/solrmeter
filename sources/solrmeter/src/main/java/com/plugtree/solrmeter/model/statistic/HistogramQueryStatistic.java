@@ -108,14 +108,7 @@ public class HistogramQueryStatistic implements QueryStatistic {
 			}
 			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(histogramFilePath)));
 			logger.info("------------------ Histogram --------------------");
-			long maxValue = Collections.max(histogram.keySet());
-			for(long i = 0; i <=maxValue; i++) {
-				if(histogram.containsKey(i)) {
-					print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", histogram.get(i));
-				}else {
-					print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", 0);
-				}
-			}
+            printHistogramToStream(outputStream);
 			outputStream.close();
 			logger.info("---------------- End Histogram -------------------");
 		} catch (FileNotFoundException e) {
@@ -136,5 +129,16 @@ public class HistogramQueryStatistic implements QueryStatistic {
 		String fileLine = range + ";" + value + "\n";
 		outputStream.write(fileLine.getBytes());
 	}
+
+    public void printHistogramToStream(BufferedOutputStream outputStream) throws IOException {
+        long maxValue = Collections.max(histogram.keySet());
+        for(long i = 0; i <=maxValue; i++) {
+            if(histogram.containsKey(i)) {
+                print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", histogram.get(i));
+            }else {
+                print(outputStream, (i*HISTOGRAM_INTERVAL) + "ms - " + ((i+1) * HISTOGRAM_INTERVAL) + "ms", 0);
+            }
+        }
+    }
 
 }

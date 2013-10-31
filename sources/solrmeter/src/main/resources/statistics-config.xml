@@ -7,6 +7,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.HistogramChartPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessHistogramChartPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.HistogramQueryStatistic
 		</model-class>
 	</statistic>
@@ -17,6 +19,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.PieChartPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessPieChartPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.TimeRangeStatistic
 		</model-class>
 	</statistic>
@@ -27,6 +31,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.QueryTimeHistoryPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessQueryTimeHistoryPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.QueryTimeHistoryStatistic
 		</model-class>
 	</statistic>
@@ -38,6 +44,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.OperationTimeLineChartPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessOperationTimeLineChartPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.OperationTimeHistory
 		</model-class>
 	</statistic>
@@ -49,6 +57,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.FullQueryStatisticPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessFullQueryStatisticPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.FullQueryStatistic
 		</model-class>
 	</statistic>
@@ -59,6 +69,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.ErrorLogPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessErrorLogPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.ErrorLogStatistic
 		</model-class>
 	</statistic>
@@ -69,6 +81,8 @@
 		<scope>stress_test</scope>
 		<view-class>com.plugtree.solrmeter.view.statistic.CacheHistoryPanel
 		</view-class>
+        <headless-view-class>com.plugtree.solrmeter.view.statistic.HeadlessCacheHistoryPanel
+        </headless-view-class>
 		<model-class>com.plugtree.solrmeter.model.statistic.CacheHistoryStatistic
 		</model-class>
 	</statistic>

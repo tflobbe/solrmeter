@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import com.plugtree.solrmeter.runMode.SolrMeterRunModeHeadless;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +46,8 @@ public class SolrMeterConfiguration {
 	public static final String FIELDS_FILE_PATH = "solr.documentFieldsFile";
 	public static final String QUERY_TYPE = "solr.search.queryType";
 	public static final String SOLR_ADD_URL = "solr.addUrl";
+    public static final String CONFIGURATION_FILE_PATH_PROPERTY = "solrmeter.configurationFile";
+    public static final String RUN_MODE_PROPERTY = "solrmeter.runMode";
 	public static String SOLR_SEARCH_URL = "solr.searchUrl";
 	public static String QUERIES_FILE_PATH = "solr.queriesFiles";
 	public static String UPDATES_FILE_PATH = "solr.updatesFiles";
@@ -56,10 +59,9 @@ public class SolrMeterConfiguration {
 	public static String INSERTS_PER_MINUTE = "solr.load.deletesperminute";
 	public static String TEST_TIME = "solr.testTime";
 	public static String QUERY_METHOD = "solr.queryMethod";
-	
+
 	private static Logger logger = LoggerFactory.getLogger(SolrMeterConfiguration.class);
 	private static String FILE_CONFIG_NAME = "solrmeter.properties";
-	private static final String CONFIGURATION_FILE_PATH_PROPERTY = "solrmeter.configurationFile";
 	private static Properties prop = new Properties();
 	private static Map<String, String> transientProperties = new HashMap<String, String>();
 
@@ -215,6 +217,10 @@ public class SolrMeterConfiguration {
 		}
 		
 	}
+
+    public static boolean isHeadless() {
+        return getProperty(RUN_MODE_PROPERTY, "").equals(SolrMeterRunModeHeadless.RUN_MODE_NAME);
+    }
 	
 	/**
 	 * The default file can be an external file located at the same directory as solrmeter with the name
@@ -267,5 +273,6 @@ public class SolrMeterConfiguration {
 	private static boolean isXML(String fileName) {
 		return fileName.endsWith(".smc.xml");
 	}
+
 
 }

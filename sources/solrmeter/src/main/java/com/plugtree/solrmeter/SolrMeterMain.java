@@ -17,21 +17,18 @@ package com.plugtree.solrmeter;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.name.Names;
-import com.plugtree.solrmeter.controller.StatisticDescriptor;
-import com.plugtree.solrmeter.controller.StatisticType;
 import com.plugtree.solrmeter.controller.StatisticsRepository;
+import com.plugtree.solrmeter.runMode.SolrMeterRunMode;
 import com.plugtree.solrmeter.model.*;
 import com.plugtree.solrmeter.view.*;
-import com.plugtree.stressTestScope.StressTestRegistry;
 import com.plugtree.stressTestScope.StressTestScopeModule;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -43,16 +40,14 @@ public class SolrMeterMain {
 	public static ConsoleFrame mainFrame;
 	
 	private static Injector injector;
+    private static SolrMeterRunMode runMode;
 
 	public static void main(String[] args) throws Exception {
 		addPlugins(new ExpectedParameter(args, "statisticsLocation", "./plugins").getValue());
-		injector = createInjector();
-		StressTestRegistry.start();
-		loadLookAndFeel();
-		initView(injector);
-		addStatistics(injector);
-		addQueryPanel(injector);
-		showView();
+		createInjector();
+        runMode = injector.getInstance(SolrMeterRunMode.class);
+        runMode.main(injector);
+        mainFrame = runMode.getMainFrame();
 	}
 	
 	private static void addPlugins(String statisticsPath) {
@@ -76,13 +71,19 @@ public class SolrMeterMain {
 		}
 	}
 
-	private static Injector createInjector() {
-		Injector injector = Guice.createInjector(
-				createModule("guice.statisticsModule"),
-				createModule("guice.modelModule"),
-				createModule("guice.standalonePresentationModule"),
-				new StressTestScopeModule());
-		return injector;
+	private static void createInjector() {
+        List<Module> modules = new ArrayList<Module>();
+        modules.add(createModule("guice.statisticsModule"));
+        modules.add(createModule("guice.modelModule"));
+        if (SolrMeterConfiguration.isHeadless()) {
+            modules.add(createModule("guice.headlessModule"));
+        }
+        else {
+            modules.add(createModule("guice.standalonePresentationModule"));
+        }
+        modules.add(createModule("guice.solrMeterRunModeModule"));
+        modules.add(new StressTestScopeModule());
+		injector = Guice.createInjector(modules);
 	}
 
 	private static Module createModule(String moduleKey) {
@@ -106,89 +107,11 @@ public class SolrMeterMain {
 	}
 
 	public static void restartApplication() {
-		StressTestRegistry.restart();
-		I18n.onConfigurationChange();
-		mainFrame.setQueryPanel(injector.getInstance(QueryConsolePanel.class));
-		mainFrame.setUpdatePanel(injector.getInstance(UpdateConsolePanel.class));
-		mainFrame.setOptimizePanel(injector.getInstance(OptimizeConsolePanel.class));
-		mainFrame.setCommitPanel(injector.getInstance(CommitConsolePanel.class));
-		mainFrame.setJMenuBar(injector.getInstance(JMenuBar.class));
-		mainFrame.onConfigurationChanged();
-		addStatistics(injector);
-		addQueryPanel(injector);
+        runMode.restartApplication();
 	}
 
-	private static void addQueryPanel(Injector injector2) {
-		mainFrame.getStatisticsContainer().addStatistic(injector.getInstance(QueryPanel.class));
-		
-	}
+    public static SolrMeterRunMode getRunMode() {
+        return runMode;
+    }
 
-	private static void initView(Injector injector) {
-		mainFrame = injector.getInstance(ConsoleFrame.class);
-		mainFrame.setTitle(I18n.get("mainFrame.title"));
-	}
-	
-	private static void showView() {
-		mainFrame.pack();
-		SwingUtils.centerWindow(mainFrame);
-		mainFrame.setVisible(true);
-	}
-
-	private static void loadLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			Logger.getLogger(SolrMeterMain.class).error("Error loading look and feel. Will Continue with default.", e);
-		}
-	}
-	
-	private static void addStatistics(Injector injector) {
-		QueryExecutor queryExecutor = injector.getInstance(QueryExecutor.class);
-		UpdateExecutor updateExecutor = injector.getInstance(UpdateExecutor.class);
-		OptimizeExecutor optimizeExecutor = injector.getInstance(OptimizeExecutor.class);
-		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
-		for(StatisticDescriptor stat:repository.getActiveStatistics()) {
-			Logger.getLogger("boot").info("Adding Statistic " + stat.getName());
-			if(stat.isHasView()) {
-				addStatictic(mainFrame.getStatisticsContainer(), injector, stat.getViewName());
-			}
-			if(stat.getTypes().contains(StatisticType.QUERY)) {
-				addStatistic(queryExecutor, injector, stat.getModelName());
-			}
-			if(stat.getTypes().contains(StatisticType.UPDATE)) {
-				addStatistic(updateExecutor, injector, stat.getModelName());
-			}
-			if(stat.getTypes().contains(StatisticType.OPTIMIZE)) {
-				addStatistic(optimizeExecutor, injector, stat.getModelName());
-			}
-		}
-		
-	}
-	
-	private static void addStatistic(OptimizeExecutor optimizeExecutor,
-			Injector injector, String modelName) {
-		Key<OptimizeStatistic> injectorKey = Key.get(OptimizeStatistic.class, Names.named(modelName));
-		optimizeExecutor.addStatistic(injector.getInstance(injectorKey));
-	}
-
-	private static void addStatistic(UpdateExecutor updateExecutor,
-			Injector injector, String modelName) {
-		Key<UpdateStatistic> injectorKey = Key.get(UpdateStatistic.class, Names.named(modelName));
-		updateExecutor.addStatistic(injector.getInstance(injectorKey));
-	}
-
-	private static void addStatictic(StatisticsContainer statisticsContainer,
-			Injector injector, String viewName) {
-		Key<StatisticPanel> injectorKey = Key.get(StatisticPanel.class, Names.named(viewName));
-		statisticsContainer.addStatistic(injector.getInstance(injectorKey));
-		
-	}
-	
-	private static void addStatistic(QueryExecutor queryExecutor, Injector injector,
-			String modelName) {
-		Key<QueryStatistic> injectorKey = Key.get(QueryStatistic.class, Names.named(modelName));
-		queryExecutor.addStatistic(injector.getInstance(injectorKey));
-	}
-	
-	
 }
