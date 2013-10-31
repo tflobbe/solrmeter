@@ -23,6 +23,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.name.Names;
+import com.plugtree.solrmeter.model.SolrMeterConfiguration;
+import com.plugtree.solrmeter.view.HeadlessStatisticPanel;
 import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.controller.StatisticDescriptor;
 import com.plugtree.solrmeter.controller.StatisticScope;
@@ -81,7 +83,12 @@ public class StatisticsModule extends AbstractModule {
 	@SuppressWarnings("unchecked")
 	private void bindStatistic(StatisticDescriptor description) {
 		if(description.isHasView()) {
-			bindView(description);
+            if (SolrMeterConfiguration.isHeadless()) {
+                bindHeadlessView(description);
+            }
+            else {
+                bindView(description);
+            }
 		}
 		ScopedBindingBuilder interfaceBinderBuilder = null;
 		if(description.getTypes().contains(StatisticType.QUERY)) {
@@ -120,8 +127,13 @@ public class StatisticsModule extends AbstractModule {
 		Class<?> statisticViewClass = description.getViewClass();
 		ScopedBindingBuilder binderBuilder = bind(statisticViewClass);
 		applyScope(description, binderBuilder);
-		
 	}
+
+    private void bindHeadlessViewClass(StatisticDescriptor description) {
+        Class<?> statisticHeadlessViewClass = description.getHeadlessViewClass();
+        ScopedBindingBuilder binderBuilder =  bind(statisticHeadlessViewClass);
+        applyScope(description, binderBuilder);
+    }
 
 	private void bindView(StatisticDescriptor description) {
 		Class<? extends StatisticPanel> statisticViewClass = description.getViewClass();
@@ -129,6 +141,13 @@ public class StatisticsModule extends AbstractModule {
 		applyScope(description, binderBuilder);
 		bindViewClass(description);
 	}
+
+    private void bindHeadlessView(StatisticDescriptor description) {
+        Class<? extends HeadlessStatisticPanel> statisticHeadlessViewClass = description.getHeadlessViewClass();
+        ScopedBindingBuilder binderBuilder = bind(HeadlessStatisticPanel.class).annotatedWith(Names.named(description.getHeadlessViewName())).to(statisticHeadlessViewClass);
+        applyScope(description, binderBuilder);
+        bindHeadlessViewClass(description);
+    }
 	
 	private void applyScope(StatisticDescriptor description,
 			ScopedBindingBuilder binderBuilder) {

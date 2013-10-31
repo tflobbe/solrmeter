@@ -175,8 +175,8 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 		totalClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime()));
 		totalErrors.setValue(String.valueOf(simpleQueryStatistic.getTotalErrors()));
 		if(simpleQueryStatistic.getTotalQueries() != 0) {
-			averageQueryTime.setValue(BigDecimal.valueOf(simpleQueryStatistic.getTotalQTime()).divide(BigDecimal.valueOf(simpleQueryStatistic.getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).toString());
-			averageClientTime.setValue(BigDecimal.valueOf(simpleQueryStatistic.getTotalClientTime()).divide(BigDecimal.valueOf(simpleQueryStatistic.getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).toString());
+			averageQueryTime.setValue(String.valueOf(simpleQueryStatistic.getAverageQueryTime()));
+			averageClientTime.setValue(String.valueOf(simpleQueryStatistic.getAverageClientTime()));
 		}
 		actualQueryRate.setValue(String.valueOf(operationRateStatistic.getQueryRate()));
 	}

@@ -112,15 +112,7 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 		logger.info("--------------Q TIME----------------------------");
 		try {
 			BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(queryTimeFilePath)));
-			long maxValue = Collections.max(timePerInterval.keySet());
-			long minValue = Collections.min(timePerInterval.keySet());
-			for(long i = minValue; i <=maxValue; i++) {
-				if(queriesPerInterval.containsKey(i)) {
-					print(outputStream, ((i-minValue)*precision) + "sec - " + (((i-minValue)+1) * precision) + "sec", (timePerInterval.get(i) / queriesPerInterval.get(i)));
-				}else {
-					print(outputStream, ((i-minValue)*precision) + "sec - " + (((i-minValue)+1) * precision) + "sec", 0);
-				}
-			}
+            printQueriesTimeToStream(outputStream);
 			outputStream.close();
 		} catch (IOException e) {
 			logger.error(e);
@@ -139,5 +131,17 @@ public class QueryTimeHistoryStatistic implements QueryStatistic {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public void printQueriesTimeToStream(BufferedOutputStream outputStream) throws IOException {
+        long maxValue = Collections.max(timePerInterval.keySet());
+        long minValue = Collections.min(timePerInterval.keySet());
+        for(long i = minValue; i <=maxValue; i++) {
+            if(queriesPerInterval.containsKey(i)) {
+                print(outputStream, ((i-minValue)*precision) + "sec - " + (((i-minValue)+1) * precision) + "sec", (timePerInterval.get(i) / queriesPerInterval.get(i)));
+            }else {
+                print(outputStream, ((i-minValue)*precision) + "sec - " + (((i-minValue)+1) * precision) + "sec", 0);
+            }
+        }
+    }
 
 }

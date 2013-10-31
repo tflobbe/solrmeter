@@ -8,6 +8,11 @@
 		<param name="attribute" value="viewClass" />
 	</field-handler>
 
+    <field-handler name="classHandlerHeadlessView"
+        class="com.plugtree.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
+        <param name="attribute" value="headlessViewClass" />
+    </field-handler>
+
 	<field-handler name="classHandlerModel"
 		class="com.plugtree.solrmeter.controller.statisticsParser.castor.ClassCastorFieldHandler">
 		<param name="attribute" value="modelClass" />
@@ -35,6 +40,11 @@
 			handler="classHandlerView">
 			<bind-xml name="view-class" node="element" />
 		</field>
+
+        <field name="headlessViewClass" type="string"
+            handler="classHandlerHeadlessView">
+            <bind-xml name="headless-view-class" node="element" />
+        </field>
 		
 		<field name="modelClass" type="string" required="true"
 			handler="classHandlerModel">

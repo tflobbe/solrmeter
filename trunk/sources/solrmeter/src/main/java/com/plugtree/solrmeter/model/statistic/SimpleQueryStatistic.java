@@ -21,6 +21,9 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.QueryStatistic;
 import com.plugtree.solrmeter.model.exception.QueryException;
+
+import java.math.BigDecimal;
+
 /**
  * Statistic that will show basic information about queries 
  * @author tflobbe
@@ -82,6 +85,14 @@ public class SimpleQueryStatistic implements QueryStatistic {
 	public long getTotalClientTime() {
 		return totalClientTime;
 	}
+
+    public long getAverageQueryTime() {
+        return BigDecimal.valueOf(getTotalQTime()).divide(BigDecimal.valueOf(getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).longValue();
+    }
+
+    public long getAverageClientTime() {
+        return BigDecimal.valueOf(getTotalClientTime()).divide(BigDecimal.valueOf(getTotalQueries()), 2, BigDecimal.ROUND_HALF_UP).longValue();
+    }
 
 	@Override
 	public void onQueryError(QueryException exception) {

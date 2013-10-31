@@ -20,11 +20,11 @@ public class StatisticsRepositoryTestCase extends BaseTestCase {
 		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
 		assertEquals(0, repository.getAvailableStatistics().size());
 		assertEquals(0, repository.getActiveStatistics().size());
-		repository.addStatistic(new StatisticDescriptor("test","Test", null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+		repository.addStatistic(new StatisticDescriptor("test","Test", null, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
 		assertEquals(1, repository.getAvailableStatistics().size());
 		assertEquals(1, repository.getActiveStatistics().size());
 		for(int i = 0; i < 9; i++) {
-			repository.addStatistic(new StatisticDescriptor("test" + i,"Test " + i, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+			repository.addStatistic(new StatisticDescriptor("test" + i,"Test " + i, null, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
 		}
 		assertEquals(10, repository.getAvailableStatistics().size());
 		assertEquals(10, repository.getActiveStatistics().size());
@@ -39,11 +39,11 @@ public class StatisticsRepositoryTestCase extends BaseTestCase {
 		StatisticsRepository repository = injector.getInstance(StatisticsRepository.class);
 		assertEquals(0, repository.getAvailableStatistics().size());
 		assertEquals(0, repository.getActiveStatistics().size());
-		repository.addStatistic(new StatisticDescriptor("test","Test", null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+		repository.addStatistic(new StatisticDescriptor("test","Test", null, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
 		assertEquals(1, repository.getAvailableStatistics().size());
 		assertEquals(1, repository.getActiveStatistics().size());
 		for(int i = 0; i < 9; i++) {
-			repository.addStatistic(new StatisticDescriptor("test" + i,"Test " + i, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
+			repository.addStatistic(new StatisticDescriptor("test" + i,"Test " + i, null, null, null,new StatisticType[]{StatisticType.QUERY}, StatisticScope.STRESS_TEST));
 		}
 		assertEquals(10, repository.getAvailableStatistics().size());
 		assertEquals(1, repository.getActiveStatistics().size());
