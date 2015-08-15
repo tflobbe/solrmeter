@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for SwingSet2 Demo Application -->
+<jnlp
+  spec="1.5+"
+  codebase="http://solrmeter.googlecode.com/files"
+  href="solrmeter.jnlp">
+  <information>
+    <title>SolrMeter Web Start</title>
+    <vendor>Linebee LLC.</vendor>
+    <homepage href="http://groups.google.com/goroup/solrmeter"/>
+    <description>Stress test tool for Apache Solr</description>
+    <description kind="short">A demo of the capabilities 
+    of the Swing Graphical User Interface.</description>
+    <offline-allowed/> 
+    <shortcut online="false">
+      <desktop/>
+      <menu submenu="My Corporation Apps"/>
+    </shortcut>
+  </information>
+  <!-- information os="linux">   
+    <title> SwingSet2 Demo on Linux </title>
+    <homepage href="docs/linuxhelp.html">
+  </information-->
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.4.2+" java-vm-args="-esa -Xnoclassgc"/>
+    <jar href="solrmeter-0.1.1-jar-with-dependencies.jar"/>
+  </resources>
+  <application-desc main-class="com.linebee.solrmeter.SolrMeterMain"/>
+</jnlp>
