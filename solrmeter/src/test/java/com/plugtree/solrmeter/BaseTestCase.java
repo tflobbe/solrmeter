@@ -39,7 +39,7 @@ import com.plugtree.solrmeter.StatisticsModule;
 
 public abstract class BaseTestCase extends TestCase {
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final Logger logger = Logger.getLogger(this.getClass());
 	
 	protected Injector injector;
 	
@@ -51,7 +51,6 @@ public abstract class BaseTestCase extends TestCase {
 			exception.printStackTrace();
 		}
 		PropertyConfigurator.configure(props);
-		logger = Logger.getLogger(this.getClass());
 		injector = createInjector();
 	}
 	

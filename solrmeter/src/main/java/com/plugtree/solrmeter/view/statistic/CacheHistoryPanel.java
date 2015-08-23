@@ -63,6 +63,8 @@ import com.plugtree.stressTestScope.StressTestScope;
 public class CacheHistoryPanel extends StatisticPanel implements ActionListener {
 	
 	private static final long serialVersionUID = -154560067788983461L;
+	
+	private final static Logger logger = Logger.getLogger(CacheHistoryPanel.class);
 
 	/**
 	 * Just for i18n stuff
@@ -339,7 +341,7 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void refreshView() {
-		Logger.getLogger(this.getClass()).debug("Cache History Panel");
+	    logger.debug("Cache History Panel");
 		if(showingSpecificCacheData) {
 			refreshSeries((Map<Long, CacheData>)ReflectionUtils.getAttribute(statistic, comboBoxCache.getSelectedItem().toString() + "Data"));
 			refreshCumulativeData();

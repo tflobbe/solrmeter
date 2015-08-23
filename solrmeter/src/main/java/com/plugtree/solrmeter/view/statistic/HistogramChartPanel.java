@@ -45,6 +45,8 @@ public class HistogramChartPanel extends StatisticPanel {
 	
 	private static final double LOWER_TICK_UNIT = HistogramQueryStatistic.HISTOGRAM_INTERVAL;
 	
+	private final static Logger logger = Logger.getLogger(HistogramChartPanel.class);
+	
 	private HistogramQueryStatistic histogram;
 	
 	private DefaultXYDataset xyDataset;
@@ -88,7 +90,7 @@ public class HistogramChartPanel extends StatisticPanel {
 	
 	@Override
 	public synchronized void refreshView() {
-		Logger.getLogger(this.getClass()).debug("refreshing histogram");
+		logger.debug("refreshing histogram");
 		
 		Map<Integer, Integer> histogramData = histogram.getCurrentHisogram();
 		double[][] data = new double[2][histogramData.size()];

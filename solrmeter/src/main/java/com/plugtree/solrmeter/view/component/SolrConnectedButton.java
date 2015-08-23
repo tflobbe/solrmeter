@@ -110,7 +110,10 @@ public class SolrConnectedButton extends JButton {
 					setConnectionOK();
 					stop();
 				}catch (InterruptedException e) {
-					Logger.getLogger(this.getClass()).error("Error on SolrConnectedButton", e);
+					Logger.getLogger(this.getClass()).error("Pinger thread interrupted", e);
+					Thread.currentThread().interrupt();
+					stop();
+					break;
 				}
 			}
 			

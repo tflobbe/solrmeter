@@ -25,6 +25,8 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 
 public class RoundedBorderJPanel extends TwoColumnsPanel {
+    
+    private static final Logger logger = Logger.getLogger(RoundedBorderJPanel.class);
 	
 	private static final long serialVersionUID = 1L;
 
@@ -84,13 +86,13 @@ public class RoundedBorderJPanel extends TwoColumnsPanel {
 		for(Component c: getComponents()) {
 			if(Row.class.isAssignableFrom(c.getClass()) && c.getMinimumSize().height>height) {
 				height = c.getMinimumSize().height;
-				Logger.getLogger(getClass()).info("maxHeight="+height);
+				logger.info("maxHeight="+height);
 			}
 		}
 		
 		for(Component c: getComponents()) {
 			if(Row.class.isAssignableFrom(c.getClass())) {
-				Logger.getLogger(getClass()).info(c.getClass().getName());
+			    logger.info(c.getClass().getName());
 				c.setMinimumSize(new Dimension(c.getMinimumSize().width, height));
 				c.setPreferredSize(new Dimension(c.getPreferredSize().width, height));
 				c.setMaximumSize(new Dimension(c.getMaximumSize().width, height));

@@ -86,6 +86,7 @@ public class ConstantOperationExecutorThread extends Thread {
   }
   
   private void executeOperation() throws OperationException {
+      //TODO use Executor
     Runnable r = new Runnable() {
       
       @Override

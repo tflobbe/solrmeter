@@ -34,7 +34,7 @@ import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
  */
 public abstract class AbstractRandomExecutor {
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final Logger logger = Logger.getLogger(this.getClass());
 	
 	/**
 	 * List of threads executing strings

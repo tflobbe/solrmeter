@@ -38,7 +38,7 @@ public class HistogramQueryStatistic implements QueryStatistic {
 	
 	public static final long HISTOGRAM_INTERVAL = 100L;
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final static Logger logger = Logger.getLogger(HistogramQueryStatistic.class);
 	
 	private Map<Long, Integer> histogram;
 	

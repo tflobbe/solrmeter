@@ -29,6 +29,8 @@ import com.plugtree.solrmeter.view.ConsolePanel;
 
 @StressTestScope
 public class QueryExecutorController {
+    
+    private final static Logger logger = Logger.getLogger(QueryExecutorController.class);
 	
 	private ConsolePanel panel;
 	
@@ -72,14 +74,14 @@ public class QueryExecutorController {
 	}
 
 	private void incrementQueriesPerMinute(Integer value) {
-		Logger.getLogger(this.getClass()).debug("Incrementing");
+	    logger.debug("Incrementing");
 		while(getExecutor().getQueriesPerSecond() < value) {
 			getExecutor().incrementOperationsPerSecond();
 		}
 	}
 
 	private void decrementQueriesPerMinute(Integer value) {
-		Logger.getLogger(this.getClass()).debug("Decrementing");
+	    logger.debug("Decrementing");
 		while(getExecutor().getQueriesPerSecond() > value) {
 			getExecutor().decrementOperationsPerSecond();
 		}

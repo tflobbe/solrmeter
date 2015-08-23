@@ -35,7 +35,7 @@ import com.plugtree.stressTestScope.StressTestScope;
 @StressTestScope
 public class OnDemandOptimizeExecutor implements OptimizeExecutor {
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final static Logger logger = Logger.getLogger(OnDemandOptimizeExecutor.class);
 	
 	/**
 	 * The Solr Server were the optimize is going to run.

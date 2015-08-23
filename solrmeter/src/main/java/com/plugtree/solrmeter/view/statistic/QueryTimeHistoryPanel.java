@@ -38,6 +38,8 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 	
 	private static final long serialVersionUID = 2781214713297030466L;
 	
+	private static final Logger logger = Logger.getLogger(QueryTimeHistoryPanel.class);
+	
 	private static final int LOWER_TICK_UNIT = 10;
 	
 	private static final int BAR_WIDTH = LOWER_TICK_UNIT-1;
@@ -63,7 +65,7 @@ public class QueryTimeHistoryPanel extends StatisticPanel {
 
 	@Override
 	public void refreshView() {
-		Logger.getLogger(this.getClass()).debug("refreshing query Time History");
+		logger.debug("refreshing query Time History");
 		
 		Map<Integer, Integer> histogramData = queryTimeStatistic.getCurrentHistory();
 		int size = histogramData.size();

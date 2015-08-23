@@ -32,7 +32,7 @@ import com.plugtree.solrmeter.model.generator.QueryGenerator;
  */
 public class QueryOperation implements Operation {
   
-  private Logger logger = Logger.getLogger(this.getClass());
+  private final static Logger logger = Logger.getLogger(QueryOperation.class);
   
   private QueryExecutor executor;
   

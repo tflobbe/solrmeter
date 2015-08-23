@@ -37,6 +37,8 @@ import java.io.IOException;
 
 @StressTestScope
 public class SolrMeterMenuController {
+    
+    private final static Logger logger = Logger.getLogger(SolrMeterMenuController.class);
 
 	private QueryExecutor queryExecutor;
 
@@ -74,14 +76,14 @@ public class SolrMeterMenuController {
 		if(returnValue == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			if(!selectedFile.exists()) {
-				Logger.getLogger(this.getClass()).error("Can't find file with name " + selectedFile.getName());
+			    logger.error("Can't find file with name " + selectedFile.getName());
 				//TODO show error
 			}else {
 				try {
 					SolrMeterConfiguration.importConfiguration(selectedFile);
 					SolrMeterMain.restartApplication();
 				} catch (IOException e) {
-					Logger.getLogger(this.getClass()).error("Error importing configuration", e);
+				    logger.error("Error importing configuration", e);
 					//TODO show error
 				}
 			}
@@ -109,7 +111,7 @@ public class SolrMeterMenuController {
 				}
 			}
 		} catch (IOException e) {
-			Logger.getLogger(this.getClass()).error("Error exporting configuration", e);
+		    logger.error("Error exporting configuration", e);
 			//TODO show error
 		}
 

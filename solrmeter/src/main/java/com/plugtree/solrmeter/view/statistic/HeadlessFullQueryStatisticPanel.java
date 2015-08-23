@@ -8,6 +8,7 @@ import com.plugtree.solrmeter.view.HeadlessStatisticPanel;
 import com.plugtree.solrmeter.view.HeadlessUtils;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.stressTestScope.StressTestScope;
+
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import java.util.List;
 @StressTestScope
 public class HeadlessFullQueryStatisticPanel extends HeadlessStatisticPanel {
 
+    private final static Logger logger = Logger.getLogger(HeadlessFullQueryStatisticPanel.class);
     private final String PREFIX = "statistic.fullQueryStatistic.";
     private static final int DOUBLE_SCALE = 2;
 	private FullQueryStatistic fullQueryStatistic;
@@ -47,7 +49,7 @@ public class HeadlessFullQueryStatisticPanel extends HeadlessStatisticPanel {
 
     @Override
     public void refreshView() {
-        Logger.getLogger(this.getClass()).debug("refreshing Full Query Statistics");
+        logger.debug("refreshing Full Query Statistics");
 
         ArrayList<String> lines = new ArrayList<String>();
         lines.add("median:\t" + getString(fullQueryStatistic.getMedian()));

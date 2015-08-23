@@ -29,6 +29,8 @@ import com.plugtree.solrmeter.view.QueryPanel;
  *
  */
 public class QueryPanelController {
+    
+    private final static Logger logger = Logger.getLogger(QueryPanelController.class);
 	
 	private QueryService service;
 	
@@ -40,7 +42,8 @@ public class QueryPanelController {
 	}
 	
 	public void executeQuery() {
-		Logger.getLogger(this.getClass()).info("Executing Query");
+	    logger.info("Executing Query");
+	    //TODO to executor
 		Thread thread = new Thread() {
 			@Override
 			public void run() {

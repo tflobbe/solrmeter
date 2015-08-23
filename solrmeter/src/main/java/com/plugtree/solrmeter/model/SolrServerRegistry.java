@@ -30,9 +30,9 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
  */
 public class SolrServerRegistry {
 
-	protected static Logger logger = Logger.getLogger(SolrServerRegistry.class);
+	protected static final Logger logger = Logger.getLogger(SolrServerRegistry.class);
 
-	private static Map<String, SolrServer> servers = new HashMap<String, SolrServer>();
+	private static final Map<String, SolrServer> servers = new HashMap<String, SolrServer>();
 
 	public static synchronized SolrServer getSolrServer(String url) {
 		SolrServer server = servers.get(url);

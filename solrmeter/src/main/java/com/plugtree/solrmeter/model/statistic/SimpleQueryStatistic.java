@@ -32,7 +32,7 @@ import java.math.BigDecimal;
 @StressTestScope
 public class SimpleQueryStatistic implements QueryStatistic {
 	
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final static Logger logger = Logger.getLogger(SimpleQueryStatistic.class);
 	
 	/**
 	 * The sum of QTime of all executed strings

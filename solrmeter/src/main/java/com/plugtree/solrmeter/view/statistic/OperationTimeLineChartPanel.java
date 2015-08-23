@@ -57,6 +57,8 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 	
 	private static final String SERIES_KEY_OPTIMIZE_TIME = "optimizeTime";
 	
+	private static final Logger logger = Logger.getLogger(OperationTimeLineChartPanel.class);
+	
 	private DefaultXYDataset xyDataset = new DefaultXYDataset();
 	
 	private OperationTimeHistory statistic;
@@ -137,7 +139,7 @@ public class OperationTimeLineChartPanel extends StatisticPanel implements Actio
 
 	@Override
 	public synchronized void refreshView() {
-		Logger.getLogger(this.getClass()).debug("refreshing Time Line");
+		logger.debug("refreshing Time Line");
 		
 		// instead of deleting the series when a checkbox is unchecked,
 		// I prefer to use an empty map because in this way the legend

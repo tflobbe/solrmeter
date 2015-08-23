@@ -45,7 +45,7 @@ import com.plugtree.stressTestScope.StressTestScope;
 @StressTestScope
 public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final static Logger logger = Logger.getLogger(UpdateExecutorConstantImpl.class);
 
 	//TODO DI
 	private SolrServer server;

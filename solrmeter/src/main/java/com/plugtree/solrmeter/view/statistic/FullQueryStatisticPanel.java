@@ -56,6 +56,8 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 
 	private static final int doubleScale = 2;
 	
+	private final static Logger logger = Logger.getLogger(FullQueryStatisticPanel.class);
+	
 	private FullQueryStatistic fullQueryStatistic;
 	private QueryLogStatistic queryLogStatistic;
 	
@@ -164,7 +166,7 @@ public class FullQueryStatisticPanel extends StatisticPanel {
 
 	@Override
 	public void refreshView() {
-		Logger.getLogger(this.getClass()).debug("refreshing Full Query Statistics");
+	    logger.debug("refreshing Full Query Statistics");
 		medianInfoPanel.setValue(getString(fullQueryStatistic.getMedian()));
 		modeInfoPanel.setValue(fullQueryStatistic.getMode().toString());
 		varianceInfoPanel.setValue(getString(fullQueryStatistic.getVariance()));

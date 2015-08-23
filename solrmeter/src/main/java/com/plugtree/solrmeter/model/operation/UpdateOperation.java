@@ -32,7 +32,7 @@ import com.plugtree.solrmeter.model.exception.UpdateException;
  */
 public class UpdateOperation implements Operation {
 	
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final static Logger logger = Logger.getLogger(UpdateOperation.class);
 	
 	private UpdateExecutor executor;
 	

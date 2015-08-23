@@ -36,7 +36,7 @@ import com.plugtree.solrmeter.model.exception.QueryException;
 @StressTestScope
 public class QueryTimeHistoryStatistic implements QueryStatistic {
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final static Logger logger = Logger.getLogger(QueryTimeHistoryStatistic.class);
 	
 	private Map<Long, Integer> timePerInterval;
 	

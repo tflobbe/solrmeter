@@ -48,6 +48,8 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 	
 	private static final long serialVersionUID = 6190280732555917695L;
 	
+	private final static Logger logger = Logger.getLogger(ErrorLogPanel.class);
+	
 	private final static SimpleDateFormat dateFormat = new SimpleDateFormat(SolrMeterConfiguration.getProperty("solr.view.logPanel.dateFormat", "MM/dd/yyyy HH:mm:ss:SS"));
 
 	private JTable logTable;
@@ -134,7 +136,7 @@ public class ErrorLogPanel extends StatisticPanel implements ActionListener, Mou
 
 	@Override
 	public synchronized void refreshView() {
-		Logger.getLogger(this.getClass()).debug("refreshing Error Log");
+	    logger.debug("refreshing Error Log");
 		((OperationExceptionTableModel)logTable.getModel()).refreshData(getErrorsToShow());
 	}
 

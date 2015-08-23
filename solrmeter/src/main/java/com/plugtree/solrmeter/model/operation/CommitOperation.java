@@ -30,6 +30,8 @@ import com.plugtree.solrmeter.model.exception.CommitException;
  *
  */
 public class CommitOperation implements Operation {
+    
+    private final static Logger logger = Logger.getLogger(CommitOperation.class);
 	
 	private UpdateExecutor executor;
 	
@@ -39,17 +41,17 @@ public class CommitOperation implements Operation {
 
 	@Override
 	public boolean execute() {
-		Logger.getLogger(this.getClass()).info("commiting");
+	    logger.info("commiting");
 		try {
 			UpdateResponse response = executor.getSolrServer().commit();
-			Logger.getLogger(this.getClass()).info("Commit OK");
+			logger.info("Commit OK");
 			executor.notifyCommitSuccessfull(response);
 		} catch (SolrServerException e) {
-			Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
+		    logger.error("Error on commiter thread", e);
 			executor.notifyCommitError(new CommitException(e));
 			return false;
 		} catch (IOException e) {
-			Logger.getLogger(this.getClass()).error("Error on commiter thread", e);
+		    logger.error("Error on commiter thread", e);
 			executor.notifyCommitError(new CommitException(e));
 			return false;
 		}

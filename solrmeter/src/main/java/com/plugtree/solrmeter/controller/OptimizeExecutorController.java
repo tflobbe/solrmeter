@@ -25,6 +25,8 @@ import com.plugtree.solrmeter.view.Refreshable;
 
 @StressTestScope
 public class OptimizeExecutorController {
+    
+    private final static Logger logger = Logger.getLogger(OptimizeExecutorController.class);
 	
 	private OptimizeExecutor executor;
 	
@@ -39,7 +41,8 @@ public class OptimizeExecutorController {
 	}
 
 	public void onOptimize() {
-		Logger.getLogger(this.getClass()).info("Optimizing...");
+	    logger.info("Optimizing...");
+	    //TODO: to executor
 		Thread thread = new Thread() {
 			
 			@Override
@@ -52,7 +55,8 @@ public class OptimizeExecutorController {
 					}
 					panel.refreshView();
 				} catch (InterruptedException e) {
-					Logger.getLogger(this.getClass()).info(e);
+					logger.info(e);
+					Thread.currentThread().interrupt();
 				}
 			}
 		};

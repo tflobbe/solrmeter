@@ -32,7 +32,7 @@ import com.plugtree.solrmeter.model.exception.OperationException;
  */
 public class RandomOperationExecutorThread extends Thread {
 	
-	protected Logger logger = Logger.getLogger(this.getClass());
+	protected final static Logger logger = Logger.getLogger(RandomOperationExecutorThread.class);
 
 	protected boolean stopping = false;
 	

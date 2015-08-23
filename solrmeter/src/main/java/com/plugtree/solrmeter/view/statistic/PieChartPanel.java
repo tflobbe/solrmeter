@@ -46,6 +46,8 @@ public class PieChartPanel extends StatisticPanel {
 
 	private static final long serialVersionUID = -3022639027937641338L;
 	
+	private static final Logger logger = Logger.getLogger(PieChartPanel.class);
+	
 	private DefaultPieDataset pieDataset;
 	
 	private TimeRangeStatistic timeRangeStatistic;
@@ -107,7 +109,7 @@ public class PieChartPanel extends StatisticPanel {
 
 	@Override
 	public void refreshView() {
-		Logger.getLogger(this.getClass()).debug("Refreshing pie chart");
+		logger.debug("Refreshing pie chart");
 		
 		pieDataset.clear();
 		

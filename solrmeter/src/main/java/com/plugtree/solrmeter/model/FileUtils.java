@@ -42,7 +42,7 @@ public class FileUtils {
 	
     public static final String UTF8_BOM = "\uFEFF";
 	
-	private static Logger logger = Logger.getLogger(FileUtils.class);
+	private static final Logger logger = Logger.getLogger(FileUtils.class);
 
 	/**
 	 * Loads from the file with path "filePath" all lines as strings.
