@@ -12,7 +12,7 @@ The following steps should be followed to compile and package SolrMeter ([Maven]
   1. cd to the root of the project.
   1. run 'mvn package'
   1. The generated jar file is under "solrmeter/target" directory. The jar is named solrmeter-{version}-jar-with-dependencies.jar
-  1. run it like [Run the lastest version](Usage#Run_the_latest_version.md) running the generated jar instead of the downloaded one.
+  1. run it like [Run the lastest version](Usage.md#run-the-latest-version) running the generated jar instead of the downloaded one.
 
 # Just want to see how SolrMeter works? #
 If you just want to see how SolrMeter works, you can try with the default configuration. SolrMeter default configuration was thought to run with Solr example.
