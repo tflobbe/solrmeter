@@ -55,7 +55,7 @@ public interface QueryExecutor {
 	 * Returns the number of queries to be executed every minute
 	 * @return
 	 */
-	int getQueriesPerMinute();
+	int getQueriesPerSecond();
 
 	/**
 	 * Prepares this executor to run
@@ -75,12 +75,12 @@ public interface QueryExecutor {
 	/**
 	 * Increments in one the number of strings per minute
 	 */
-	void incrementOperationsPerMinute();
+	void incrementOperationsPerSecond();
 
 	/**
 	 * Decrements in one the number of strings per minute
 	 */
-	void decrementOperationsPerMinute();
+	void decrementOperationsPerSecond();
 
 	/**
 	 * Determines whether this executor is running.

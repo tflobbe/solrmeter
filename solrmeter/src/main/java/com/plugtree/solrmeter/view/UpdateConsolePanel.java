@@ -165,7 +165,7 @@ public class UpdateConsolePanel extends RoundedBorderJPanel implements ConsolePa
 	}
 	
 	private Component getConcurrentUpdatesSpinner() {
-		concurrentUpdatesSpinnerPanel = new SpinnerPanel(updateExecutor.getUpdatesPerMinute(), 1, MAX_CONCURRENT_UPDATES, 1, I18n.get("updateConsolePanel.updatesPerMinute"));
+		concurrentUpdatesSpinnerPanel = new SpinnerPanel(updateExecutor.getUpdatesPerMinute(), 1, MAX_CONCURRENT_UPDATES, 1, I18n.get("updateConsolePanel.updatesPerSecond"));
 		concurrentUpdatesSpinnerPanel.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

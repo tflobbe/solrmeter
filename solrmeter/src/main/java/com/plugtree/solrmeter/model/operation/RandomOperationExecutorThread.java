@@ -23,7 +23,7 @@ import com.plugtree.solrmeter.model.exception.OperationException;
 
 /**
  * 
- * An Operation that has to be executed every N seconds. The interval of execution
+ * An Operation that has to be executed every N milliseconds. The interval of execution
  * is not precise, it is at least queryInterval (parameter passed to the constructor)
  * and at most queryInterval + operation time. This is because the instant where the
  * operation is executed is randomly chosen inside the N seconds interval.
@@ -36,7 +36,7 @@ public class RandomOperationExecutorThread extends Thread {
 
 	protected boolean stopping = false;
 	
-	private long queryInterval;
+	private long operationIntervalInMs;
 	
 	/**
 	 * Operation to execute
@@ -45,7 +45,7 @@ public class RandomOperationExecutorThread extends Thread {
 	
 	public RandomOperationExecutorThread(Operation operation, long operationInterval) {
 		super();
-		this.queryInterval = operationInterval;
+		this.operationIntervalInMs = operationInterval;
 		this.operation = operation;
 	}
 	
@@ -56,26 +56,31 @@ public class RandomOperationExecutorThread extends Thread {
 			try {
 				Thread.sleep(waitBeforeTime);
 			} catch (InterruptedException e) {
-				logger.error(e);
+				logger.error("Thread interrupted", e);
+				stopping = true;
+				Thread.currentThread().interrupt();
+				break;
 			}
 			if(!isStopping()) {
 				executeOperation();
 			}
 			try {
 				
-				long diff = ((queryInterval*1000) + init) - new Date().getTime();
+				long diff = (operationIntervalInMs + init) - new Date().getTime();
 				if(diff > 0L) {
 					Thread.sleep(diff);
 				}
-//				Thread.sleep((queryInterval * 1000) - waitBeforeTime);
 			} catch (InterruptedException e) {
-				logger.error(e);
+			    logger.error("Thread interrupted", e);
+				stopping = true;
+                Thread.currentThread().interrupt();
+                break;
 			}
 		}
 	}
 	
 	protected long getRandomSleepTime() {
-		return (long) (Math.random() * queryInterval * 1000);
+		return (long) (Math.random() * operationIntervalInMs);
 	}
 	
 	protected void executeOperation() {

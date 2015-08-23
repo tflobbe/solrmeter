@@ -59,7 +59,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	 */
 	private boolean running;
 	
-	private int operationsPerMinute;
+	private int operationsPerSecond;
 	
 	/**
 	 * Thread that execute queries periodically
@@ -76,20 +76,20 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 		super();
         this.queryGenerator = queryGenerator;
         statistics = new LinkedList<QueryStatistic>();
-		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
+		this.operationsPerSecond = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_SECOND)).intValue();
 	}
 
 
 
 	@Override
-	public void decrementOperationsPerMinute() {
-		operationsPerMinute--;
+	public void decrementOperationsPerSecond() {
+		operationsPerSecond--;
 		updateThreadWaitTime();
 	}
 
 	@Override
-	public int getQueriesPerMinute() {
-		return operationsPerMinute;
+	public int getQueriesPerSecond() {
+		return operationsPerSecond;
 	}
 
 	@Override
@@ -101,14 +101,14 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	}
 
 	@Override
-	public void incrementOperationsPerMinute() {
-		operationsPerMinute++;
+	public void incrementOperationsPerSecond() {
+		operationsPerSecond++;
 		updateThreadWaitTime();
 	}
 	
 	private void updateThreadWaitTime() {
 		if(executerThread != null) {
-			executerThread.setTimeToWait(60000/operationsPerMinute);
+			executerThread.setTimeToWait(1000/operationsPerSecond);
 		}
 	}
 

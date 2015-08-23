@@ -119,7 +119,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	public void testMaxDocsBeforeCommit() throws InterruptedException{
 		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "10000");
 		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "100");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
@@ -140,7 +140,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	public void testDecrementMaxDocsBeforeCommit() throws InterruptedException{
 		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "10000");
 		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "100");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
@@ -174,7 +174,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	public void testIncrementMaxDocsBeforeCommit() throws InterruptedException{
 		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "100000");
 		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "100");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
@@ -212,7 +212,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	
 	public void testAutocommit() {
 		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "true");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
 		UpdateTestSatistic statistic = new UpdateTestSatistic();
@@ -258,7 +258,7 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 	public void testManyAdds() throws InterruptedException {
 		SolrMeterConfiguration.setProperty("solr.update.timeToCommit", "1000000");//Don't want to commit due to time
 		SolrMeterConfiguration.setProperty("solr.update.solrAutocommit", "false");
-		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE, "0");
+		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "10");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();

@@ -6,3 +6,8 @@ stressTestScope/.classpath
 stressTestScope/.project
 stressTestScope/.settings
 stressTestScope/target
+histogram.csv
+queryTime.csv
+solrmeter.log
+solrmeter/solrmeter.log
+

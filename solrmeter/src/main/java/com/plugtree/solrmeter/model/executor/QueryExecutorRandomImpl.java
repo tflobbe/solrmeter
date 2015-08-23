@@ -62,8 +62,8 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	public QueryExecutorRandomImpl(@Named("queryGenerator") QueryGenerator queryGenerator) {
 		super();
         this.queryGenerator = queryGenerator;
-		statistics = new LinkedList<QueryStatistic>();
-		this.operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
+		this.statistics = new LinkedList<QueryStatistic>();
+		this.operationsPerSecond = Integer.parseInt(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_SECOND));
 		super.prepare();
 	}
 
@@ -71,7 +71,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 
 	public QueryExecutorRandomImpl() {
 		super();
-		statistics = new LinkedList<QueryStatistic>();
+		this.statistics = new LinkedList<QueryStatistic>();
 //		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 	}
 	
@@ -79,7 +79,7 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new QueryOperation(this, queryGenerator), 60);
+		return new RandomOperationExecutorThread(new QueryOperation(this, queryGenerator), 1000);
 	}
 
 	/**
@@ -102,22 +102,22 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	
 	@Override
 	public void notifyQueryExecuted(QueryResponse response, long clientTime) {
-		for(QueryStatistic statistic:statistics) {
+		for (QueryStatistic statistic:statistics) {
 			statistic.onExecutedQuery(response, clientTime);
 		}
 	}
 	
 	@Override
 	public void notifyError(QueryException exception) {
-		for(QueryStatistic statistic:statistics) {
+		for (QueryStatistic statistic:statistics) {
 			statistic.onQueryError(exception);
 		}
 	}
 	
 	
 	@Override
-	protected String getOperationsPerMinuteConfigurationKey() {
-		return "solr.load.queriesperminute";
+	protected String getOperationsPerSecondConfigurationKey() {
+		return "solr.load.queriespersecond";
 	}
 	
 	@Override
@@ -126,8 +126,8 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	}
 
 	@Override
-	public int getQueriesPerMinute() {
-		return operationsPerMinute;
+	public int getQueriesPerSecond() {
+		return operationsPerSecond;
 	}
 
 }

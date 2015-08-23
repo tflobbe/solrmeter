@@ -75,7 +75,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		super();
 		this.documentExtractor = documentExtractor;
 		statistics = new LinkedList<UpdateStatistic>();
-		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE)).intValue();
+		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_SECOND)).intValue();
 		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
@@ -215,7 +215,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	}
 
 	@Override
-	public void decrementOperationsPerMinute() {
+	public void decrementOperationsPerSecond() {
 		if(operationsPerMinute > 1) {
 			this.operationsPerMinute--;
 			this.onOperationsPerMinuteChange();
@@ -223,7 +223,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	}
 
 	@Override
-	public void incrementOperationsPerMinute() {
+	public void incrementOperationsPerSecond() {
 		this.operationsPerMinute++;
 		onOperationsPerMinuteChange();
 	}

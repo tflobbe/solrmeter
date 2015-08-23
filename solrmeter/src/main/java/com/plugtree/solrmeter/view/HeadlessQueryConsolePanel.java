@@ -48,7 +48,7 @@ public class HeadlessQueryConsolePanel extends HeadlessConsolePanel {
 
     public void refreshView() {
         ArrayList<String> lines = new ArrayList<String>();
-        lines.add("queries per minute:\t" + String.valueOf(queryExecutor.getQueriesPerMinute()));
+        lines.add("queries per minute:\t" + String.valueOf(queryExecutor.getQueriesPerSecond()));
         lines.add("total queries:\t" + String.valueOf(simpleQueryStatistic.getTotalQueries()));
         lines.add("total query time:\t" + String.valueOf(simpleQueryStatistic.getTotalQTime()));
         lines.add("total client time:\t" + String.valueOf(simpleQueryStatistic.getTotalClientTime()));

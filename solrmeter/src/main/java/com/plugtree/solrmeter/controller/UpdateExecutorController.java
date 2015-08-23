@@ -83,14 +83,14 @@ public class UpdateExecutorController {
 	private void incrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Incrementing");
 		while(executor.getUpdatesPerMinute() < value) {
-			executor.incrementOperationsPerMinute();
+			executor.incrementOperationsPerSecond();
 		}
 	}
 
 	private void decrementQueriesPerMinute(Integer value) {
 		Logger.getLogger(this.getClass()).debug("Decrementing");
 		while(executor.getUpdatesPerMinute() > value) {
-			executor.decrementOperationsPerMinute();
+			executor.decrementOperationsPerSecond();
 		}
 	}
 

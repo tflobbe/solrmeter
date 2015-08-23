@@ -26,7 +26,7 @@ public class MockExecutor extends AbstractRandomExecutor {
 	
 	public MockExecutor(int operations) {
 		super();
-		this.operationsPerMinute = operations;
+		this.operationsPerSecond = operations;
 		destroyedThreads = 0;
 		executedThreads = 0;
 	}
@@ -75,7 +75,7 @@ public class MockExecutor extends AbstractRandomExecutor {
 	}
 
 	@Override
-	protected String getOperationsPerMinuteConfigurationKey() {
+	protected String getOperationsPerSecondConfigurationKey() {
 		return "";
 	}
 

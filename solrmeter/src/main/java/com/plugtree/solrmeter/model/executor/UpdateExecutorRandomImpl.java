@@ -67,7 +67,7 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		super();
 		this.documentExtractor = documentExtractor;
 		statistics = new LinkedList<UpdateStatistic>();
-		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_MINUTE)).intValue();
+		operationsPerSecond = Integer.parseInt(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.UPDATES_PER_SECOND));
 		autocommit = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.update.solrAutocommit", "false"));;
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
@@ -87,7 +87,7 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 	}
 	
 	protected RandomOperationExecutorThread createThread() {
-		return new RandomOperationExecutorThread(new UpdateOperation(this, documentExtractor), 60);
+		return new RandomOperationExecutorThread(new UpdateOperation(this, documentExtractor), 1000);
 	}
 
 	private void prepareCommitter() {
@@ -204,11 +204,11 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 	}
 
 	public Integer getUpdatesPerMinute() {
-		return this.operationsPerMinute;
+		return this.operationsPerSecond;
 	}
 
 	@Override
-	protected String getOperationsPerMinuteConfigurationKey() {
-		return "solr.load.updatesperminute";
+	protected String getOperationsPerSecondConfigurationKey() {
+		return "solr.load.updatespersecond";
 	}
 }

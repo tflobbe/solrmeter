@@ -59,8 +59,10 @@ public class ConstantOperationExecutorThread extends Thread {
           executeOperation();
         }
       } catch (InterruptedException e) {
-        Logger.getLogger(this.getClass()).error("Error on query thread", e);
-        throw new RuntimeException(e);
+        Logger.getLogger(this.getClass()).error("Thread interrupted", e);
+        Thread.currentThread().interrupt();
+        running = false;
+        break;
       } catch (OperationException e) {
         Logger.getLogger(this.getClass()).error("Error on query thread", e);
         throw new RuntimeException(e);

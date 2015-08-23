@@ -42,12 +42,12 @@ public abstract class AbstractRandomExecutor {
 	protected List<RandomOperationExecutorThread> threads;
 	
 	/**
-	 * The number of operations that are executed every one minute.
+	 * The number of operations that are executed every one second.
 	 */
-	protected int operationsPerMinute;
+	protected int operationsPerSecond;
 	
 	/**
-	 * Indicates wether the Executor is running or not
+	 * Indicates whether the Executor is running or not
 	 */
 	private boolean running;
 	
@@ -81,7 +81,7 @@ public abstract class AbstractRandomExecutor {
 	public void prepare() {
 		threads = new LinkedList<RandomOperationExecutorThread>();
 		running = false;
-		for(int i = 0; i < operationsPerMinute; i++) {
+		for(int i = 0; i < operationsPerSecond; i++) {
 			threads.add(createThread());
 		}
 		prepared = true;
@@ -90,17 +90,17 @@ public abstract class AbstractRandomExecutor {
 	/**
 	 * Increments in one the number of strings per minute
 	 */
-	public void incrementOperationsPerMinute() {
+	public void incrementOperationsPerSecond() {
 		RandomOperationExecutorThread newThread = this.createThread(); 
 		threads.add(newThread);
 		if(running) {
 			newThread.start();
 		}
-		operationsPerMinute++;
-		SolrMeterConfiguration.setProperty(getOperationsPerMinuteConfigurationKey(), String.valueOf(operationsPerMinute));
+		operationsPerSecond++;
+		SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
 	}
 	
-	protected abstract String getOperationsPerMinuteConfigurationKey();
+	protected abstract String getOperationsPerSecondConfigurationKey();
 
 	protected abstract RandomOperationExecutorThread createThread();
 
@@ -108,11 +108,11 @@ public abstract class AbstractRandomExecutor {
 	 * Decrements in one (and stops the removed one) the number of
 	 * strings per minute
 	 */
-	public void decrementOperationsPerMinute() {
+	public void decrementOperationsPerSecond() {
 		RandomOperationExecutorThread removedThread = threads.remove(threads.size() - 1);
 		removedThread.destroy();
-		operationsPerMinute--;
-		SolrMeterConfiguration.setProperty(getOperationsPerMinuteConfigurationKey(), String.valueOf(operationsPerMinute));
+		operationsPerSecond--;
+		SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
 	}
 	
 

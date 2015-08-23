@@ -38,7 +38,7 @@ public class AbstractOperationThreadTestCase extends BaseTestCase {
 	}
 	
 	public void testRunNoOpTime() throws InterruptedException {
-		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1, 0);//every 1 second
+		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1000, 0);//every 1 second
 		thread.start();
 		Thread.sleep(5000);
 		assertEquals(5, thread.getExecutionCount());
@@ -46,7 +46,7 @@ public class AbstractOperationThreadTestCase extends BaseTestCase {
 	}
 	
 	public void testRunSmallOpTime() throws InterruptedException {
-		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1, 100);//every 1 second
+		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1000, 100);//every 1 second
 		thread.forceExecutionTimes(1);
 		long init = new Date().getTime();
 		thread.run();
@@ -56,7 +56,7 @@ public class AbstractOperationThreadTestCase extends BaseTestCase {
 	}
 	
 	public void testRunMediumOpTime() throws InterruptedException {
-		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1, 500);//every 1 second
+		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1000, 500);//every 1 second
 		thread.forceExecutionTimes(1);
 		long init = new Date().getTime();
 		thread.run();
@@ -66,7 +66,7 @@ public class AbstractOperationThreadTestCase extends BaseTestCase {
 	}
 	
 	public void testRunBigOpTime() throws InterruptedException {
-		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1, 1500);//every 1 second
+		DummyAbstractOperationThread thread = new DummyAbstractOperationThread(1000, 1500);//every 1 second
 		thread.forceExecutionTimes(1);
 		long init = new Date().getTime();
 		thread.run();

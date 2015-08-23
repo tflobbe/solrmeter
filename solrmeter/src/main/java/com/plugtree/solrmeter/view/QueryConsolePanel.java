@@ -157,19 +157,19 @@ public class QueryConsolePanel extends RoundedBorderJPanel implements ConsolePan
 	}
 	
 	private Component getCurrentQueriesSpinner() {
-		concurrentQueries = new SpinnerPanel(1, 1, MAX_CONCURRENT_QUERIES, 1, I18n.get("queryConsolePanel.queriesPerMinute"));
+		concurrentQueries = new SpinnerPanel(1, 1, MAX_CONCURRENT_QUERIES, 1, I18n.get("queryConsolePanel.queriesPerSecond"));
 		concurrentQueries.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				controller.onConcurrentQueriesValueChange(concurrentQueries.getValue());
 			}
 		});
-		concurrentQueries.setValue(queryExecutor.getQueriesPerMinute());
+		concurrentQueries.setValue(queryExecutor.getQueriesPerSecond());
 		return concurrentQueries;
 	}
 
 	public void refreshView() {
-		concurrentQueries.setValue(queryExecutor.getQueriesPerMinute());
+		concurrentQueries.setValue(queryExecutor.getQueriesPerSecond());
 		totalQueries.setValue(String.valueOf(simpleQueryStatistic.getTotalQueries()));
 		totalQueryTime.setValue(String.valueOf(simpleQueryStatistic.getTotalQTime()));
 		totalClientTime.setValue(String.valueOf(simpleQueryStatistic.getTotalClientTime()));

@@ -53,10 +53,10 @@ public class SolrMeterConfiguration {
 	public static String UPDATES_FILE_PATH = "solr.updatesFiles";
 	public static String DELETES_FILE_PATH = "solr.deletesFiles";
 	public static String INSERTS_FILE_PATH = "solr.insertsFiles";
-	public static String QUERIES_PER_MINUTE = "solr.load.queriesperminute";
-	public static String UPDATES_PER_MINUTE = "solr.load.updatesperminute";
-	public static String DELETES_PER_MINUTE = "solr.load.deletesperminute";
-	public static String INSERTS_PER_MINUTE = "solr.load.deletesperminute";
+	public static String QUERIES_PER_SECOND = "solr.load.queriespersecond";
+	public static String UPDATES_PER_SECOND = "solr.load.updatespersecond";
+	public static String DELETES_PER_SECOND = "solr.load.deletespersecond";
+	public static String INSERTS_PER_SECOND = "solr.load.deletespersecond";
 	public static String TEST_TIME = "solr.testTime";
 	public static String QUERY_METHOD = "solr.queryMethod";
 

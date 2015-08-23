@@ -134,12 +134,12 @@ public interface UpdateExecutor {
 	/**
 	 * Increment in one the number of updates that has to be executed in a minute.
 	 */
-	public void incrementOperationsPerMinute();
+	public void incrementOperationsPerSecond();
 
 	/**
 	 * Decrement in one the number of updates that has to be executed in a minute.
 	 * It can't be 0 or less.
 	 */
-	public void decrementOperationsPerMinute();
+	public void decrementOperationsPerSecond();
 
 }
