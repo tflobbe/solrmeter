@@ -13,15 +13,15 @@
 
 	<licenses>
 		<license>
-			<name>ASF</name>
+			<name>Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
 
 	<scm>
-		<url>http://code.google.com/p/solrmeter/source/browse/</url>
-		<developerConnection>scm:svn:https://solrmeter.googlecode.com/svn/trunk/sources</developerConnection>
-		<connection>scm:svn:http://solrmeter.googlecode.com/svn/trunk/sources</connection>
+		<url>https://github.com/tflobbe/solrmeter</url>
+		<developerConnection>scm:git:https://github.com/tflobbe/solrmeter.git</developerConnection>
+		<connection>scm:git:https://github.com/tflobbe/solrmeter.git</connection>
 	</scm>
 
 	<mailingLists>
@@ -35,8 +35,8 @@
 	</mailingLists>
 
 	<issueManagement>
-		<system>Google Issues</system>
-		<url>http://code.google.com/p/solrmeter/issues/list</url>
+		<system>Github issues</system>
+		<url>https://github.com/tflobbe/solrmeter/issues</url>
 	</issueManagement>
 
 	<organization>
@@ -191,9 +191,6 @@
   	                <groupId>org.apache.maven.plugins</groupId>
   	                <artifactId>maven-release-plugin</artifactId>
   	                <version>2.3.2</version>
-  	                <configuration>
-  	                    <tagBase>https://solrmeter.googlecode.com/svn/tags</tagBase>
-  	                </configuration>
   	            </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
