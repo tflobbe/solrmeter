@@ -141,14 +141,14 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 		NamedList<Object> namedList = new NamedList<Object>();
 		namedList.add("lookups", new Long(10));
 		namedList.add("hits", new Long(5));
-		namedList.add("hitratio", "0.50");
+		namedList.add("hitratio", new Float(0.50));
 		namedList.add("inserts", new Long(10));
 		namedList.add("evictions", new Long(0));
 		namedList.add("size", new Long(50));
 		namedList.add("warmupTime", new Long(15));
 		namedList.add("cumulative_lookups", new Long(100));
 		namedList.add("cumulative_hits", new Long(50));
-		namedList.add("cumulative_hitratio", "0.50");
+		namedList.add("cumulative_hitratio", new Float(0.50));
 		namedList.add("cumulative_inserts", new Long(100));
 		namedList.add("cumulative_evictions", new Long(0));
 		return namedList;

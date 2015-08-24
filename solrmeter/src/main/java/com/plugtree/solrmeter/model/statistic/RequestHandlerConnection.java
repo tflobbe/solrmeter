@@ -81,7 +81,7 @@ public class RequestHandlerConnection extends AbstractStatisticConnection {
 	      return null;
 	    }
 		NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
-		return new CacheData((Long)stats.get("lookups"), (Long)stats.get("hits"), Float.valueOf((String)stats.get("hitratio")), (Long)stats.get("inserts"), (Long)stats.get("evictions"), Long.valueOf(stats.get("size").toString()), (Long)stats.get("warmupTime"));
+		return new CacheData((Long)stats.get("lookups"), (Long)stats.get("hits"), (Float)stats.get("hitratio"), (Long)stats.get("inserts"), (Long)stats.get("evictions"), Long.valueOf(stats.get("size").toString()), (Long)stats.get("warmupTime"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,7 +98,7 @@ public class RequestHandlerConnection extends AbstractStatisticConnection {
        return null;
      }
    NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
-		return new CacheData((Long)stats.get("cumulative_lookups"), (Long)stats.get("cumulative_hits"), Float.valueOf((String)stats.get("cumulative_hitratio")), (Long)stats.get("cumulative_inserts"), (Long)stats.get("cumulative_evictions"));
+		return new CacheData((Long)stats.get("cumulative_lookups"), (Long)stats.get("cumulative_hits"), (Float)stats.get("cumulative_hitratio"), (Long)stats.get("cumulative_inserts"), (Long)stats.get("cumulative_evictions"));
 	}
 	
 	private class MBeanRequest extends SolrRequest {
