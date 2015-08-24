@@ -15,18 +15,24 @@
  */
 package com.plugtree.solrmeter.controller;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.OptimizeExecutor;
+import com.plugtree.solrmeter.util.SolrMeterThreadFactory;
 import com.plugtree.solrmeter.view.Refreshable;
+import com.plugtree.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class OptimizeExecutorController {
     
     private final static Logger logger = Logger.getLogger(OptimizeExecutorController.class);
+    
+    private final ExecutorService pool = Executors.newCachedThreadPool(new SolrMeterThreadFactory("optimize-executor"));
 	
 	private OptimizeExecutor executor;
 	
@@ -41,26 +47,23 @@ public class OptimizeExecutorController {
 	}
 
 	public void onOptimize() {
-	    logger.info("Optimizing...");
-	    //TODO: to executor
-		Thread thread = new Thread() {
-			
-			@Override
-			public void run() {
-				executor.execute();
-				try {
-					Thread.sleep(100);
-					while(executor.isOptimizing()) {
-						panel.refreshView();
-					}
-					panel.refreshView();
-				} catch (InterruptedException e) {
-					logger.info(e);
-					Thread.currentThread().interrupt();
-				}
-			}
-		};
-		thread.start();
+	    pool.execute(new Runnable() {
+	        @Override
+            public void run() {
+	            logger.info("Optimizing...");
+                executor.execute();
+                try {
+                    Thread.sleep(100);
+                    while(executor.isOptimizing()) {
+                        panel.refreshView();
+                    }
+                    panel.refreshView();
+                } catch (InterruptedException e) {
+                    logger.info(e);
+                    Thread.currentThread().interrupt();
+                }
+            }
+	    });
 		
 	}
 

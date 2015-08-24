@@ -19,19 +19,15 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.QueryExecutor;
 import com.plugtree.solrmeter.view.ConsolePanel;
+import com.plugtree.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class QueryExecutorController {
     
-    private final static Logger logger = Logger.getLogger(QueryExecutorController.class);
-	
 	private ConsolePanel panel;
 	
 	private QueryExecutor executor;
@@ -66,28 +62,9 @@ public class QueryExecutorController {
 	}
 
 	public void onConcurrentQueriesValueChange(Integer value) {
-		if(getExecutor().getQueriesPerSecond() > value) {
-			decrementQueriesPerMinute(value);
-		}else {
-			incrementQueriesPerMinute(value);
-		}
+	    getExecutor().setOperationsPerSecond(value);
 	}
 
-	private void incrementQueriesPerMinute(Integer value) {
-	    logger.debug("Incrementing");
-		while(getExecutor().getQueriesPerSecond() < value) {
-			getExecutor().incrementOperationsPerSecond();
-		}
-	}
-
-	private void decrementQueriesPerMinute(Integer value) {
-	    logger.debug("Decrementing");
-		while(getExecutor().getQueriesPerSecond() > value) {
-			getExecutor().decrementOperationsPerSecond();
-		}
-		
-	}
-	
 	private QueryExecutor getExecutor() {
 		return executor;
 	}

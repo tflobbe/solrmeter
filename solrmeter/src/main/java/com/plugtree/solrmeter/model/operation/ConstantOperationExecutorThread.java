@@ -17,6 +17,8 @@ package com.plugtree.solrmeter.model.operation;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 
@@ -37,13 +39,13 @@ import com.plugtree.solrmeter.model.exception.OperationException;
 @StressTestScope
 public class ConstantOperationExecutorThread extends Thread {
   
-  private ExecutorService threadPool = Executors.newCachedThreadPool();
+  private final ExecutorService threadPool = Executors.newCachedThreadPool();
   
-  private long timeToWait;
+  private final AtomicLong timeToWait = new AtomicLong(1);
   
-  private boolean running;
+  private final AtomicBoolean running = new AtomicBoolean(false);
   
-  private Operation operation;
+  private final Operation operation;
   
   public ConstantOperationExecutorThread(Operation operation) {
     super();
@@ -52,16 +54,16 @@ public class ConstantOperationExecutorThread extends Thread {
   
   @Override
   public synchronized void run() {
-    while(running) {
+    while(running.get()) {
       try {
         this.wait(getTimeToWait());
-        if(running) {
+        if(running.get()) {
           executeOperation();
         }
       } catch (InterruptedException e) {
         Logger.getLogger(this.getClass()).error("Thread interrupted", e);
         Thread.currentThread().interrupt();
-        running = false;
+        running.set(false);
         break;
       } catch (OperationException e) {
         Logger.getLogger(this.getClass()).error("Error on query thread", e);
@@ -72,7 +74,7 @@ public class ConstantOperationExecutorThread extends Thread {
   
   @Override
   public synchronized void start() {
-    this.running = true;
+    this.running.set(true);
     super.start();
   }
   
@@ -82,11 +84,10 @@ public class ConstantOperationExecutorThread extends Thread {
   
   @Override
   public void destroy() {
-    this.running = false;
+      running.set(false);
   }
   
   private void executeOperation() throws OperationException {
-      //TODO use Executor
     Runnable r = new Runnable() {
       
       @Override
@@ -102,10 +103,10 @@ public class ConstantOperationExecutorThread extends Thread {
   }
   
   private long getTimeToWait() {
-    return timeToWait;
+    return timeToWait.get();
   }
   
   public void setTimeToWait(long timeToWait) {
-    this.timeToWait = timeToWait;
+    this.timeToWait.set(timeToWait);
   }
 }

@@ -33,7 +33,7 @@ public class CommitOperation implements Operation {
     
     private final static Logger logger = Logger.getLogger(CommitOperation.class);
 	
-	private UpdateExecutor executor;
+	private final UpdateExecutor executor;
 	
 	public CommitOperation(UpdateExecutor executor) {
 		this.executor = executor;

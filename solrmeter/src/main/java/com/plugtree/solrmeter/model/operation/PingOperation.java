@@ -16,7 +16,7 @@ import com.plugtree.solrmeter.model.exception.PingNotConfiguredException;
  */
 public class PingOperation implements Operation {
 	
-	private SolrServer server;
+	private final SolrServer server;
 	
 	public PingOperation(SolrServer server) {
 		this.server = server;

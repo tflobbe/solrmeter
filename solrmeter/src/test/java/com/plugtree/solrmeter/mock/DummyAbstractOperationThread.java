@@ -43,12 +43,12 @@ public class DummyAbstractOperationThread extends RandomOperationExecutorThread 
 	}
 	
 	public void setStopping(boolean stopping) {
-		this.stopping = stopping;
+		this.stopping.set(stopping);
 	}
 	
 	public boolean isStopping() {
 		if(forcedExecutionTimes == -1) {
-			return this.stopping;
+			return this.stopping.get();
 		}else {
 			return executionCount >= forcedExecutionTimes;
 		}

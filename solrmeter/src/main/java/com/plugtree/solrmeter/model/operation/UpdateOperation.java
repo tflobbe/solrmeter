@@ -34,9 +34,9 @@ public class UpdateOperation implements Operation {
 	
 	private final static Logger logger = Logger.getLogger(UpdateOperation.class);
 	
-	private UpdateExecutor executor;
+	private final UpdateExecutor executor;
 	
-	private InputDocumentExtractor documentExtractor;
+	private final InputDocumentExtractor documentExtractor;
 	
 	public UpdateOperation(UpdateExecutor executor, InputDocumentExtractor documentExtractor) {
 		super();

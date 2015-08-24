@@ -79,42 +79,51 @@ public abstract class AbstractRandomExecutor {
 	 * Prepare this executor to run a test
 	 */
 	public void prepare() {
-		threads = new LinkedList<RandomOperationExecutorThread>();
+	    if (threads == null) {
+	        threads = new LinkedList<RandomOperationExecutorThread>();
+	    }
 		running = false;
-		for(int i = 0; i < operationsPerSecond; i++) {
-			threads.add(createThread());
-		}
+		synchronized (threads) {
+		    for(int i = threads.size(); i < operationsPerSecond; i++) {
+	            threads.add(createThread());
+	        }
+        }
 		prepared = true;
 	}
 	
-	/**
-	 * Increments in one the number of strings per minute
-	 */
-	public void incrementOperationsPerSecond() {
-		RandomOperationExecutorThread newThread = this.createThread(); 
-		threads.add(newThread);
-		if(running) {
-			newThread.start();
-		}
-		operationsPerSecond++;
-		SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
-	}
+    public void setOperationsPerSecond(int newOperationsPerSecond) {
+        if (newOperationsPerSecond < 1) {
+            throw new IllegalArgumentException("Invalid number of operations: " + newOperationsPerSecond);
+        }
+	    logger.debug("Setting Operations per second to "+ newOperationsPerSecond);
+	    synchronized (threads) {
+	        if (newOperationsPerSecond == threads.size()) {
+	            return;
+	        }
+	        if (newOperationsPerSecond > threads.size()) {
+	            while (threads.size() < newOperationsPerSecond) {
+	                RandomOperationExecutorThread newThread = this.createThread();
+	                threads.add(newThread);
+	                if (running) {
+	                    newThread.start();
+	                }
+	            }
+	            this.operationsPerSecond = newOperationsPerSecond;
+	            SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
+	        } else {
+	            while (threads.size() > newOperationsPerSecond) {
+	                RandomOperationExecutorThread removedThread = threads.remove(threads.size() - 1);
+	                removedThread.destroy();
+	            }
+	            this.operationsPerSecond = newOperationsPerSecond;
+	            SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
+	        }
+	    }
+    }
 	
 	protected abstract String getOperationsPerSecondConfigurationKey();
 
 	protected abstract RandomOperationExecutorThread createThread();
-
-	/**
-	 * Decrements in one (and stops the removed one) the number of
-	 * strings per minute
-	 */
-	public void decrementOperationsPerSecond() {
-		RandomOperationExecutorThread removedThread = threads.remove(threads.size() - 1);
-		removedThread.destroy();
-		operationsPerSecond--;
-		SolrMeterConfiguration.setProperty(getOperationsPerSecondConfigurationKey(), String.valueOf(operationsPerSecond));
-	}
-	
 
 	/**
 	 * Starts the executor. All Threads are started.
@@ -127,8 +136,10 @@ public abstract class AbstractRandomExecutor {
 			prepare();
 		}
 		running = true;
-		for(Thread thread:threads) {
-			thread.start();
+		synchronized (threads) {
+    		for(Thread thread:threads) {
+    			thread.start();
+    		}
 		}
 	}
 	
@@ -140,11 +151,13 @@ public abstract class AbstractRandomExecutor {
 			return;
 		}
 		running = false;
-		for(RandomOperationExecutorThread thread:threads) {
-			thread.destroy();
+		synchronized (threads) {
+    		for(RandomOperationExecutorThread thread:threads) {
+    			thread.destroy();
+    		}
 		}
 		stopStatistics();
-		threads = null;
+		threads.clear();;
 		prepared = false;
 	}
 

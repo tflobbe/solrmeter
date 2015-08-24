@@ -213,20 +213,6 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 	public boolean isRunning() {
 		return running;
 	}
-
-	@Override
-	public void decrementOperationsPerSecond() {
-		if(operationsPerMinute > 1) {
-			this.operationsPerMinute--;
-			this.onOperationsPerMinuteChange();
-		}
-	}
-
-	@Override
-	public void incrementOperationsPerSecond() {
-		this.operationsPerMinute++;
-		onOperationsPerMinuteChange();
-	}
 	
 	private void onOperationsPerMinuteChange() {
 		SolrMeterConfiguration.setProperty("solr.load.updatesperminute", String.valueOf(operationsPerMinute));
@@ -234,6 +220,15 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 			this.updateExecutorThread.setTimeToWait(60000/operationsPerMinute);
 		}
 	}
+
+    @Override
+    public void setOperationsPerSecond(int value) {
+        if (operationsPerMinute < 1) {
+            throw new IllegalArgumentException("Invalid number of operations per second: " + value);
+        }
+        this.operationsPerMinute = value;
+        onOperationsPerMinuteChange();
+    }
 
 	
 }

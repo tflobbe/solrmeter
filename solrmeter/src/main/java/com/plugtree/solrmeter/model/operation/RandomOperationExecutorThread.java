@@ -16,6 +16,7 @@
 package com.plugtree.solrmeter.model.operation;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 
@@ -34,9 +35,9 @@ public class RandomOperationExecutorThread extends Thread {
 	
 	protected final static Logger logger = Logger.getLogger(RandomOperationExecutorThread.class);
 
-	protected boolean stopping = false;
+	protected final AtomicBoolean stopping = new AtomicBoolean(false);
 	
-	private long operationIntervalInMs;
+	private final long operationIntervalInMs;
 	
 	/**
 	 * Operation to execute
@@ -51,13 +52,13 @@ public class RandomOperationExecutorThread extends Thread {
 	
 	public void run() {
 		while(!isStopping()) {
-			long init = new Date().getTime();
+			long init = System.currentTimeMillis();
 			long waitBeforeTime = getRandomSleepTime();
 			try {
 				Thread.sleep(waitBeforeTime);
 			} catch (InterruptedException e) {
 				logger.error("Thread interrupted", e);
-				stopping = true;
+				stopping.set(true);
 				Thread.currentThread().interrupt();
 				break;
 			}
@@ -66,13 +67,13 @@ public class RandomOperationExecutorThread extends Thread {
 			}
 			try {
 				
-				long diff = (operationIntervalInMs + init) - new Date().getTime();
+				long diff = (operationIntervalInMs + init) - System.currentTimeMillis();
 				if(diff > 0L) {
 					Thread.sleep(diff);
 				}
 			} catch (InterruptedException e) {
 			    logger.error("Thread interrupted", e);
-				stopping = true;
+			    stopping.set(true);
                 Thread.currentThread().interrupt();
                 break;
 			}
@@ -92,10 +93,10 @@ public class RandomOperationExecutorThread extends Thread {
 	}
 
 	protected boolean isStopping() {
-		return stopping;
+		return stopping.get();
 	}
 	
 	public void destroy() {
-		this.stopping = true;
+	    this.stopping.set(true);
 	}
 }

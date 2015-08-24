@@ -16,44 +16,43 @@ import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 
 public class ComplexQueryGenerator implements QueryGenerator {
   
+  private final static Integer facetMinCount = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.minCount", "1"));
   
-  private static Integer facetMinCount = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.minCount", "1"));
-  
-  private static Integer facetLimit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.limit", "8"));
+  private final static Integer facetLimit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.query.facet.limit", "8"));
   
   /**
    * If set, strings are executed adding random felds as facet.
    */
-  private String queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
+  private final String queryType = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_TYPE);
   
   private boolean useFacets = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFacets", "true"));
   
-  private String facetMethod = SolrMeterConfiguration.getProperty("solr.query.facetMethod");
+  private final String facetMethod = SolrMeterConfiguration.getProperty("solr.query.facetMethod");
   
-  private boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
+  private final boolean useFilterQueries = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.useFilterQueries", "true"));
 
-  private boolean forceEchoParamsAll = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.echoParams", "false"));
+  private final boolean forceEchoParamsAll = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.echoParams", "false"));
 
-  private boolean addRandomExtraParams = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.addRandomExtraParams", "true"));
+  private final boolean addRandomExtraParams = Boolean.valueOf(SolrMeterConfiguration.getProperty("solr.query.addRandomExtraParams", "true"));
   
   /**
    * The facet fields extractor
    */
-  private FieldExtractor facetFieldExtractor;
+  private final FieldExtractor facetFieldExtractor;
   
   /**
    * The filter query extractor
    */
-  private QueryExtractor filterQueryExtractor;
+  private final QueryExtractor filterQueryExtractor;
   
   /**
    * The standard query extractor
    */
-  private QueryExtractor queryExtractor;
+  private final QueryExtractor queryExtractor;
   
-  private QueryExtractor extraParameterExtractor;
+  private final QueryExtractor extraParameterExtractor;
   
-  protected Map<String, String> extraParameters;
+  protected final Map<String, String> extraParameters = new HashMap<String, String>();;
   
   
   @Inject
@@ -70,13 +69,14 @@ public class ComplexQueryGenerator implements QueryGenerator {
   }
   
   protected ComplexQueryGenerator(){
-    
+    this.queryExtractor = null;
+    this.extraParameterExtractor = null;
+    this.filterQueryExtractor = null;
+    this.facetFieldExtractor = null;
   }
   
   
   protected void loadExtraParameters(String property) {
-    extraParameters = new HashMap<String, String>();
-    
     if(property == null || "".equals(property.trim())) {
       return;
     }

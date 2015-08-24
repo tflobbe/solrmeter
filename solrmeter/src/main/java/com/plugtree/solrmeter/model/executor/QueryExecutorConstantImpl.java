@@ -79,14 +79,6 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 		this.operationsPerSecond = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_SECOND)).intValue();
 	}
 
-
-
-	@Override
-	public void decrementOperationsPerSecond() {
-		operationsPerSecond--;
-		updateThreadWaitTime();
-	}
-
 	@Override
 	public int getQueriesPerSecond() {
 		return operationsPerSecond;
@@ -98,12 +90,6 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}
 		return server;
-	}
-
-	@Override
-	public void incrementOperationsPerSecond() {
-		operationsPerSecond++;
-		updateThreadWaitTime();
 	}
 	
 	private void updateThreadWaitTime() {
@@ -164,5 +150,13 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	public void addStatistic(QueryStatistic statistic) {
 		this.statistics.add(statistic);
 	}
+
+
+
+    @Override
+    public void setOperationsPerSecond(int newOperationsPerSecond) {
+        this.operationsPerSecond = newOperationsPerSecond;
+        updateThreadWaitTime();
+    }
 
 }

@@ -16,8 +16,6 @@ import java.util.*;
 
 public class ExtractFromLogFileController {
   
-  
-  
   private final ExtractFromLogFilePanelContainer container;
   private final Window window;
   private Properties extractProperties;

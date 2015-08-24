@@ -15,17 +15,23 @@
  */
 package com.plugtree.solrmeter.controller;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.SolrMeterMain;
 import com.plugtree.solrmeter.model.exception.OperationException;
+import com.plugtree.solrmeter.util.SolrMeterThreadFactory;
 import com.plugtree.solrmeter.view.JDialogStackTrace;
 import com.plugtree.solrmeter.view.Refreshable;
 
 @StressTestScope
 public class ErrorLogController {
 	
+    private final ExecutorService pool = Executors.newCachedThreadPool(new SolrMeterThreadFactory("error-log-executor"));
+    
 	private Refreshable view;
 
 	@Inject
@@ -39,13 +45,12 @@ public class ErrorLogController {
 	}
 
 	public void onErrorsToShowChaned() {
-		Thread thread = new Thread() {
+	    pool.execute(new Runnable() {
 			@Override
 			public void run() {
 				view.refreshView();
 			}
-		};
-		thread.start();
+		});
 		
 	}
 }

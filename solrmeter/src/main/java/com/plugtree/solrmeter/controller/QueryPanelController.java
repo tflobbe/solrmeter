@@ -15,12 +15,16 @@
  */
 package com.plugtree.solrmeter.controller;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
 import com.plugtree.solrmeter.model.exception.QueryException;
 import com.plugtree.solrmeter.model.service.QueryService;
+import com.plugtree.solrmeter.util.SolrMeterThreadFactory;
 import com.plugtree.solrmeter.view.QueryPanel;
 
 /**
@@ -31,6 +35,8 @@ import com.plugtree.solrmeter.view.QueryPanel;
 public class QueryPanelController {
     
     private final static Logger logger = Logger.getLogger(QueryPanelController.class);
+    
+    private final ExecutorService pool = Executors.newCachedThreadPool(new SolrMeterThreadFactory("query-panel-executor"));
 	
 	private QueryService service;
 	
@@ -42,12 +48,11 @@ public class QueryPanelController {
 	}
 	
 	public void executeQuery() {
-	    logger.info("Executing Query");
-	    //TODO to executor
-		Thread thread = new Thread() {
+	    pool.execute(new Runnable() {
 			@Override
 			public void run() {
 				try {
+				    logger.info("Executing Query");
 					QueryResponse response = service.executeQuery(view.getQ(), 
 							view.getFQ(), 
 							view.getQT(), 
@@ -63,8 +68,7 @@ public class QueryPanelController {
 					view.showError(e);
 				}
 			}
-		};
-		thread.start();
+		});
 		
 	}
 

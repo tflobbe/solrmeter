@@ -75,25 +75,7 @@ public class UpdateExecutorController {
 	}
 
 	public void onConcurrentQueriesValueChange(Integer value) {
-		if(executor.getUpdatesPerMinute() > value) {
-			decrementQueriesPerMinute(value);
-		}else {
-			incrementQueriesPerMinute(value);
-		}
-	}
-
-	private void incrementQueriesPerMinute(Integer value) {
-	    logger.debug("Incrementing");
-		while(executor.getUpdatesPerMinute() < value) {
-			executor.incrementOperationsPerSecond();
-		}
-	}
-
-	private void decrementQueriesPerMinute(Integer value) {
-	    logger.debug("Decrementing");
-		while(executor.getUpdatesPerMinute() > value) {
-			executor.decrementOperationsPerSecond();
-		}
+	    executor.setOperationsPerSecond(value);
 	}
 
 	public void onDocsBeforeCommitValueChange(Integer value) {

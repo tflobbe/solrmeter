@@ -17,15 +17,20 @@ package com.plugtree.solrmeter.controller;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.plugtree.solrmeter.model.SolrMeterConfiguration;
+import com.plugtree.solrmeter.util.SolrMeterThreadFactory;
 import com.plugtree.solrmeter.view.Refreshable;
 
 @Singleton
 public class StatisticsContainerController {
+    
+    private final ExecutorService pool = Executors.newCachedThreadPool(new SolrMeterThreadFactory("statistics-executor"));
 
 	private Refreshable container;
 	
@@ -48,12 +53,11 @@ public class StatisticsContainerController {
 	}
 	
 	public void onTabChanged() {
-		Thread thread = new Thread() {
+	    pool.execute(new Runnable() {
 			@Override
 			public void run() {
 				container.refreshView();
 			}
-		};
-		thread.start();
+		});
 	}
 }

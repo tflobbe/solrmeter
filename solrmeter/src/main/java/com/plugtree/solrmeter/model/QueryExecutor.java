@@ -73,14 +73,9 @@ public interface QueryExecutor {
 	void stop();
 
 	/**
-	 * Increments in one the number of strings per minute
-	 */
-	void incrementOperationsPerSecond();
-
-	/**
-	 * Decrements in one the number of strings per minute
-	 */
-	void decrementOperationsPerSecond();
+     * Set the number of operations expected per second
+     */
+	void setOperationsPerSecond(int newOperationsPerSecond);
 
 	/**
 	 * Determines whether this executor is running.
