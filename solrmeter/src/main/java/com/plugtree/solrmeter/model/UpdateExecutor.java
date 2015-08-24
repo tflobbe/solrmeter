@@ -80,16 +80,10 @@ public interface UpdateExecutor {
 	public int getNotCommitedDocuments();
 
 	/**
-	 * Increment the number of documents that has to be added before a commit is performed
-	 * by solrmeter. This number is useless when solrmeter doesn't perform commits.
-	 */
-	public void incrementNumberOfDocumentsBeforeCommit();
-
-	/**
-	 * Decrement the number of documents that has to be added before a commit is performed
-	 * by solrmeter. This number is useless when solrmeter doesn't perform commits.
-	 */
-	public void decrementNumberOfDocumentsBeforeCommit();
+     * Set the number of documents that has to be added before a commit is performed
+     * by solrmeter. This number is useless when solrmeter doesn't perform commits.
+     */
+	public void setNumberOfDocumentsBeforeCommit(int value);
 
 	/**
 	 * 

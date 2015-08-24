@@ -24,9 +24,9 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.plugtree.stressTestScope.StressTestScope;
 import com.plugtree.solrmeter.model.UpdateExecutor;
 import com.plugtree.solrmeter.view.ConsolePanel;
+import com.plugtree.stressTestScope.StressTestScope;
 
 @StressTestScope
 public class UpdateExecutorController {
@@ -79,11 +79,7 @@ public class UpdateExecutorController {
 	}
 
 	public void onDocsBeforeCommitValueChange(Integer value) {
-		if(value > executor.getNumberOfDocumentsBeforeCommit()) {
-			executor.incrementNumberOfDocumentsBeforeCommit();
-		}else {
-			executor.decrementNumberOfDocumentsBeforeCommit();
-		}
+	    executor.setNumberOfDocumentsBeforeCommit(value);
 	}
 
 	public void onTimeBeforeCommitValueChange(Integer value) {

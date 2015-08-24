@@ -147,9 +147,9 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		updateExecutor.prepare();
 		updateExecutor.start();
 		Thread.sleep(100);//Wait to the thread to start correctly
-		for(int i = 0; i < 10; i++) {
-			updateExecutor.decrementNumberOfDocumentsBeforeCommit();
-		}
+		
+		updateExecutor.setNumberOfDocumentsBeforeCommit(90);
+		assertEquals(90, updateExecutor.getNumberOfDocumentsBeforeCommit().intValue());
 		for(int i = 1; i < 90; i++) {
 			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
 			assertEquals(i, updateExecutor.getNotCommitedDocuments());
@@ -160,15 +160,18 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
 		updateExecutor.stop();
 		
-		while (updateExecutor.getNumberOfDocumentsBeforeCommit() > 1) {
-			updateExecutor.decrementNumberOfDocumentsBeforeCommit();
-		}
 		try {
-			updateExecutor.decrementNumberOfDocumentsBeforeCommit();
+			updateExecutor.setNumberOfDocumentsBeforeCommit(-1);
 			fail("Exception should be thrown");
-		}catch(RuntimeException e) {
+		}catch(IllegalArgumentException e) {
 			//extected
 		}
+		try {
+            updateExecutor.setNumberOfDocumentsBeforeCommit(Integer.MAX_VALUE);
+            fail("Exception should be thrown");
+        }catch(IllegalArgumentException e) {
+            //extected
+        }
 	}
 	
 	public void testIncrementMaxDocsBeforeCommit() throws InterruptedException{
@@ -177,13 +180,13 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_PER_SECOND, "0");
 		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "100");
 		SolrMeterConfiguration.setProperty(SolrMeterConfiguration.UPDATES_FILE_PATH, "./src/test/resources/FileInputDocumentExtractorTestCase1.txt");
+		int documentsToCommit = 100;
 		UpdateExecutorSpy updateExecutor = new UpdateExecutorSpy();
 		updateExecutor.prepare();
 		updateExecutor.start();
 		Thread.sleep(100);//Wait to the thread to start correctly
-		for(int i = 0; i < 10; i++) {
-			updateExecutor.incrementNumberOfDocumentsBeforeCommit();
-		}
+		
+		updateExecutor.setNumberOfDocumentsBeforeCommit(110);
 		for(int i = 1; i < 110; i++) {
 			updateExecutor.notifyAddedDocument(createUpdateResponse(1));
 			assertEquals(i, updateExecutor.getNotCommitedDocuments());
@@ -193,21 +196,6 @@ public class UpdateExecutorTestCase extends BaseTestCase {
 		assertEquals(0, updateExecutor.getNotCommitedDocuments());
 		assertEquals(1, ((SolrServerMock)updateExecutor.getSolrServer()).getNumberOfCommits());
 		updateExecutor.stop();
-		
-		
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", "2147483600");
-		updateExecutor = new UpdateExecutorSpy();
-		updateExecutor.prepare();
-		
-		while (updateExecutor.getNumberOfDocumentsBeforeCommit() < Integer.MAX_VALUE) {
-			updateExecutor.incrementNumberOfDocumentsBeforeCommit();
-		}
-		try {
-			updateExecutor.incrementNumberOfDocumentsBeforeCommit();
-			fail("Exception should be thrown");
-		}catch(RuntimeException e) {
-			//extected
-		}
 	}
 	
 	public void testAutocommit() {

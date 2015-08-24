@@ -167,22 +167,6 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		return notCommitedDocuments;
 	}
 	
-	public void incrementNumberOfDocumentsBeforeCommit() {
-		if(numberOfDocumentsBeforeCommit == Integer.MAX_VALUE) {
-			throw new RuntimeException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
-		}
-		numberOfDocumentsBeforeCommit+= 1;
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-	}
-	
-	public void decrementNumberOfDocumentsBeforeCommit() {
-		if(numberOfDocumentsBeforeCommit <= 1) {
-			throw new RuntimeException("Number of documents before commit can't be 0");
-		}
-		numberOfDocumentsBeforeCommit-= 1;
-		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-	}
-
 	public Integer getNumberOfDocumentsBeforeCommit() {
 		return numberOfDocumentsBeforeCommit;
 	}
@@ -228,6 +212,18 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
         }
         this.operationsPerMinute = value;
         onOperationsPerMinuteChange();
+    }
+
+    @Override
+    public void setNumberOfDocumentsBeforeCommit(int value) {
+        if (value == Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
+        }
+        if (value < 0) {
+            throw new IllegalArgumentException("Number of documents before commit can't be less than 0");
+        }
+        numberOfDocumentsBeforeCommit= value;
+        SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
     }
 
 	

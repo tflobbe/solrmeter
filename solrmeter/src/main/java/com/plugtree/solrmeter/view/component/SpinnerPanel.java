@@ -94,7 +94,7 @@ public class SpinnerPanel extends JPanel implements TwoColumns, Row {
 		
 		try {
 			JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor)spinner.getEditor();
-			editor.getTextField().setEditable(false);
+			editor.getTextField().setEditable(true);
 			editor.getTextField().setColumns(5);
 		} catch(ClassCastException ex) {
 			log.warn("Unexpected JSpinner editor class: " + spinner.getEditor().getClass().getName());
