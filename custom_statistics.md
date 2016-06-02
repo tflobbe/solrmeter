@@ -2,7 +2,7 @@
 Statistics in SolrMeter (from version 0.2.0) are pluggable. This means you can build your own statistic and see it from the SolrMeter UI.
 To build your statistic, follow this steps:
 ## Build the **model class** ##
-This class is going to observe at the operation executors (Query Executor, Update Executor or Optimize Executor). The statistic must implement the interfaces [QueryStatistic](http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/QueryStatistic.java), [UpdateStatistic](http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/UpdateStatistic.java) and/or [OptimizeStatistic](http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/model/OptimizeStatistic.java). You have to implement all the necessary interfaces for your purpose. It can be one, two or the three interfaces.
+This class is going to observe at the operation executors (Query Executor, Update Executor or Optimize Executor). The statistic must implement the interfaces [QueryStatistic](../../tree/master/solrmeter/src/main/java/com/plugtree/solrmeter/model/QueryStatistic.java), [UpdateStatistic](../../tree/master/solrmeter/src/main/java/com/plugtree/solrmeter/model/UpdateStatistic.java) and/or [OptimizeStatistic](../../tree/master/solrmeter/src/main/java/com/plugtree/solrmeter/model/OptimizeStatistic.java). You have to implement all the necessary interfaces for your purpose. It can be one, two or the three interfaces.
 For Example:
 ```
 /**
@@ -39,7 +39,7 @@ public class TestPluginStatistic implements QueryStatistic {
 }
 ```
 ## Build the statistic **UI class** ##
-You have to extend the [StatisticPanel](http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/java/com/linebee/solrmeter/view/StatisticPanel.java) and then implement it using Swing. One more thing is required in this class. If you need to use the **model class**, you will have to add it as a _Constructor Parameter_, and add the **@Inject** annotation to the constructor. This way, Guice (the dependency injection framework we are using) is going to add the correct object to it. **DO NOT CREATE A NEW INSTANCE OF THE MODEL** inside the constructor, otherwise, the instance you will have on the UI is not going to be the same instance that is observing the executors and things aren’t going to work.
+You have to extend the [StatisticPanel](../../tree/master/solrmeter/src/main/java/com/plugtree/solrmeter/view/StatisticPanel.java) and then implement it using Swing. One more thing is required in this class. If you need to use the **model class**, you will have to add it as a _Constructor Parameter_, and add the **@Inject** annotation to the constructor. This way, Guice (the dependency injection framework we are using) is going to add the correct object to it. **DO NOT CREATE A NEW INSTANCE OF THE MODEL** inside the constructor, otherwise, the instance you will have on the UI is not going to be the same instance that is observing the executors and things aren’t going to work.
 
 ```
 /**
@@ -148,5 +148,3 @@ In both cases this is what the xml attributes and elements mean:
 Run SolrMeter, you should see your statistic right away. If you don't, check the settings menu, on the "statistics" tab and make sure that yours is selected.
 
 **If you think you have built a statistic that is usefull to de community, please share it. You can send the code to the group or upload the patch to the issues page and we will add it to the trunk.**
-
-Download the source code or the compiled statistic of the example from the [downloads](http://code.google.com/p/solrmeter/downloads/list) page.
