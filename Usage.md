@@ -18,4 +18,3 @@ The following steps should be followed to compile and package SolrMeter ([Maven]
 If you just want to see how SolrMeter works, you can try with the default configuration. SolrMeter default configuration was thought to run with Solr example.
 Just complete the [Solr tutorial](http://lucene.apache.org/solr/tutorial.html), download SolrMeter latest version and run it with 
 ```java -jar solrmeter-{version}-jar-with-dependencies.jar```. 
-Or you can run SolrMeter with [Java Web Start](http://solrmeter.googlecode.com/svn/JWS/solrmeter.jnlp).
