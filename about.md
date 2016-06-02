@@ -17,5 +17,5 @@ Current version of SolrMeter (0.3.0) allows you to:
 See [Overview](Overview.md) for more details and some screenshots or [Tutorial](Tutorial.md) to dive into docs.
 
 # What's next and what's new? #
-**New released version 0.3.0. See [Downloads](http://code.google.com/p/solrmeter/downloads/list)**
-Click [here](http://code.google.com/p/solrmeter/issues/list?can=1&q=Milestone%3DRelease-0.3.0+status%3AResolved+&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles) to see the new stuff.
+**New released version 0.3.0. See [Downloads](../../releases/tag/solrmeter-parent-0.3.0)**
+Click [here](../../issues?q=label%3AMilestone-Release-0.3.0+is%3Aclosed) to see the new stuff.
