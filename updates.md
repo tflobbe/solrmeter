@@ -13,4 +13,4 @@ id:3;name:lettuce;category:vegetable
 if you want to escape a semicolon, use a slash and then a semicolon "\;". If you want to add a slash, add two slashes "\\".
 
 
-Also, you can check de [example file](http://solrmeter.googlecode.com/svn/trunk/sources/solrmeter/src/main/resources/example/updates.txt) from the sorce code, this example works just fine with the [solr example](http://lucene.apache.org/solr/tutorial.html).
+Also, you can check de [example file](../../tree/master/solrmeter/src/main/resources/example/updates.txt) from the sorce code, this example works just fine with the [solr example](http://lucene.apache.org/solr/tutorial.html).
