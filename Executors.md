@@ -95,11 +95,9 @@ guice.standalonePresentationModule=com.plugtree.solrmeter.StandalonePresentation
 ...
 ```
 
-(I know, modify the solrmeter.properties file is an ugly thing to do inside the jar file, this way of changing properties will be eliminated when issues [#38](http://code.google.com/p/solrmeter/issues/detail?id=38) and [#39](http://code.google.com/p/solrmeter/issues/detail?id=39) are done :) )
+You can also [override specific properties](../../issues/38) or the [complete properties file](../../issues/39)
 
 
 Run solrmeter and you can select this new executor by typing "example" on the Query Executor Field of the Query Settings. The example will run 20 queries like the QueryExecutorConstantImpl and then stops itself.
-
-The full example code can be downloaded from the [downloads](http://code.google.com/p/solrmeter/downloads/list) page.
 
 **If you think you have built an executorthat is usefull to de community, please share it. You can send the code to the group or upload the patch to the issues page and we will add it to the trunk.**
