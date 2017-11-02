@@ -15,11 +15,18 @@
  */
 package com.plugtree.solrmeter.model.statistic;
 
+import static java.util.Arrays.stream;
+import static java.util.Optional.ofNullable;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrResponse;
 import org.apache.solr.client.solrj.SolrServer;
@@ -41,39 +48,66 @@ import com.plugtree.solrmeter.model.exception.StatisticConnectionException;
  *
  */
 public class RequestHandlerConnection extends AbstractStatisticConnection {
+	private static final String SINGLE_COLLECTION = "SINGLE_COLLECTION";
+
+	private static final String collectionsStr = SolrMeterConfiguration.getProperty("solr.collection.names", null);
 	
-	private SolrServer solrServer;
+	private final static Logger logger = Logger.getLogger(RequestHandlerConnection.class);
+
+	private static final List<String> collections;
+	
+	private Map<String, SolrServer> solrServer;
+	
+	static {
+		List<String> _collections = new ArrayList<>();
+		stream(ofNullable(collectionsStr).orElse(SINGLE_COLLECTION).split("\\,")).map(String::trim).forEach(_collections::add);
+		collections = Collections.unmodifiableList(_collections);
+	}
 	
 	@Inject
 	public RequestHandlerConnection() {
-		this(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL)));
+		this(
+			new HashMap<String, SolrServer>() {{
+				collections.forEach(collectionName -> {
+				put(collectionName, 
+						SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL) 
+							+ (collectionName.equals(SINGLE_COLLECTION) ? "" : collectionName)));
+				});
+			}}
+		);
 	}
 	
-	public RequestHandlerConnection(SolrServer solrServer) {
+	public RequestHandlerConnection(Map<String, SolrServer> solrServer) {
 		super();
 		this.solrServer = solrServer;
 	}
 	
-	public Map<String, CacheData> getData() throws StatisticConnectionException {
+	public Map<String, Map<String, CacheData>> getData() throws StatisticConnectionException {
 		SolrRequest request = new MBeanRequest("CACHE");
-		Map<String, CacheData> cacheData = new HashMap<String, CacheData>();
-		try {
-			NamedList<Object> namedList = solrServer.request(request);
-			cacheData.put(FILTER_CACHE_NAME, getCacheData(namedList, "filterCache"));
-			cacheData.put(QUERY_RESULT_CACHE_NAME, getCacheData(namedList, "queryResultCache"));
-			cacheData.put(DOCUMENT_CACHE_NAME, getCacheData(namedList, "documentCache"));
-			cacheData.put(FIELD_VALUE_CACHE_NAME, getCacheData(namedList, "fieldValueCache"));
-			
-			cacheData.put(CUMULATIVE_FILTER_CACHE_NAME, getCumulativeCacheData(namedList, "filterCache"));
-			cacheData.put(CUMULATIVE_QUERY_RESULT_CACHE_NAME, getCumulativeCacheData(namedList, "queryResultCache"));
-			cacheData.put(CUMULATIVE_DOCUMENT_CACHE_NAME, getCumulativeCacheData(namedList, "documentCache"));
-			cacheData.put(CUMULATIVE_FIELD_VALUE_CACHE_NAME, getCumulativeCacheData(namedList, "fieldValueCache"));
-		} catch (Exception e) {
-			throw new StatisticConnectionException(e);
+		Map<String, Map<String, CacheData>> cacheData = new HashMap<>();
+		
+		for (String collectionName : collections) {
+			try {
+				Map<String, CacheData> collectionCacheData = new HashMap<>();
+				NamedList<Object> namedList = solrServer.get(collectionName).request(request);
+				collectionCacheData.put(FILTER_CACHE_NAME, getCacheData(namedList, "filterCache"));
+				collectionCacheData.put(QUERY_RESULT_CACHE_NAME, getCacheData(namedList, "queryResultCache"));
+				collectionCacheData.put(DOCUMENT_CACHE_NAME, getCacheData(namedList, "documentCache"));
+				collectionCacheData.put(FIELD_VALUE_CACHE_NAME, getCacheData(namedList, "fieldValueCache"));
+				
+				collectionCacheData.put(CUMULATIVE_FILTER_CACHE_NAME, getCumulativeCacheData(namedList, "filterCache"));
+				collectionCacheData.put(CUMULATIVE_QUERY_RESULT_CACHE_NAME, getCumulativeCacheData(namedList, "queryResultCache"));
+				collectionCacheData.put(CUMULATIVE_DOCUMENT_CACHE_NAME, getCumulativeCacheData(namedList, "documentCache"));
+				collectionCacheData.put(CUMULATIVE_FIELD_VALUE_CACHE_NAME, getCumulativeCacheData(namedList, "fieldValueCache"));
+				
+				cacheData.put(collectionName, collectionCacheData);
+			} catch (Exception e) {
+				throw new StatisticConnectionException(e);
+			}
 		}
 		return cacheData;
 	}
-	
+		
 	@SuppressWarnings("unchecked")
 	private CacheData getCacheData(NamedList<Object> namedList, String cacheName) {
 	  NamedList<Object> cache = getCacheNamedList(namedList, cacheName);
@@ -81,24 +115,29 @@ public class RequestHandlerConnection extends AbstractStatisticConnection {
 	      return null;
 	    }
 		NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
-		return new CacheData((Long)stats.get("lookups"), (Long)stats.get("hits"), (Float)stats.get("hitratio"), (Long)stats.get("inserts"), (Long)stats.get("evictions"), Long.valueOf(stats.get("size").toString()), (Long)stats.get("warmupTime"));
+		CacheData cd = new CacheData((Long)stats.get("lookups"), (Long)stats.get("hits"), (Float)stats.get("hitratio"), (Long)stats.get("inserts"), (Long)stats.get("evictions"), Long.valueOf(stats.get("size").toString()), (Long)stats.get("warmupTime"));
+		return cd;
 	}
 
 	@SuppressWarnings("unchecked")
   private NamedList<Object> getCacheNamedList(NamedList<Object> namedList,
       String cacheName) {
     NamedList<Object> cache = ((NamedList<Object>)((NamedList<Object>)((NamedList<Object>)namedList.get("solr-mbeans")).get("CACHE")).get(cacheName));
+    logger.trace("Got cache for " + cacheName);
     return cache;
   }
 	
 	@SuppressWarnings("unchecked")
 	private CacheData getCumulativeCacheData(NamedList<Object> namedList, String cacheName) {
     NamedList<Object> cache = getCacheNamedList(namedList, cacheName);
+
     if(cache == null) {
        return null;
-     }
-   NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
-		return new CacheData((Long)stats.get("cumulative_lookups"), (Long)stats.get("cumulative_hits"), (Float)stats.get("cumulative_hitratio"), (Long)stats.get("cumulative_inserts"), (Long)stats.get("cumulative_evictions"));
+    }
+
+    NamedList<Object> stats = (NamedList<Object>)cache.get("stats");
+		CacheData data = new CacheData((Long)stats.get("cumulative_lookups"), (Long)stats.get("cumulative_hits"), (Float)stats.get("cumulative_hitratio"), (Long)stats.get("cumulative_inserts"), (Long)stats.get("cumulative_evictions"));
+		return data;
 	}
 	
 	private class MBeanRequest extends SolrRequest {

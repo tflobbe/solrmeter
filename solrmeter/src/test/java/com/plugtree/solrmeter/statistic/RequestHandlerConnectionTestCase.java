@@ -1,6 +1,7 @@
 package com.plugtree.solrmeter.statistic;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServer;
@@ -13,11 +14,14 @@ import com.plugtree.solrmeter.model.statistic.CacheData;
 import com.plugtree.solrmeter.model.statistic.RequestHandlerConnection;
 
 public class RequestHandlerConnectionTestCase extends BaseTestCase {
+	private static String dummyCollection = "SINGLE_COLLECTION";
 	
 	public void testConnectionData() throws MalformedURLException, StatisticConnectionException {
 		SolrServer solrServer = this.createMockSolrServer();
-		RequestHandlerConnection connection = new RequestHandlerConnection(solrServer);
-		Map<String, CacheData> data = connection.getData();
+		Map<String, SolrServer> serverMap = new HashMap<>();
+		serverMap.put(dummyCollection, solrServer);
+		RequestHandlerConnection connection = new RequestHandlerConnection(serverMap);
+		Map<String, CacheData> data = connection.getData().get(dummyCollection);
 		CacheData filterQueryData = connection.getFilterCacheData(data);
 		assertEquals((long)10, filterQueryData.getLookups());
 		assertEquals((long)5, filterQueryData.getHits());
@@ -29,8 +33,11 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 	
 	public void testAllCachesPresent() throws MalformedURLException, StatisticConnectionException {
 		SolrServer solrServer = this.createMockSolrServer();
-		RequestHandlerConnection connection = new RequestHandlerConnection(solrServer);
-		Map<String, CacheData> data = connection.getData();
+		Map<String, SolrServer> serverMap = new HashMap<>();
+		serverMap.put(dummyCollection, solrServer);
+		RequestHandlerConnection connection = new RequestHandlerConnection(serverMap);
+		Map<String, CacheData> data = connection.getData().get(dummyCollection);
+
 		assertNotNull(connection.getFilterCacheData(data));
 		assertNotNull(connection.getDocumentCacheData(data));
 		assertNotNull(connection.getFieldValueCacheData(data));
@@ -51,8 +58,10 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 	 */
 	public void testCumulativeData() throws MalformedURLException, StatisticConnectionException {
 		SolrServer solrServer = this.createMockSolrServer();
-		RequestHandlerConnection connection = new RequestHandlerConnection(solrServer);
-		Map<String, CacheData> data = connection.getData();
+		Map<String, SolrServer> serverMap = new HashMap<>();
+		serverMap.put(dummyCollection, solrServer);
+		RequestHandlerConnection connection = new RequestHandlerConnection(serverMap);
+		Map<String, CacheData> data = connection.getData().get(dummyCollection);
 		CacheData filterQueryData = connection.getCumulativeFilterCacheData(data);
 		
 		assertEquals((long)100, filterQueryData.getLookups());
@@ -156,8 +165,11 @@ public class RequestHandlerConnectionTestCase extends BaseTestCase {
 	
 	 public void testMissingCaches() throws MalformedURLException, StatisticConnectionException {
 	    SolrServer solrServer = this.createMockSolrServer("filterCache");
-	    RequestHandlerConnection connection = new RequestHandlerConnection(solrServer);
-	    Map<String, CacheData> data = connection.getData();
+		Map<String, SolrServer> serverMap = new HashMap<>();
+		serverMap.put(dummyCollection, solrServer);
+		RequestHandlerConnection connection = new RequestHandlerConnection(serverMap);
+		Map<String, CacheData> data = connection.getData().get(dummyCollection);
+
 	    assertNotNull(connection.getFilterCacheData(data));
 	    assertNull(connection.getDocumentCacheData(data));
 	    assertNull(connection.getFieldValueCacheData(data));
