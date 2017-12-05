@@ -39,7 +39,7 @@ public abstract class AbstractStatisticConnection {
 	public final static String CUMULATIVE_QUERY_RESULT_CACHE_NAME = "cumulativeQueryResultCache";
 	
 
-	public abstract Map<String, CacheData> getData() throws StatisticConnectionException;
+	public abstract Map<String, Map<String, CacheData>> getData() throws StatisticConnectionException;
 	
 	public CacheData getFilterCacheData(Map<String, CacheData> map) {
 		return map.get(FILTER_CACHE_NAME);

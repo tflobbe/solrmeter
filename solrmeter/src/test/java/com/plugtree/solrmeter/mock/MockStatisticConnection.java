@@ -28,19 +28,24 @@ import com.plugtree.solrmeter.model.statistic.CacheData;
  */
 public class MockStatisticConnection extends AbstractStatisticConnection {
 	
-	private Map<String, CacheData> data;
+	private Map<String, Map<String, CacheData>> data;
+	private Map<String, CacheData> internalData;
+	
+	private String singleCollection = "SINGLE_COLLECTION";
 	
 	public MockStatisticConnection() {
 		super();
-		this.data = new HashMap<String, CacheData>();
+		this.data = new HashMap<>();
+		this.internalData = new HashMap<>();
+		this.data.put(singleCollection, internalData);
 	}
 	
 	public void putData(String key, CacheData cacheData) {
-		data.put(key, cacheData);
+		data.get(singleCollection).put(key, cacheData);
 	}
 
 	@Override
-	public Map<String, CacheData> getData() throws StatisticConnectionException {
+	public Map<String, Map<String, CacheData>> getData() throws StatisticConnectionException {
 		return data;
 	}
 

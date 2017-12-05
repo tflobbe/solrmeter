@@ -15,6 +15,9 @@
  */
 package com.plugtree.solrmeter.view.statistic;
 
+import static java.util.Arrays.stream;
+import static java.util.Optional.ofNullable;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -22,10 +25,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -33,7 +43,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -44,9 +53,9 @@ import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.ui.RectangleEdge;
 
 import com.google.inject.Inject;
+import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.statistic.CacheData;
 import com.plugtree.solrmeter.model.statistic.CacheHistoryStatistic;
-import com.plugtree.solrmeter.util.ReflectionUtils;
 import com.plugtree.solrmeter.view.I18n;
 import com.plugtree.solrmeter.view.StatisticPanel;
 import com.plugtree.solrmeter.view.component.InfoPanel;
@@ -64,8 +73,31 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	
 	private static final long serialVersionUID = -154560067788983461L;
 	
-	private final static Logger logger = Logger.getLogger(CacheHistoryPanel.class);
+	private static final String collectionsStr = SolrMeterConfiguration.getProperty("solr.collection.names", null);
+	
+	private String activeCollection = "";
 
+	private static final List<String> collections;
+	
+	private enum cacheTypes {
+		documentCache,
+		fieldValueCache,
+		filterCache,
+		queryResultCache;
+		
+		private static final String[] cacheTypeValues = 
+			stream(cacheTypes.values())
+				.map(cacheTypes::toString)
+				.collect(Collectors.toList())
+				.toArray(new String[0]);
+		
+	}
+	
+	//Avoids having to use expensive Reflection calls.
+	private final Map<String, Supplier<Map<String, CacheData>>> cumulativeDataMethodMapper;
+	private final Map<String, Supplier<Map<String, SortedMap<Long, CacheData>>>> dataMethodMapper;
+	private final Map<String, Function<CacheData, Object>> cacheDataMethodMap;
+	
 	/**
 	 * Just for i18n stuff
 	 */
@@ -81,16 +113,20 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	 */
 	private CacheHistoryStatistic statistic;
 	
+	private JComboBox<String> collectionBox;
+	
 	/**
 	 * The combo box where the user will chose the cache hi wants to see
 	 */
-	private JComboBox comboBoxCache;
+	private JComboBox<String> comboBoxCache;
 	
 	/**
 	 * Combo box to select wether to see the hit ratio information or a specific
 	 * cache information
 	 */
-	private JComboBox whatToShowBoxCache;
+	private JComboBox<String> whatToShowBoxCache;
+	
+	private static final String SINGLE_COLLECTION = "SINGLE_COLLECTION";
 	
 	/**
 	 * Info Panel to display comulative lookups of the selected cache
@@ -138,6 +174,68 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	 */
 	private XYPlot plot;
 	
+	static {
+		List<String> _collections = new ArrayList<>();
+		stream(ofNullable(collectionsStr).orElse(SINGLE_COLLECTION).split("\\,")).map(String::trim).forEach(_collections::add);
+		collections = Collections.unmodifiableList(_collections);
+	} 
+	
+	{
+		activeCollection = collections.get(0);
+		
+		cumulativeDataMethodMapper = new HashMap<>();
+		cumulativeDataMethodMapper.put(cacheTypes.documentCache.toString(), () -> statistic.getDocumentCacheCumulativeData());
+		cumulativeDataMethodMapper.put(cacheTypes.fieldValueCache.toString(), () -> statistic.getFieldValueCacheCumulativeData());
+		cumulativeDataMethodMapper.put(cacheTypes.filterCache.toString(), () -> statistic.getFilterCacheCumulativeData());
+		cumulativeDataMethodMapper.put(cacheTypes.queryResultCache.toString(), () -> statistic.getQueryResultCacheCumulativeData());
+
+		dataMethodMapper = new HashMap<>();
+		dataMethodMapper.put(cacheTypes.documentCache.toString(), () -> statistic.getDocumentCacheData());
+		dataMethodMapper.put(cacheTypes.fieldValueCache.toString(), () -> statistic.getFieldValueCacheData());
+		dataMethodMapper.put(cacheTypes.filterCache.toString(), () -> statistic.getFilterCacheData());
+		dataMethodMapper.put(cacheTypes.queryResultCache.toString(), () -> statistic.getQueryResultCacheData());
+		
+		cacheDataMethodMap = new HashMap<>();
+		cacheDataMethodMap.put("Lookups", CacheData::getLookups);
+		cacheDataMethodMap.put("Hits", CacheData::getHits);
+		cacheDataMethodMap.put("Hitratio", CacheData::getHitratio);
+		cacheDataMethodMap.put("Inserts", CacheData::getInserts);
+		cacheDataMethodMap.put("Evictions", CacheData::getEvictions);
+		cacheDataMethodMap.put("Size", CacheData::getSize);
+		cacheDataMethodMap.put("WarmupTime", CacheData::getWarmupTime);
+	}
+
+	Supplier<CacheData> selectedCache = () ->
+		cumulativeDataMethodMapper.get(comboBoxCache.getSelectedItem().toString()).get().get(activeCollection);
+	
+	
+	Supplier<Map<String, SortedMap<Long,CacheData>>> cacheDataByCollection = () -> 
+		dataMethodMapper.get(comboBoxCache.getSelectedItem().toString()).get();
+
+	@SuppressWarnings("unchecked")
+	private Consumer<ActionEvent> cacheTypeChange = event -> {
+		changeChartTitle("title" + comboBoxCache.getSelectedItem().toString());
+		refreshSeries(Collections.EMPTY_MAP);
+		refreshView();
+	};
+
+	private Consumer<ActionEvent> whatToShowChange = event -> {
+		setShowingSpecificData(!whatToShowBoxCache.getSelectedItem().equals(I18n.get("statistic.cacheStatistic.showHitRatio")));
+		refreshView();
+	};
+
+	
+	@SuppressWarnings("unchecked")
+	private Consumer<ActionEvent> collectionChange = event -> {
+		activeCollection = collectionBox.getSelectedItem().toString();
+		changeChartTitle("title" + comboBoxCache.getSelectedItem().toString());
+		refreshSeries(Collections.EMPTY_MAP);
+		refreshView();
+	};
+	
+	private Runnable delayedAction = () -> refreshView();
+
+	
 	/**
 	 * Constructor to be injected by Guice
 	 * @param statistic
@@ -168,10 +266,12 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 		constraints.weighty = 0;
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.insets = new Insets(1,1,1,1);
+		
 		for(Component component: this.createControlPanel()) {
 			panel.add(component, constraints);
 			constraints.gridy++;
 		}
+		
 		cumulativeDataPanel = this.createCumulativeDataPanel(); 
 		panel.add(cumulativeDataPanel, constraints);
 		constraints.gridy++;
@@ -189,58 +289,65 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	private JPanel createCumulativeDataPanel() {
 		JPanel panel = new RoundedBorderJPanel("Cumulative Data");
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		cumulativeLookupsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Lookups"));
-		cumulativeHitsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Hits"));
-		cumulativeHitRatioInfoPanel = new InfoPanel(I18n.get(PREFIX + "HitRatio"));
-		cumulativeInsertsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Inserts"));
-		cumulativeEvictionsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Evictions"));
+	
+		collections.forEach(collectionName -> {
+			cumulativeLookupsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Lookups"));
+			cumulativeHitsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Hits"));
+			cumulativeHitRatioInfoPanel = new InfoPanel(I18n.get(PREFIX + "HitRatio"));
+			cumulativeInsertsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Inserts"));
+			cumulativeEvictionsInfoPanel = new InfoPanel(I18n.get(PREFIX + "Evictions"));
+		});
+				
 		panel.add(cumulativeLookupsInfoPanel);
 		panel.add(cumulativeHitsInfoPanel);
 		panel.add(cumulativeHitRatioInfoPanel);
 		panel.add(cumulativeInsertsInfoPanel);
 		panel.add(cumulativeEvictionsInfoPanel);
+		
 		return panel;
 	}
 
 	/**
-	 * Creates the controlers to select hit ratio or caches
+	 * Creates the controllers to select hit ratio or caches
 	 * @return
 	 */
 	private List<Component> createControlPanel() {
 		List<Component> components = new LinkedList<Component>();
-		whatToShowBoxCache = new JComboBox();
-		whatToShowBoxCache.addItem(I18n.get("statistic.cacheStatistic.showHitRatio"));
-		whatToShowBoxCache.addItem(I18n.get("statistic.cacheStatistic.showSpecificData"));
-		whatToShowBoxCache.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setShowingSpecificData(!whatToShowBoxCache.getSelectedItem().equals(I18n.get("statistic.cacheStatistic.showHitRatio")));
-				refreshView();
-			}
+		
+		addCollectionsComboBox(components);
+		addWhatToShowComboBox(components);
+		addCacheComboBox(components);
+		
+		return components;
+	}
 
-		});
+	private void addCacheComboBox(List<Component> components) {
+		comboBoxCache = createComboBox(cacheTypeChange, cacheTypes.cacheTypeValues);
+		components.add(comboBoxCache);
+	}
+	
+	private void addWhatToShowComboBox(List<Component> components) {
+		whatToShowBoxCache = 
+			createComboBox(whatToShowChange, 
+				I18n.get("statistic.cacheStatistic.showHitRatio"),
+				I18n.get("statistic.cacheStatistic.showSpecificData"));
+
 		components.add(whatToShowBoxCache);
 		components.add(Box.createRigidArea(new Dimension(3, 3)));
-		
-		comboBoxCache = new JComboBox();
-		comboBoxCache.addItem("documentCache");
-		comboBoxCache.addItem("fieldValueCache");
-		comboBoxCache.addItem("filterCache");
-		comboBoxCache.addItem("queryResultCache");
-		comboBoxCache.addActionListener(new ActionListener() {
+	}
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				changeChartTitle("title" + comboBoxCache.getSelectedItem().toString());
-				refreshSeries(Collections.EMPTY_MAP);
-				refreshView();
-			}
-
-		});
-		components.add(comboBoxCache);
-		return components;
+	private void addCollectionsComboBox(List<Component> components) {
+		if (!collections.isEmpty() && !collections.get(0).contentEquals(SINGLE_COLLECTION)) {
+			collectionBox = createComboBox(collectionChange, collections.toArray(new String[0]));
+			components.add(collectionBox);
+		}
+	}
+	
+	private <T> JComboBox<T> createComboBox(Consumer<ActionEvent> eventListener, T...items) {
+		JComboBox<T> box = new JComboBox<>();
+		stream(items).forEach(box::addItem);
+		box.addActionListener(eventListener::accept);
+		return box;
 	}
 	
 	/**
@@ -259,8 +366,8 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 			plot.getRangeAxis().setAutoRange(false);
 			changeChartTitle("titleHitRatio");
 		}
-		clearChart();
 		
+		clearChart();
 	}
 	
 	/**
@@ -284,23 +391,23 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	 * Refreshes the cumulative cache information
 	 */
 	private void refreshCumulativeData() {
-		CacheData cacheData = (CacheData) ReflectionUtils.getAttribute(statistic, comboBoxCache.getSelectedItem().toString() + "CumulativeData");
-		if(cacheData != null) {
+		CacheData cacheData = selectedCache.get();
+
+		if (cacheData != null) {
 			cumulativeLookupsInfoPanel.setValue(String.valueOf(cacheData.getLookups()));
 			cumulativeHitsInfoPanel.setValue(String.valueOf(cacheData.getHits()));
 			cumulativeHitRatioInfoPanel.setValue(String.valueOf(cacheData.getHitratio()));
 			cumulativeInsertsInfoPanel.setValue(String.valueOf(cacheData.getInserts()));
 			cumulativeEvictionsInfoPanel.setValue(String.valueOf(cacheData.getEvictions()));
 		} else {
-		  cumulativeLookupsInfoPanel.setValue("");
-      cumulativeHitsInfoPanel.setValue("");
-      cumulativeHitRatioInfoPanel.setValue("");
-      cumulativeInsertsInfoPanel.setValue("");
-      cumulativeEvictionsInfoPanel.setValue("");
+			cumulativeLookupsInfoPanel.setValue("");
+			cumulativeHitsInfoPanel.setValue("");
+			cumulativeHitRatioInfoPanel.setValue("");
+			cumulativeInsertsInfoPanel.setValue("");
+			cumulativeEvictionsInfoPanel.setValue("");
 		}
-		
 	}
-
+	
 	/**
 	 * Creates the chart of this statistic
 	 * @return
@@ -310,9 +417,7 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 		NumberAxis yaxis = new NumberAxis(I18n.get(PREFIX + "entries"));
 		
 		plot = new XYPlot(xyDataset, xaxis, yaxis, new XYLineAndShapeRenderer(true, true));
-		
-		chart = new JFreeChart("notitle",
-				null, plot, true);
+		chart = new JFreeChart("notitle", null, plot, true);
 		chart.getLegend().setPosition(RectangleEdge.RIGHT);
 		ChartPanel chartPanel = new ChartPanel(chart);
 		
@@ -330,7 +435,10 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	 * @param key is the last part of the i18n key
 	 */
 	private void changeChartTitle(String key) {
-		chart.setTitle(I18n.get(PREFIX + key));
+		char[] collectionName = activeCollection.toCharArray();
+		collectionName[0] = Character.toUpperCase(collectionName[0]);
+		
+		chart.setTitle(String.valueOf(collectionName) + " " + I18n.get(PREFIX + key));
 	}
 	
 	@Override
@@ -338,12 +446,10 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 		return I18n.get("statistic.cacheStatistic.title");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void refreshView() {
-	    logger.debug("Cache History Panel");
 		if(showingSpecificCacheData) {
-			refreshSeries((Map<Long, CacheData>)ReflectionUtils.getAttribute(statistic, comboBoxCache.getSelectedItem().toString() + "Data"));
+			refreshSeries(cacheDataByCollection.get());
 			refreshCumulativeData();
 		} else {
 			refreshHitRatio();
@@ -354,58 +460,53 @@ public class CacheHistoryPanel extends StatisticPanel implements ActionListener 
 	 * If showing the hit ratio, this method will be invoked to refresh the chart
 	 */
 	private void refreshHitRatio() {
-//		synchronized(statistic) {
-			addSerie(statistic.getFilterCacheData(), "hitratio", PREFIX + "hitratio.filterCache");
-			addSerie(statistic.getDocumentCacheData(), "hitratio", PREFIX + "hitratio.documentCache");
-			addSerie(statistic.getQueryResultCacheData(), "hitratio", PREFIX + "hitratio.queryResultCache");
-			addSerie(statistic.getFieldValueCacheData(), "hitratio", PREFIX + "hitratio.fieldValueCache");
-			
-//		}
+		addSeries(statistic.getFilterCacheData().get(activeCollection), "Hitratio", PREFIX + "hitratio.filterCache");
+		addSeries(statistic.getDocumentCacheData().get(activeCollection), "Hitratio", PREFIX + "hitratio.documentCache");
+		addSeries(statistic.getQueryResultCacheData().get(activeCollection), "Hitratio", PREFIX + "hitratio.queryResultCache");
+		addSeries(statistic.getFieldValueCacheData().get(activeCollection), "Hitratio", PREFIX + "hitratio.fieldValueCache");
 	}
 
 	/**
 	 * If showing specific cache data, this method will be invoked to refresh
 	 * @param data
 	 */
-	private void refreshSeries(Map<Long, CacheData> data) {
+	private void refreshSeries(Map<String, SortedMap<Long, CacheData>> data) {
 		synchronized(data) {
-			addSerie(data, "Lookups");
-			addSerie(data, "Hits");
-			addSerie(data, "Size");
-			addSerie(data, "Inserts");
-			addSerie(data, "Evictions");
+				addSeries(data.get(activeCollection), "Lookups");
+				addSeries(data.get(activeCollection), "Hits");
+				addSeries(data.get(activeCollection), "Size");
+				addSeries(data.get(activeCollection), "Inserts");
+				addSeries(data.get(activeCollection), "Evictions");
 		}
 		
 	}
-	
-	private void addSerie(Map<Long, CacheData> data, String element, String label) {
+		
+	private void addSeries(Map<Long, CacheData> data, String element, String label) {
+		if (data == null) {
+			return;
+		}
+		
 		int i = 0;
-		double[][] seriesData;
-		seriesData = new double[2][data.size()];
+		double[][] seriesData = new double[2][data.size()];
+
+		Function<CacheData, Double> cacheDataValue = cacheDataMethodMap.get(element)
+			.andThen(o -> o.toString()).andThen(Double::valueOf);
+		Function<Long, Double> timePoint = (time) -> time / 1000.0;
 		
 		for(Map.Entry<Long, CacheData> xy: data.entrySet()) {
-			seriesData[0][i] = xy.getKey()/1000.0;
-			try {
-				seriesData[1][i] = Double.valueOf(ReflectionUtils.getAttribute(xy.getValue(), element).toString());
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			} 
+			seriesData[0][i] = timePoint.apply(xy.getKey());
+			seriesData[1][i] = cacheDataValue.apply(xy.getValue());
 			i++;
 		}
 		xyDataset.addSeries(I18n.get(label), seriesData);
 	}
 	
-	private void addSerie(Map<Long, CacheData> data, String element) {
-		this.addSerie(data, element, PREFIX + element);
+	private void addSeries(Map<Long, CacheData> data, String element) {
+		this.addSeries(data, element, PREFIX + element);
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				refreshView();
-			}
-		});
+		SwingUtilities.invokeLater(delayedAction);
 	}
 }
