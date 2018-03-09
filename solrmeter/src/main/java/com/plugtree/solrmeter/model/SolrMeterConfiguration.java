@@ -56,7 +56,7 @@ public class SolrMeterConfiguration {
 	public static String QUERIES_PER_SECOND = "solr.load.queriespersecond";
 	public static String UPDATES_PER_SECOND = "solr.load.updatespersecond";
 	public static String DELETES_PER_SECOND = "solr.load.deletespersecond";
-	public static String INSERTS_PER_SECOND = "solr.load.deletespersecond";
+	public static String INSERTS_PER_SECOND = "solr.load.insertspersecond";
 	public static String TEST_TIME = "solr.testTime";
 	public static String QUERY_METHOD = "solr.queryMethod";
 
