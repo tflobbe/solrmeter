@@ -15,7 +15,7 @@
  */
 package com.plugtree.solrmeter.model;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.plugtree.solrmeter.model.exception.QueryException;
@@ -27,17 +27,17 @@ import com.plugtree.solrmeter.model.exception.QueryException;
 public interface QueryExecutor {
 
 	/**
-	 * 
+	 *
 	 * @return The current Solr Server. If there is no current Solr Server, then the method returns a new one.
 	 */
-	SolrServer getSolrServer();
+	SolrClient getSolrServer();
 
 	/**
 	 * To be executed when a Query succeeds. 
 	 * @param response
 	 */
 	void notifyQueryExecuted(QueryResponse response,
-			long clientTime);
+							 long clientTime);
 
 	/**
 	 * To be executed when a query fails
@@ -73,8 +73,8 @@ public interface QueryExecutor {
 	void stop();
 
 	/**
-     * Set the number of operations expected per second
-     */
+	 * Set the number of operations expected per second
+	 */
 	void setOperationsPerSecond(int newOperationsPerSecond);
 
 	/**
@@ -82,5 +82,5 @@ public interface QueryExecutor {
 	 * @return
 	 */
 	boolean isRunning();
-	
+
 }

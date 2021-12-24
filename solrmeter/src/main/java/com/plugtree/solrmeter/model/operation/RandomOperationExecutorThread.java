@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import com.plugtree.solrmeter.model.exception.OperationException;
 
 /**
- * 
+ *
  * An Operation that has to be executed every N milliseconds. The interval of execution
  * is not precise, it is at least queryInterval (parameter passed to the constructor)
  * and at most queryInterval + operation time. This is because the instant where the
@@ -32,24 +32,25 @@ import com.plugtree.solrmeter.model.exception.OperationException;
  *
  */
 public class RandomOperationExecutorThread extends Thread {
-	
+
 	protected final static Logger logger = Logger.getLogger(RandomOperationExecutorThread.class);
 
 	protected final AtomicBoolean stopping = new AtomicBoolean(false);
-	
+
 	private final long operationIntervalInMs;
-	
+
 	/**
 	 * Operation to execute
 	 */
 	private Operation operation;
-	
+
 	public RandomOperationExecutorThread(Operation operation, long operationInterval) {
 		super();
 		this.operationIntervalInMs = operationInterval;
 		this.operation = operation;
 	}
-	
+
+	@Override
 	public void run() {
 		while(!isStopping()) {
 			long init = System.currentTimeMillis();
@@ -66,24 +67,24 @@ public class RandomOperationExecutorThread extends Thread {
 				executeOperation();
 			}
 			try {
-				
+
 				long diff = (operationIntervalInMs + init) - System.currentTimeMillis();
 				if(diff > 0L) {
 					Thread.sleep(diff);
 				}
 			} catch (InterruptedException e) {
-			    logger.error("Thread interrupted", e);
-			    stopping.set(true);
-                Thread.currentThread().interrupt();
-                break;
+				logger.error("Thread interrupted", e);
+				stopping.set(true);
+				Thread.currentThread().interrupt();
+				break;
 			}
 		}
 	}
-	
+
 	protected long getRandomSleepTime() {
 		return (long) (Math.random() * operationIntervalInMs);
 	}
-	
+
 	protected void executeOperation() {
 		try {
 			operation.execute();
@@ -95,8 +96,8 @@ public class RandomOperationExecutorThread extends Thread {
 	protected boolean isStopping() {
 		return stopping.get();
 	}
-	
+
 	public void destroy() {
-	    this.stopping.set(true);
+		this.stopping.set(true);
 	}
 }

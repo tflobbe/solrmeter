@@ -15,7 +15,7 @@
  */
 package com.plugtree.solrmeter.model;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.plugtree.solrmeter.model.exception.CommitException;
@@ -28,10 +28,10 @@ import com.plugtree.solrmeter.model.exception.UpdateException;
 public interface UpdateExecutor {
 
 	/**
-	 * 
+	 *
 	 * @return The current Solr Server. If there is no current Solr Server, then the method returns a new one.
 	 */
-	public SolrServer getSolrServer();
+	public SolrClient getSolrServer();
 
 	/**
 	 * Starts this executor
@@ -80,13 +80,13 @@ public interface UpdateExecutor {
 	public int getNotCommitedDocuments();
 
 	/**
-     * Set the number of documents that has to be added before a commit is performed
-     * by solrmeter. This number is useless when solrmeter doesn't perform commits.
-     */
+	 * Set the number of documents that has to be added before a commit is performed
+	 * by solrmeter. This number is useless when solrmeter doesn't perform commits.
+	 */
 	public void setNumberOfDocumentsBeforeCommit(int value);
 
 	/**
-	 * 
+	 *
 	 * @return The number of documents that has to be added before a commit is performed by
 	 * solrmeter.
 	 */
@@ -100,7 +100,7 @@ public interface UpdateExecutor {
 	public void setMaxTimeBeforeCommit(Integer value);
 
 	/**
-	 * 
+	 *
 	 * @return The time interval between commits executed by solrmeter.
 	 */
 	public Integer getMaxTimeBeforeCommit();
@@ -113,21 +113,21 @@ public interface UpdateExecutor {
 	public boolean isAutocommit();
 
 	/**
-	 * 
+	 *
 	 * @return The number of update operations that has to be executed per minute
 	 */
 	public Integer getUpdatesPerMinute();
 
 	/**
-	 * 
+	 *
 	 * @return true if the executor is currently running.
 	 * 			false if the executor is not currently running.
 	 */
 	public boolean isRunning();
 
 	/**
-     * Set the number of updates that has to be executed in a minute.
-     */
-    public void setOperationsPerSecond(int value);
+	 * Set the number of updates that has to be executed in a minute.
+	 */
+	public void setOperationsPerSecond(int value);
 
 }

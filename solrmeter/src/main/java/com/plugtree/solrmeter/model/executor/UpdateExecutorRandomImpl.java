@@ -18,7 +18,7 @@ package com.plugtree.solrmeter.model.executor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.google.inject.Inject;
@@ -35,8 +35,8 @@ import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
 import com.plugtree.solrmeter.model.operation.UpdateOperation;
 import com.plugtree.stressTestScope.StressTestScope;
 
-/** 
- * manages update execution Threads. The updates are executed with 
+/**
+ * manages update execution Threads. The updates are executed with
  * RandomOperationExectionThread.
  * @see com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread
  * @author tflobbe
@@ -44,24 +44,23 @@ import com.plugtree.stressTestScope.StressTestScope;
  */
 @StressTestScope
 public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements UpdateExecutor {
-	
-	//TODO DI
-	private SolrServer server;
-	
+
+	private SolrClient server;
+
 	private Integer numberOfDocumentsBeforeCommit;
-	
+
 	private Integer maxTimeBeforeCommit;
-	
+
 	private List<UpdateStatistic> statistics;
-	
+
 	protected boolean autocommit;
-	
+
 	private int notCommitedDocuments;
-	
+
 	private ConstantOperationExecutorThread commiterThread;
-	
+
 	private InputDocumentExtractor documentExtractor;
-	
+
 	@Inject
 	public UpdateExecutorRandomImpl(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
 		super();
@@ -78,14 +77,16 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		super();
 		statistics = new LinkedList<UpdateStatistic>();
 	}
-	
-	public synchronized SolrServer getSolrServer() {
+
+	@Override
+	public synchronized SolrClient getSolrServer() {
 		if(server == null) {
 			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
 		}
 		return server;
 	}
-	
+
+	@Override
 	protected RandomOperationExecutorThread createThread() {
 		return new RandomOperationExecutorThread(new UpdateOperation(this, documentExtractor), 1000);
 	}
@@ -97,7 +98,8 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		commiterThread = new ConstantOperationExecutorThread(new CommitOperation(this));
 		commiterThread.setTimeToWait(maxTimeBeforeCommit);
 	}
-	
+
+	@Override
 	public void start() {
 		if(this.isRunning()) {
 			return;
@@ -109,7 +111,8 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		}
 		logger.info("Update Executor started");
 	}
-	
+
+	@Override
 	public void stop() {
 		if(!this.isRunning()) {
 			return;
@@ -120,12 +123,14 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		super.stop();
 	}
 
+	@Override
 	protected void stopStatistics() {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onFinishedTest();
 		}
 	}
 
+	@Override
 	public void notifyAddedDocument(UpdateResponse response) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onAddedDocument(response);
@@ -138,50 +143,57 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 			}
 		}
 	}
-	
+
+	@Override
 	public void notifyCommitSuccessfull(UpdateResponse response) {
 		notCommitedDocuments = 0;
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onCommit(response);
 		}
 	}
-	
+
+	@Override
 	public void notifyCommitError(CommitException exception) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onCommitError(exception);
 		}
 	}
-	
+
+	@Override
 	public void notifyUpdateError(UpdateException updateException) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onAddError(updateException);
 		}
 	}
-	
+
+	@Override
 	public void addStatistic(UpdateStatistic statistic) {
 		this.statistics.add(statistic);
 	}
 
+	@Override
 	public int getNotCommitedDocuments() {
 		return notCommitedDocuments;
 	}
-	
-	@Override
-    public void setNumberOfDocumentsBeforeCommit(int value) {
-        if (value == Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
-        }
-        if (value < 0) {
-            throw new IllegalArgumentException("Number of documents before commit can't be less than 0");
-        }
-        numberOfDocumentsBeforeCommit= value;
-        SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-    }
 
+	@Override
+	public void setNumberOfDocumentsBeforeCommit(int value) {
+		if (value == Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
+		}
+		if (value < 0) {
+			throw new IllegalArgumentException("Number of documents before commit can't be less than 0");
+		}
+		numberOfDocumentsBeforeCommit= value;
+		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
+	}
+
+	@Override
 	public Integer getNumberOfDocumentsBeforeCommit() {
 		return numberOfDocumentsBeforeCommit;
 	}
-	
+
+	@Override
 	public void setMaxTimeBeforeCommit(Integer value) {
 		if(value <= 0) {
 			throw new RuntimeException("Time before commit can't be 0");
@@ -191,14 +203,17 @@ public class UpdateExecutorRandomImpl extends AbstractRandomExecutor implements 
 		commiterThread.setTimeToWait(value);
 	}
 
+	@Override
 	public Integer getMaxTimeBeforeCommit() {
 		return maxTimeBeforeCommit;
 	}
 
+	@Override
 	public boolean isAutocommit() {
 		return autocommit;
 	}
 
+	@Override
 	public Integer getUpdatesPerMinute() {
 		return this.operationsPerSecond;
 	}

@@ -18,7 +18,7 @@ package com.plugtree.solrmeter.model.executor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
@@ -33,7 +33,7 @@ import com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread;
 import com.plugtree.stressTestScope.StressTestScope;
 
 /**
- * Creates and manages query execution Threads. The queries are executed with 
+ * Creates and manages query execution Threads. The queries are executed with
  * RandomOperationExectionThread.
  * @see com.plugtree.solrmeter.model.operation.RandomOperationExecutorThread
  * @author tflobbe
@@ -41,27 +41,27 @@ import com.plugtree.stressTestScope.StressTestScope;
  */
 @StressTestScope
 public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements QueryExecutor {
-	
+
 	/**
 	 * Solr Server for strings
 	 * TODO implement provider
 	 */
-	private SolrServer server;
-	
+	private SolrClient server;
+
 	/**
 	 * List of Statistics observing this Executor.
 	 */
 	private List<QueryStatistic> statistics;
-	
-    /**
-     * The generator that creates a query depending on the query mode selected
-     */
-    private QueryGenerator queryGenerator;
 
-    @Inject
+	/**
+	 * The generator that creates a query depending on the query mode selected
+	 */
+	private QueryGenerator queryGenerator;
+
+	@Inject
 	public QueryExecutorRandomImpl(@Named("queryGenerator") QueryGenerator queryGenerator) {
 		super();
-        this.queryGenerator = queryGenerator;
+		this.queryGenerator = queryGenerator;
 		this.statistics = new LinkedList<QueryStatistic>();
 		this.operationsPerSecond = Integer.parseInt(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_SECOND));
 		super.prepare();
@@ -74,8 +74,8 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 		this.statistics = new LinkedList<QueryStatistic>();
 //		operationsPerMinute = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_MINUTE)).intValue();
 	}
-	
-	
+
+
 
 	@Override
 	protected RandomOperationExecutorThread createThread() {
@@ -93,33 +93,33 @@ public class QueryExecutorRandomImpl extends AbstractRandomExecutor implements Q
 	}
 
 	@Override
-	public synchronized SolrServer getSolrServer() {
+	public synchronized SolrClient getSolrServer() {
 		if(server == null) {
 			server = super.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}
 		return server;
 	}
-	
+
 	@Override
 	public void notifyQueryExecuted(QueryResponse response, long clientTime) {
 		for (QueryStatistic statistic:statistics) {
 			statistic.onExecutedQuery(response, clientTime);
 		}
 	}
-	
+
 	@Override
 	public void notifyError(QueryException exception) {
 		for (QueryStatistic statistic:statistics) {
 			statistic.onQueryError(exception);
 		}
 	}
-	
-	
+
+
 	@Override
 	protected String getOperationsPerSecondConfigurationKey() {
 		return "solr.load.queriespersecond";
 	}
-	
+
 	@Override
 	public void addStatistic(QueryStatistic statistic) {
 		this.statistics.add(statistic);

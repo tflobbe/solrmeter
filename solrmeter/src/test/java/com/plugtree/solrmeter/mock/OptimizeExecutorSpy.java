@@ -18,7 +18,7 @@ package com.plugtree.solrmeter.mock;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 
 import com.plugtree.solrmeter.model.OptimizeStatistic;
 import com.plugtree.solrmeter.model.executor.OnDemandOptimizeExecutor;
@@ -30,10 +30,10 @@ public class OptimizeExecutorSpy extends OnDemandOptimizeExecutor {
 		optimizeObservers = new LinkedList<OptimizeStatistic>();
 	}
 	
-	public SolrServer getServer() {
+	public SolrClient getServer() {
 		return server;
 	}
-	public void setServer(SolrServer server) {
+	public void setServer(SolrClient server) {
 		this.server = server;
 	}
 	

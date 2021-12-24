@@ -99,7 +99,7 @@ public class QueryServiceSolrJImplTestCase extends BaseTestCase {
 		SolrQuery query = service.createQuery("some query", "name:tomas", "/dismax", false, "name, surname", null, null, 10, 0, "");
 		assertEquals("some query", query.get("q"));
 		assertEquals(new String[]{"name:tomas"}, query.getFilterQueries());
-		assertEquals("/dismax", query.getQueryType());
+		assertEquals("/dismax", query.getRequestHandler());
 		assertEquals(new String[]{"name", "surname"}, query.getFacetFields());
 		
 		service.createQuery(null, "name:tomas", "/dismax", false, "name, surname", null, null, 10, 0, "");

@@ -15,15 +15,25 @@
  */
 package com.plugtree.solrmeter.model;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 /**
- * This registry holds all the created solr servers. It will be one for each different url 
+ * This registry holds all the created solr servers. It will be one for each different url
  * and it wont change between tests.
  * @author tflobbe
  *
@@ -32,29 +42,42 @@ public class SolrServerRegistry {
 
 	protected static final Logger logger = Logger.getLogger(SolrServerRegistry.class);
 
-	private static final Map<String, SolrServer> servers = new HashMap<String, SolrServer>();
+	private static final Map<String, HttpSolrClient> servers = new HashMap<String, HttpSolrClient>();
 
-	public static synchronized SolrServer getSolrServer(String url) {
-		SolrServer server = servers.get(url);
+	public static synchronized SolrClient getSolrServer(String url) {
+		SolrClient server = servers.get(url);
 		if(server == null) {
 			logger.info("Connecting to Solr: " + url);
-			HttpSolrServer httpServer = new HttpSolrServer(url);
-			httpServer.setSoTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.soTimeout", "60000"))); // socket read timeout
-			httpServer.setConnectionTimeout(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.connectionTimeout", "60000")));
-			httpServer.setDefaultMaxConnectionsPerHost(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.defaultMaxConnectionsPerHost", "100000")));
-			httpServer.setMaxTotalConnections(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxTotalConnections", "1000000")));
-			httpServer.setFollowRedirects(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.followRedirect", "false"))); // defaults to false
-			httpServer.setAllowCompression(Boolean.parseBoolean(SolrMeterConfiguration.getProperty("solr.server.configuration.allowCompression", "true")));
-			httpServer.setMaxRetries(Integer.parseInt(SolrMeterConfiguration.getProperty("solr.server.configuration.maxRetries", "1"))); // defaults to 0. > 1 not recommended.
-			setAuthentication(httpServer);
-			servers.put(url, httpServer);
-			return httpServer;
+			String user = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthUser");
+			String pass = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthPass");
+			HttpSolrClient client;
+
+			HttpClientBuilder builder = HttpClientBuilder.create();
+			if (StringUtils.isNotEmpty(user) && StringUtils.isNotEmpty(pass)) {
+				UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, pass);
+				CredentialsProvider credsProvider = new BasicCredentialsProvider();
+				credsProvider.setCredentials(
+						AuthScope.ANY,
+						creds);
+
+				builder.addInterceptorFirst(new PreemptiveAuthInterceptor());
+				builder.setDefaultCredentialsProvider(credsProvider);
+			}
+
+			CloseableHttpClient httpClient = builder.build();
+
+			client = new HttpSolrClient.Builder().withBaseSolrUrl(url)
+					.withHttpClient(httpClient)
+					.build();
+
+			servers.put(url, client);
+			return client;
 
 		}
 		return server;
 	}
 
-	private static void setAuthentication(HttpSolrServer httpServer) {
+	private static void setAuthentication(HttpSolrClient httpServer) {
 		String user = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthUser");
 		String pass = SolrMeterConfiguration.getProperty("solr.server.configuration.httpAuthPass");
 		if(user != null && !user.isEmpty() && pass != null && !pass.isEmpty()) {
@@ -67,9 +90,11 @@ public class SolrServerRegistry {
 	 * Drops all existing SolrServers
 	 */
 	public static void invalidate() {
-		for(SolrServer server:servers.values()) {
-			if(server instanceof HttpSolrServer) {
-				((HttpSolrServer) server).shutdown();
+		for(SolrClient server:servers.values()) {
+			try {
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		servers.clear();
