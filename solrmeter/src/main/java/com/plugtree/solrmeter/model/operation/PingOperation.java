@@ -2,7 +2,7 @@ package com.plugtree.solrmeter.model.operation;
 
 import java.io.IOException;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.apache.solr.common.SolrException;
@@ -15,10 +15,10 @@ import com.plugtree.solrmeter.model.exception.PingNotConfiguredException;
  *
  */
 public class PingOperation implements Operation {
-	
-	private final SolrServer server;
-	
-	public PingOperation(SolrServer server) {
+
+	private final SolrClient server;
+
+	public PingOperation(SolrClient server) {
 		this.server = server;
 	}
 

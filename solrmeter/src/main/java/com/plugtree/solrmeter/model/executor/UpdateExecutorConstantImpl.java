@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 
 import com.google.inject.Inject;
@@ -44,32 +44,32 @@ import com.plugtree.stressTestScope.StressTestScope;
  */
 @StressTestScope
 public class UpdateExecutorConstantImpl implements UpdateExecutor {
-	
+
 	private final static Logger logger = Logger.getLogger(UpdateExecutorConstantImpl.class);
 
 	//TODO DI
-	private SolrServer server;
-	
+	private SolrClient server;
+
 	private Integer numberOfDocumentsBeforeCommit;
-	
+
 	private Integer maxTimeBeforeCommit;
-	
+
 	private List<UpdateStatistic> statistics;
-	
+
 	protected boolean autocommit;
-	
+
 	private int notCommitedDocuments;
-	
+
 	private ConstantOperationExecutorThread commiterThread;
-	
+
 	private InputDocumentExtractor documentExtractor;
-	
+
 	private int operationsPerMinute;
-	
+
 	private boolean running;
-	
+
 	private ConstantOperationExecutorThread updateExecutorThread;
-	
+
 	@Inject
 	public UpdateExecutorConstantImpl(@Named("updateExtractor") InputDocumentExtractor documentExtractor) {
 		super();
@@ -80,14 +80,15 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		maxTimeBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.timeToCommit", "10000"));
 		numberOfDocumentsBeforeCommit = Integer.valueOf(SolrMeterConfiguration.getProperty("solr.update.documentsToCommit", "100"));
 	}
-	
-	public synchronized SolrServer getSolrServer() {
+
+	@Override
+	public synchronized SolrClient getSolrServer() {
 		if(server == null) {
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL));
 		}
 		return server;
 	}
-	
+
 	private void prepareCommitter() {
 		if(commiterThread != null) {
 			commiterThread.destroy();
@@ -95,7 +96,8 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		commiterThread = new ConstantOperationExecutorThread(new CommitOperation(this));
 		commiterThread.setTimeToWait(maxTimeBeforeCommit);
 	}
-	
+
+	@Override
 	public void start() {
 		if(this.isRunning()) {
 			return;
@@ -109,7 +111,8 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		}
 		logger.info("Update Executor started");
 	}
-	
+
+	@Override
 	public void stop() {
 		if(!this.isRunning()) {
 			return;
@@ -127,6 +130,7 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		}
 	}
 
+	@Override
 	public void notifyAddedDocument(UpdateResponse response) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onAddedDocument(response);
@@ -139,38 +143,45 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 			}
 		}
 	}
-	
+
+	@Override
 	public void notifyCommitSuccessfull(UpdateResponse response) {
 		notCommitedDocuments = 0;
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onCommit(response);
 		}
 	}
-	
+
+	@Override
 	public void notifyCommitError(CommitException exception) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onCommitError(exception);
 		}
 	}
-	
+
+	@Override
 	public void notifyUpdateError(UpdateException updateException) {
 		for(UpdateStatistic statistic:statistics) {
 			statistic.onAddError(updateException);
 		}
 	}
-	
+
+	@Override
 	public void addStatistic(UpdateStatistic statistic) {
 		this.statistics.add(statistic);
 	}
 
+	@Override
 	public int getNotCommitedDocuments() {
 		return notCommitedDocuments;
 	}
-	
+
+	@Override
 	public Integer getNumberOfDocumentsBeforeCommit() {
 		return numberOfDocumentsBeforeCommit;
 	}
-	
+
+	@Override
 	public void setMaxTimeBeforeCommit(Integer value) {
 		if(value <= 0) {
 			throw new RuntimeException("Time before commit can't be 0");
@@ -182,22 +193,26 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		}
 	}
 
+	@Override
 	public Integer getMaxTimeBeforeCommit() {
 		return maxTimeBeforeCommit;
 	}
 
+	@Override
 	public boolean isAutocommit() {
 		return autocommit;
 	}
 
+	@Override
 	public Integer getUpdatesPerMinute() {
 		return this.operationsPerMinute;
 	}
-	
+
+	@Override
 	public boolean isRunning() {
 		return running;
 	}
-	
+
 	private void onOperationsPerMinuteChange() {
 		SolrMeterConfiguration.setProperty("solr.load.updatesperminute", String.valueOf(operationsPerMinute));
 		if(this.updateExecutorThread != null) {
@@ -205,26 +220,26 @@ public class UpdateExecutorConstantImpl implements UpdateExecutor {
 		}
 	}
 
-    @Override
-    public void setOperationsPerSecond(int value) {
-        if (operationsPerMinute < 1) {
-            throw new IllegalArgumentException("Invalid number of operations per second: " + value);
-        }
-        this.operationsPerMinute = value;
-        onOperationsPerMinuteChange();
-    }
+	@Override
+	public void setOperationsPerSecond(int value) {
+		if (operationsPerMinute < 1) {
+			throw new IllegalArgumentException("Invalid number of operations per second: " + value);
+		}
+		this.operationsPerMinute = value;
+		onOperationsPerMinuteChange();
+	}
 
-    @Override
-    public void setNumberOfDocumentsBeforeCommit(int value) {
-        if (value == Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
-        }
-        if (value < 0) {
-            throw new IllegalArgumentException("Number of documents before commit can't be less than 0");
-        }
-        numberOfDocumentsBeforeCommit= value;
-        SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
-    }
+	@Override
+	public void setNumberOfDocumentsBeforeCommit(int value) {
+		if (value == Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Number of documents before commit can't be more than " + Integer.MAX_VALUE);
+		}
+		if (value < 0) {
+			throw new IllegalArgumentException("Number of documents before commit can't be less than 0");
+		}
+		numberOfDocumentsBeforeCommit= value;
+		SolrMeterConfiguration.setProperty("solr.update.documentsToCommit", String.valueOf(numberOfDocumentsBeforeCommit));
+	}
 
-	
+
 }

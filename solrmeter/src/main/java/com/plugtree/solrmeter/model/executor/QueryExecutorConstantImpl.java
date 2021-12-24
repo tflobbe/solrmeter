@@ -18,7 +18,7 @@ package com.plugtree.solrmeter.model.executor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import com.google.inject.Inject;
@@ -43,39 +43,39 @@ import com.plugtree.stressTestScope.StressTestScope;
  */
 @StressTestScope
 public class QueryExecutorConstantImpl implements QueryExecutor{
-	
+
 	/**
 	 * Solr Server for strings
 	 */
-	private SolrServer server;
-	
+	private SolrClient server;
+
 	/**
 	 * List of Statistics observing this Executor.
 	 */
 	private List<QueryStatistic> statistics;
-	
+
 	/**
 	 * Indicates wether the Executor is running or not
 	 */
 	private boolean running;
-	
+
 	private int operationsPerSecond;
-	
+
 	/**
 	 * Thread that execute queries periodically
 	 */
 	private ConstantOperationExecutorThread executerThread;
 
-    /**
-     * The generator that creates a query depending on the query mode selected 
-     */
-    private QueryGenerator queryGenerator;
+	/**
+	 * The generator that creates a query depending on the query mode selected
+	 */
+	private QueryGenerator queryGenerator;
 
-    @Inject
+	@Inject
 	public QueryExecutorConstantImpl(@Named("queryGenerator") QueryGenerator queryGenerator) {
 		super();
-        this.queryGenerator = queryGenerator;
-        statistics = new LinkedList<QueryStatistic>();
+		this.queryGenerator = queryGenerator;
+		statistics = new LinkedList<QueryStatistic>();
 		this.operationsPerSecond = Integer.valueOf(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERIES_PER_SECOND)).intValue();
 	}
 
@@ -85,13 +85,13 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	}
 
 	@Override
-	public synchronized SolrServer getSolrServer() {
+	public synchronized SolrClient getSolrServer() {
 		if(server == null) {
 			server = SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_SEARCH_URL));
 		}
 		return server;
 	}
-	
+
 	private void updateThreadWaitTime() {
 		if(executerThread != null) {
 			executerThread.setTimeToWait(1000/operationsPerSecond);
@@ -102,7 +102,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 	public boolean isRunning() {
 		return running;
 	}
-	
+
 	@Override
 	public void prepare() {
 
@@ -122,7 +122,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 		executerThread.destroy();
 		this.stopStatistics();
 	}
-	
+
 	/**
 	 * Logs strings time and all statistics information.
 	 */
@@ -145,7 +145,7 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 			statistic.onQueryError(exception);
 		}
 	}
-	
+
 	@Override
 	public void addStatistic(QueryStatistic statistic) {
 		this.statistics.add(statistic);
@@ -153,10 +153,10 @@ public class QueryExecutorConstantImpl implements QueryExecutor{
 
 
 
-    @Override
-    public void setOperationsPerSecond(int newOperationsPerSecond) {
-        this.operationsPerSecond = newOperationsPerSecond;
-        updateThreadWaitTime();
-    }
+	@Override
+	public void setOperationsPerSecond(int newOperationsPerSecond) {
+		this.operationsPerSecond = newOperationsPerSecond;
+		updateThreadWaitTime();
+	}
 
 }

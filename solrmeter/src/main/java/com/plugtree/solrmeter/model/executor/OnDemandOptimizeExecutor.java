@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServer;
 
 import com.plugtree.solrmeter.model.OptimizeExecutor;
 import com.plugtree.solrmeter.model.OptimizeStatistic;
@@ -27,6 +26,8 @@ import com.plugtree.solrmeter.model.SolrMeterConfiguration;
 import com.plugtree.solrmeter.model.SolrServerRegistry;
 import com.plugtree.solrmeter.model.exception.OptimizeException;
 import com.plugtree.stressTestScope.StressTestScope;
+import org.apache.solr.client.solrj.SolrClient;
+
 /**
  * Executes an optimize only when the "execute" method is invoked
  * @author tflobbe
@@ -34,37 +35,38 @@ import com.plugtree.stressTestScope.StressTestScope;
  */
 @StressTestScope
 public class OnDemandOptimizeExecutor implements OptimizeExecutor {
-	
+
 	protected final static Logger logger = Logger.getLogger(OnDemandOptimizeExecutor.class);
-	
+
 	/**
 	 * The Solr Server were the optimize is going to run.
 	 */
-	protected SolrServer server = null;
-	
+	protected SolrClient server = null;
+
 	/**
 	 * Indicates whether the index is being optimized or not at this time
 	 */
 	private boolean isOptimizing = false;
-	
+
 	/**
 	 * List of Statistics observing the operation
 	 */
 	protected List<OptimizeStatistic> optimizeObservers;
-	
+
 	public OnDemandOptimizeExecutor() {
 		this(SolrServerRegistry.getSolrServer(SolrMeterConfiguration.getProperty(SolrMeterConfiguration.SOLR_ADD_URL)));
 	}
-	
-	public OnDemandOptimizeExecutor(SolrServer server) {
+
+	public OnDemandOptimizeExecutor(SolrClient server) {
 		super();
 		optimizeObservers = new LinkedList<OptimizeStatistic>();
 		this.server = server;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public synchronized void execute() {
 		if(isOptimizing) {
 			logger.warn("Trying to optimize while already optimizing");
@@ -118,10 +120,11 @@ public class OnDemandOptimizeExecutor implements OptimizeExecutor {
 			observer.onOptimizeFinished(delay);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void addStatistic(OptimizeStatistic observer) {
 		this.optimizeObservers.add(observer);
 	}
@@ -129,6 +132,7 @@ public class OnDemandOptimizeExecutor implements OptimizeExecutor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isOptimizing() {
 		return isOptimizing;
 	}

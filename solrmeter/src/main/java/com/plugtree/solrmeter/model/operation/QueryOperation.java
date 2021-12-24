@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.plugtree.solrmeter.model.operation;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -33,19 +34,20 @@ import com.plugtree.solrmeter.model.generator.QueryGenerator;
  *
  */
 public class QueryOperation implements Operation {
-  
+
   private final static Logger logger = Logger.getLogger(QueryOperation.class);
-  
+
   private final QueryExecutor executor;
-  
+
   private final QueryGenerator queryGenerator;
-  
+
   public QueryOperation(QueryExecutor executor, QueryGenerator queryGenerator) {
     this.executor = executor;
     this.queryGenerator = queryGenerator;
   }
-  
-  
+
+
+  @Override
   public boolean execute() {
     SolrQuery query = queryGenerator.generate();
     try {
@@ -58,7 +60,7 @@ public class QueryOperation implements Operation {
         throw new RuntimeException("The query returned less than 0 as q time: " + response.getResponseHeader().get("q") + response.getQTime());
       }
       executor.notifyQueryExecuted(response, clientTime);
-    } catch (SolrServerException e) {
+    } catch (SolrServerException | IOException e) {
       logger.error("Error on Query " + query);
       e.printStackTrace();
       executor.notifyError(new QueryException(e, query));
@@ -66,10 +68,10 @@ public class QueryOperation implements Operation {
     }
     return true;
   }
-  
-  protected QueryResponse executeQuery(SolrQuery query) throws SolrServerException {
-	String requestMethod = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_METHOD, "GET");
-	return executor.getSolrServer().query(query, METHOD.valueOf(requestMethod));
+
+  protected QueryResponse executeQuery(SolrQuery query) throws SolrServerException, IOException {
+    String requestMethod = SolrMeterConfiguration.getProperty(SolrMeterConfiguration.QUERY_METHOD, "GET");
+    return executor.getSolrServer().query(query, METHOD.valueOf(requestMethod));
   }
-  
+
 }

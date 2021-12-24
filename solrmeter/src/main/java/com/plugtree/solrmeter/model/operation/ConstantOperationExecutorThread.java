@@ -38,20 +38,20 @@ import com.plugtree.solrmeter.model.exception.OperationException;
  */
 @StressTestScope
 public class ConstantOperationExecutorThread extends Thread {
-  
+
   private final ExecutorService threadPool = Executors.newCachedThreadPool();
-  
+
   private final AtomicLong timeToWait = new AtomicLong(1);
-  
+
   private final AtomicBoolean running = new AtomicBoolean(false);
-  
+
   private final Operation operation;
-  
+
   public ConstantOperationExecutorThread(Operation operation) {
     super();
     this.operation = operation;
   }
-  
+
   @Override
   public synchronized void run() {
     while(running.get()) {
@@ -71,25 +71,24 @@ public class ConstantOperationExecutorThread extends Thread {
       }
     }
   }
-  
+
   @Override
   public synchronized void start() {
     this.running.set(true);
     super.start();
   }
-  
+
   public synchronized void wake() {
     this.notify();
   }
-  
-  @Override
+
   public void destroy() {
-      running.set(false);
+    running.set(false);
   }
-  
+
   private void executeOperation() throws OperationException {
     Runnable r = new Runnable() {
-      
+
       @Override
       public void run() {
         try {
@@ -101,11 +100,11 @@ public class ConstantOperationExecutorThread extends Thread {
     };
     threadPool.execute(r);
   }
-  
+
   private long getTimeToWait() {
     return timeToWait.get();
   }
-  
+
   public void setTimeToWait(long timeToWait) {
     this.timeToWait.set(timeToWait);
   }
